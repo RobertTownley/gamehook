@@ -31,7 +31,7 @@ const LoadingScene = () => {
     setTimeout(() => {
       dispatch(setSceneTitle("Intro"));
     }, 5000);
-  });
+  }, [dispatch]);
 
   return (
     <Scene title="Loading">
@@ -44,7 +44,12 @@ const IntroScene = () => (
     <RotatingCube />
   </Scene>
 );
-const BattleScene = () => <div>Battle Scene</div>;
+const BattleScene = () => (
+  <Scene title="Battle">
+    <RotatingCube />
+    <RunawayCube />
+  </Scene>
+);
 
 function App() {
   return (

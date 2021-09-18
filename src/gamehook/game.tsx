@@ -3,8 +3,7 @@ import { Provider } from "react-redux";
 import { ReactNode, useEffect, useRef } from "react";
 
 import { useAnimation } from "./hooks";
-import { store, useAppDispatch } from "./store";
-import { setSceneTitle } from "./store/scene";
+import { store } from "./store";
 
 interface GameProps {
   children: Array<ReactNode>;
@@ -12,7 +11,6 @@ interface GameProps {
 }
 
 const Stage = ({ children }: GameProps) => {
-  const dispatch = useAppDispatch();
   return <>{children}</>;
 };
 
@@ -61,15 +59,12 @@ export const Game = (props: GameProps) => {
     renderer.current.render(scene.current, camera.current);
   });
 
-  // TODO: Find and save to state active scene based on scene title
-  const realScene = props.children[0];
-
   return (
     <Provider store={store}>
       <div ref={mountRef} />
       <Stage {...props}>
         <h2>Game</h2>
-        <div>{realScene}</div>
+        {props.children}
       </Stage>
     </Provider>
   );

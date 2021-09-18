@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useAppSelector } from "../store";
 
 interface SceneProps {
@@ -8,8 +8,15 @@ interface SceneProps {
 
 export const Scene = ({ children, title }: SceneProps) => {
   const currentSceneTitle = useAppSelector((state) => state.scene.sceneTitle);
-  console.log({ currentSceneTitle, title });
-  if (currentSceneTitle !== title) return null;
-
-  return <div>{children}</div>;
+  const [isCurrent, setIsCurrent] = useState(false);
+  useEffect(() => {
+    let mounted = true;
+    if (mounted) {
+      setIsCurrent(title === currentSceneTitle);
+    }
+    return () => {
+      mounted = false;
+    };
+  }, [currentSceneTitle, title]);
+  return isCurrent ? <>{children}</> : null;
 };
