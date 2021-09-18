@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { Game, Scene, useAnimation } from "./gamehook";
-import { Cube } from "./gamehook/objects";
+import { Cube, Text } from "./gamehook/objects";
 
 import { ObjectPosition, ObjectRotation } from "./gamehook/objects/types";
 
@@ -29,12 +29,12 @@ const LoadingScene = () => {
   useEffect(() => {
     setTimeout(() => {
       GAME.transitionToScene("Intro");
-    }, 3000);
+    }, 35000);
   }, []);
 
   return (
     <Scene title="Loading">
-      <RunawayCube />
+      <Text value="Hello World" position={[0, 0, 0]} />
     </Scene>
   );
 };
@@ -44,21 +44,16 @@ const IntroScene = () => (
     <RotatingCube position={[0, -2, 0]} />
     <RotatingCube position={[2, 0, 0]} />
     <RotatingCube position={[-2, 0, 0]} />
+
     <RotatingCube position={[-2, 0, -10]} />
     <RotatingCube position={[2, 0, -10]} />
     <RotatingCube position={[0, 2, -10]} />
     <RotatingCube position={[0, -2, -10]} />
 
-    <RotatingCube position={[6, -6, -8]} />
-    <RotatingCube position={[-6, 6, -8]} />
-    <RotatingCube position={[-6, -6, -8]} />
-    <RotatingCube position={[6, 6, -8]} />
-  </Scene>
-);
-const BattleScene = () => (
-  <Scene title="Battle">
-    <RotatingCube />
-    <RunawayCube />
+    <RotatingCube position={[5, -5, -8]} />
+    <RotatingCube position={[-5, 5, -8]} />
+    <RotatingCube position={[-5, -5, -8]} />
+    <RotatingCube position={[5, 5, -8]} />
   </Scene>
 );
 
@@ -67,7 +62,6 @@ function App() {
     <Game initialSceneTitle="Loading">
       <LoadingScene />
       <IntroScene />
-      <BattleScene />
     </Game>
   );
 }

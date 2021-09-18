@@ -70,15 +70,21 @@ export const getInitialGameData = (): GameData => {
     },
     onWindowResize: function () {
       const { width, height } = getCanvasDimensions();
-      GAME.scene.camera.aspect = width / height;
-      GAME.scene.camera.updateProjectionMatrix();
-      GAME.renderer.setSize(width, height);
+      this.scene.camera.aspect = width / height;
+      this.scene.camera.updateProjectionMatrix();
+      this.renderer.setSize(width, height);
     },
   };
 };
 
 window.GAME = getInitialGameData();
-window.addEventListener("resize", window.GAME.onWindowResize, false);
+window.addEventListener(
+  "resize",
+  () => {
+    window.GAME.onWindowResize();
+  },
+  false
+);
 window.GAME.onWindowResize();
 
 export const SceneTitleContext = createContext("Loading");

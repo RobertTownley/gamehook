@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { useEffect, useRef } from "react";
 import { generateUUID } from "three/src/math/MathUtils";
 import { GameObject, ObjectPosition, ObjectRotation } from "./types";
+import { defaultPosition, defaultRotation } from "./defaults";
 
 interface CubeProps {
   geometry?: THREE.BoxGeometry;
@@ -10,8 +11,6 @@ interface CubeProps {
   rotation?: ObjectRotation;
 }
 
-const defaultPosition: ObjectPosition = [0, 0, 0];
-const defaultRotation: ObjectRotation = [0, 0, 0];
 const defaultMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 const defaultGeometry = new THREE.BoxGeometry(1, 1, 1);
 
