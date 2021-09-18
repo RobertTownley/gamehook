@@ -1,25 +1,44 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+
+import { Game, Scene, ScenePosition, useAnimation } from "./gamehook";
+
+interface CubeProps {
+  initialPosition: ScenePosition;
+}
+
+const RunawayCube = ({ initialPosition }: CubeProps) => {
+  const [position, setPosition] = useState(initialPosition);
+  /*
+  useAnimation(() => {
+    setPosition((prev) => [prev[0], prev[1], prev[2] + 0.1]);
+    // setPosition([position[0], position[1], position[2] + 0.1]);
+  });
+  */
+
+  return (
+    <div>
+      <p>I am a cube at position {position}</p>
+    </div>
+  );
+};
+
+const LoadingScene = () => {
+  return (
+    <Scene title="Loading">
+      <RunawayCube initialPosition={[0, 0, 0]} />
+    </Scene>
+  );
+};
+const IntroScene = () => <div />;
+const BattleScene = () => <div />;
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Game initialSceneTitle="Loading">
+      <LoadingScene />
+      <IntroScene />
+      <BattleScene />
+    </Game>
   );
 }
 
