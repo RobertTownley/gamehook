@@ -1,5 +1,4 @@
 import { ReactNode, useEffect, useRef } from "react";
-import * as THREE from "three";
 
 import { useSceneTitleContext } from "../game";
 import { useAnimation } from "../hooks";
@@ -14,30 +13,14 @@ export const Scene = ({ children, title }: SceneProps) => {
   const sceneTitle = useSceneTitleContext();
   const isActive = sceneTitle === title;
 
-  // Build Scene Resources within refs to avoid re-renders
-  const renderer = useRef(new THREE.WebGLRenderer());
-  const camera = useRef(
-    new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight)
-  );
-  camera.current.position.z = 5;
-
   useEffect(() => {
+    const existingRef = mountRef.current;
     if (!isActive) return;
 
-    const existingRef = mountRef.current;
-    const existingRenderer = renderer.current;
-    mountRef.current?.appendChild(renderer.current.domElement);
-
-    const onWindowResize = () => {
-      const [width, height] = [window.innerWidth / 2, window.innerHeight / 2];
-      camera.current.aspect = width / height;
-      camera.current.updateProjectionMatrix();
-      renderer.current.setSize(width, height);
-    };
-    onWindowResize();
+    mountRef.current?.appendChild(GAME.renderer.domElement);
 
     return () => {
-      existingRef?.removeChild(existingRenderer.domElement);
+      existingRef?.removeChild(GAME.renderer.domElement);
     };
   }, [isActive]);
 
@@ -52,7 +35,7 @@ export const Scene = ({ children, title }: SceneProps) => {
         obj.state = "Terminated";
       }
     }
-    renderer.current.render(GAME.scene.threeScene, camera.current);
+    GAME.renderer.render(GAME.scene.threeScene, GAME.scene.camera);
   });
 
   if (!isActive) return null;

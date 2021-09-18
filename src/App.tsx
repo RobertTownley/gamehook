@@ -49,10 +49,10 @@ const IntroScene = () => (
     <RotatingCube position={[0, 2, -10]} />
     <RotatingCube position={[0, -2, -10]} />
 
-    <RotatingCube position={[6, -6, -10]} />
-    <RotatingCube position={[-6, 6, -10]} />
-    <RotatingCube position={[-6, -6, -10]} />
-    <RotatingCube position={[6, 6, -10]} />
+    <RotatingCube position={[6, -6, -8]} />
+    <RotatingCube position={[-6, 6, -8]} />
+    <RotatingCube position={[-6, -6, -8]} />
+    <RotatingCube position={[6, 6, -8]} />
   </Scene>
 );
 const BattleScene = () => (
