@@ -14,18 +14,21 @@ const RunawayCube = () => {
   return <Cube position={position} />;
 };
 
-const RotatingCube = () => {
+interface RotatingCubeProps {
+  position?: ObjectPosition;
+}
+const RotatingCube = ({ position = [0, 0, 0] }: RotatingCubeProps) => {
   const [rotation, setRotation] = useState<ObjectRotation>([0, 0, 0]);
   useAnimation(() => {
-    setRotation((prev) => [prev[0], prev[1], prev[2] + 0.1]);
+    setRotation((prev) => [prev[0], prev[1] + 0.01, prev[2] + 0.01]);
   });
-  return <Cube rotation={rotation} />;
+  return <Cube rotation={rotation} position={position} />;
 };
 
 const LoadingScene = () => {
   useEffect(() => {
     setTimeout(() => {
-      GAME.scene.setSceneTitle("Intro");
+      GAME.transitionToScene("Intro");
     }, 3000);
   }, []);
 
@@ -37,7 +40,19 @@ const LoadingScene = () => {
 };
 const IntroScene = () => (
   <Scene title="Intro">
-    <RotatingCube />
+    <RotatingCube position={[0, 2, 0]} />
+    <RotatingCube position={[0, -2, 0]} />
+    <RotatingCube position={[2, 0, 0]} />
+    <RotatingCube position={[-2, 0, 0]} />
+    <RotatingCube position={[-2, 0, -10]} />
+    <RotatingCube position={[2, 0, -10]} />
+    <RotatingCube position={[0, 2, -10]} />
+    <RotatingCube position={[0, -2, -10]} />
+
+    <RotatingCube position={[6, -6, -10]} />
+    <RotatingCube position={[-6, 6, -10]} />
+    <RotatingCube position={[-6, -6, -10]} />
+    <RotatingCube position={[6, 6, -10]} />
   </Scene>
 );
 const BattleScene = () => (

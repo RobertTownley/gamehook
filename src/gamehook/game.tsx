@@ -68,9 +68,12 @@ export const Game = (props: GameProps) => {
   const [sceneTitle, setSceneTitle] = useState(props.initialSceneTitle);
 
   // Game Loop
+  const FPS = 2;
   useEffect(() => {
     const gameLoop = () => {
-      requestAnimationFrame(gameLoop);
+      setTimeout(() => {
+        requestAnimationFrame(gameLoop);
+      }, 1000 / FPS);
 
       // Detect Scene Change
       if (GAME.scene.title !== sceneTitle) {
