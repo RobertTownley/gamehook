@@ -1861,6 +1861,11 @@
   dependencies:
     "@types/jest" "*"
 
+"@types/three@^0.131.1":
+  version "0.131.1"
+  resolved "https://registry.yarnpkg.com/@types/three/-/three-0.131.1.tgz#2ee511383c8620f6ce301582214122319e6aca34"
+  integrity sha512-unnjsolcm7R90e4XK9qMq4JYEzly0XQNa0pG8RAOMZeVzj3FLIFPymAYUx4Osz0gY9jFZz8omIQplqiieEE7gw==
+
 "@types/uglify-js@*":
   version "3.12.0"
   resolved "https://registry.yarnpkg.com/@types/uglify-js/-/uglify-js-3.12.0.tgz#2bb061c269441620d46b946350c8f16d52ef37c5"
@@ -10500,6 +10505,11 @@ text-table@0.2.0, text-table@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
+
+three@^0.132.2:
+  version "0.132.2"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.132.2.tgz#95eb1856147237c03e887cbbe56f964b6fb40b5e"
+  integrity sha512-0wcR7LxxkXMn6Gi58gEs3QvY8WpTVXA31L2VOvpjm4ZPYFRHCZC13UqynheFoS5OXDYgtBneN0dhbaNBE8iLhQ==
 
 throat@^5.0.0:
   version "5.0.0"
