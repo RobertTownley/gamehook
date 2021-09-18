@@ -2,7 +2,6 @@ import * as THREE from "three";
 import { useEffect, useRef } from "react";
 import { generateUUID } from "three/src/math/MathUtils";
 import { GameObject, ObjectPosition, ObjectRotation } from "./types";
-import { useAnimation } from "../hooks";
 
 interface CubeProps {
   geometry?: THREE.BoxGeometry;
@@ -41,15 +40,5 @@ export const Cube = ({
   obj.current.obj.position.set(...position);
   obj.current.obj.rotation.set(...rotation);
 
-  return (
-    <div>
-      <h3>Cube</h3>
-      <div>
-        <i>Position: {position.join(", ")}</i>
-      </div>
-      <div>
-        <i>Rotation: {rotation.join(", ")}</i>
-      </div>
-    </div>
-  );
+  return <></>;
 };

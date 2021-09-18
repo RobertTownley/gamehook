@@ -3,27 +3,25 @@ import {
   ReactNode,
   createContext,
   useEffect,
-  useRef,
   useState,
   useContext,
 } from "react";
 import { generateUUID } from "three/src/math/MathUtils";
 
 import { GameObject } from "./objects/types";
-import { useAnimation } from "./hooks";
 
 export interface GameData {
   id: string;
   scene: {
     id: string;
+    threeScene: THREE.Scene;
     objects: { [key: string]: GameObject };
     title: string;
     // Object Methods
     addObjectToScene: (obj: GameObject) => void;
     removeObjectFromScene: (obj: GameObject) => void;
-    // Scene Methods
-    setSceneTitle: (title: string) => void;
   };
+  transitionToScene: (title: string) => void;
 }
 
 interface GameProps {
@@ -36,19 +34,27 @@ export const getInitialGameData = (): GameData => {
     id: generateUUID(),
     scene: {
       id: generateUUID(),
+      threeScene: new THREE.Scene(),
       objects: {},
       title: "Loading",
       // Object Methods
       addObjectToScene: function (obj: GameObject) {
+        this.threeScene.add(obj.obj);
         this.objects[obj.id] = obj;
       },
       removeObjectFromScene: function (obj: GameObject) {
+        this.threeScene.remove(obj.obj);
         delete this.objects[obj.id];
       },
       // Scene Methods
-      setSceneTitle: function (title: string) {
-        this.title = title;
-      },
+    },
+    transitionToScene: function (title: string) {
+      // Remove objects from scene
+      Object.values(this.scene.objects).forEach((obj) => {
+        this.scene.removeObjectFromScene(obj);
+      });
+      this.scene.threeScene = new THREE.Scene();
+      this.scene.title = title;
     },
   };
 };

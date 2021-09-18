@@ -16,7 +16,6 @@ export const Scene = ({ children, title }: SceneProps) => {
 
   // Build Scene Resources within refs to avoid re-renders
   const renderer = useRef(new THREE.WebGLRenderer());
-  const scene = useRef(new THREE.Scene());
   const camera = useRef(
     new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight)
   );
@@ -48,14 +47,12 @@ export const Scene = ({ children, title }: SceneProps) => {
     for (const obj of Object.values(GAME.scene.objects)) {
       if (obj.state === "Ready") {
         // Add object to scene
-        scene.current.add(obj.obj);
         obj.state = "Initialized";
       } else if (obj.state === "Terminating") {
-        scene.current.remove(obj.obj);
         obj.state = "Terminated";
       }
     }
-    renderer.current.render(scene.current, camera.current);
+    renderer.current.render(GAME.scene.threeScene, camera.current);
   });
 
   if (!isActive) return null;
