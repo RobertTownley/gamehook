@@ -6,10 +6,5 @@ interface SceneProps {
 }
 
 export const Scene = ({ children, title }: SceneProps) => {
-  return (
-    <div>
-      <p>{title}</p>
-      {children}
-    </div>
-  );
+  return <div>{children}</div>;
 };
