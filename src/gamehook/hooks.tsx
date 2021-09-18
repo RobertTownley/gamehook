@@ -18,7 +18,14 @@ export const useAnimation = (callback: Animation) => {
   };
 
   useEffect(() => {
-    const id = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(id);
+    let isMounted = true;
+    let id: number;
+    if (isMounted) {
+      id = requestAnimationFrame(animate);
+    }
+    return () => {
+      isMounted = false;
+      cancelAnimationFrame(id);
+    };
   });
 };

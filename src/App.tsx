@@ -1,30 +1,49 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { Game, Scene, ScenePosition, useAnimation } from "./gamehook";
+import { Game, Scene, useAnimation } from "./gamehook";
 import { Cube } from "./gamehook/objects";
 
-interface CubeProps {
-  initialPosition: ScenePosition;
-}
+import { setSceneTitle } from "./gamehook/store/scene";
+import { useAppDispatch } from "./gamehook/store";
+import { ObjectPosition, ObjectRotation } from "./gamehook/objects/types";
 
-const RunawayCube = ({ initialPosition }: CubeProps) => {
-  const [position, setPosition] = useState(initialPosition);
+const RunawayCube = () => {
+  const [position, setPosition] = useState<ObjectPosition>([0, 0, 0]);
   useAnimation(() => {
-    setPosition((prev) => [prev[0], prev[1], prev[2] + 1]);
+    setPosition((prev) => [prev[0], prev[1], prev[2] + 0.01]);
   });
 
   return <Cube position={position} />;
 };
 
+const RotatingCube = () => {
+  const [rotation, setRotation] = useState<ObjectRotation>([0, 0, 0]);
+  useAnimation(() => {
+    setRotation((prev) => [prev[0], prev[1], prev[2] + 0.1]);
+  });
+  return <Cube rotation={rotation} />;
+};
+
 const LoadingScene = () => {
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(setSceneTitle("Loading"));
+    setTimeout(() => {
+      dispatch(setSceneTitle("Intro"));
+    }, 5000);
+  });
+
   return (
     <Scene title="Loading">
-      <h1>I am the loading scene</h1>
-      <RunawayCube initialPosition={[0, 0, 0]} />
+      <RunawayCube />
     </Scene>
   );
 };
-const IntroScene = () => <div>Intro Scene</div>;
+const IntroScene = () => (
+  <Scene title="Intro">
+    <RotatingCube />
+  </Scene>
+);
 const BattleScene = () => <div>Battle Scene</div>;
 
 function App() {

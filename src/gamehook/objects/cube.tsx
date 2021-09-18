@@ -1,8 +1,7 @@
-import { ScenePosition } from "../scene/types";
-import { ObjectRotation } from "./types";
+import { ObjectPosition, ObjectRotation } from "./types";
 
 interface CubeProps {
-  position?: ScenePosition;
+  position?: ObjectPosition;
   rotation?: ObjectRotation;
 }
 

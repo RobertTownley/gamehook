@@ -1,15 +1,23 @@
 import * as THREE from "three";
-import { ReactNode, useState, useEffect, useRef } from "react";
+import { Provider } from "react-redux";
+import { ReactNode, useEffect, useRef } from "react";
+
 import { useAnimation } from "./hooks";
+import { store, useAppDispatch } from "./store";
+import { setSceneTitle } from "./store/scene";
 
 interface GameProps {
   children: Array<ReactNode>;
   initialSceneTitle: string;
 }
 
-export const Game = ({ children, initialSceneTitle }: GameProps) => {
+const Stage = ({ children }: GameProps) => {
+  const dispatch = useAppDispatch();
+  return <>{children}</>;
+};
+
+export const Game = (props: GameProps) => {
   const mountRef = useRef<HTMLDivElement>(null);
-  const [sceneTitle, setSceneTitle] = useState(initialSceneTitle);
 
   const geometry = new THREE.BoxGeometry(1, 1, 1);
   const material = new THREE.MeshPhongMaterial({ color: 0x00aaff });
@@ -54,14 +62,15 @@ export const Game = ({ children, initialSceneTitle }: GameProps) => {
   });
 
   // TODO: Find and save to state active scene based on scene title
-  const realScene = children[0];
-  console.log({ children });
+  const realScene = props.children[0];
 
   return (
-    <div>
-      <h2>Game</h2>
+    <Provider store={store}>
       <div ref={mountRef} />
-      <div>{realScene}</div>
-    </div>
+      <Stage {...props}>
+        <h2>Game</h2>
+        <div>{realScene}</div>
+      </Stage>
+    </Provider>
   );
 };
