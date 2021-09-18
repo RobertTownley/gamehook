@@ -8,12 +8,9 @@ interface CubeProps {
 
 const RunawayCube = ({ initialPosition }: CubeProps) => {
   const [position, setPosition] = useState(initialPosition);
-  /*
   useAnimation(() => {
     setPosition((prev) => [prev[0], prev[1], prev[2] + 0.1]);
-    // setPosition([position[0], position[1], position[2] + 0.1]);
   });
-  */
 
   return (
     <div>

@@ -20,5 +20,5 @@ export const useAnimation = (callback: Animation) => {
   useEffect(() => {
     const id = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(id);
-  }, []); // Make sure the effect runs only once
+  });
 };
