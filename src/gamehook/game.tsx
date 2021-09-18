@@ -1,71 +1,84 @@
 import * as THREE from "three";
-import { Provider } from "react-redux";
-import { ReactNode, useEffect, useRef } from "react";
+import {
+  ReactNode,
+  createContext,
+  useEffect,
+  useRef,
+  useState,
+  useContext,
+} from "react";
+import { generateUUID } from "three/src/math/MathUtils";
 
+import { GameObject } from "./objects/types";
 import { useAnimation } from "./hooks";
-import { store } from "./store";
+
+export interface GameData {
+  id: string;
+  scene: {
+    id: string;
+    objects: { [key: string]: GameObject };
+    title: string;
+    // Object Methods
+    addObjectToScene: (obj: GameObject) => void;
+    removeObjectFromScene: (obj: GameObject) => void;
+    // Scene Methods
+    setSceneTitle: (title: string) => void;
+  };
+}
 
 interface GameProps {
   children: Array<ReactNode>;
   initialSceneTitle: string;
 }
 
-const Stage = ({ children }: GameProps) => {
-  return <>{children}</>;
+export const getInitialGameData = (): GameData => {
+  return {
+    id: generateUUID(),
+    scene: {
+      id: generateUUID(),
+      objects: {},
+      title: "Loading",
+      // Object Methods
+      addObjectToScene: function (obj: GameObject) {
+        this.objects[obj.id] = obj;
+      },
+      removeObjectFromScene: function (obj: GameObject) {
+        delete this.objects[obj.id];
+      },
+      // Scene Methods
+      setSceneTitle: function (title: string) {
+        this.title = title;
+      },
+    },
+  };
 };
 
+window.GAME = getInitialGameData();
+
+export const SceneTitleContext = createContext("Loading");
+export const useSceneTitleContext = () => useContext(SceneTitleContext);
+
 export const Game = (props: GameProps) => {
-  const mountRef = useRef<HTMLDivElement>(null);
+  const [sceneTitle, setSceneTitle] = useState(props.initialSceneTitle);
 
-  const geometry = new THREE.BoxGeometry(1, 1, 1);
-  const material = new THREE.MeshPhongMaterial({ color: 0x00aaff });
-  const cube = useRef(new THREE.Mesh(geometry, material));
-  const [width, height] = [window.innerWidth / 2, window.innerHeight / 2];
-
-  const renderer = useRef(new THREE.WebGLRenderer());
-  const scene = useRef(new THREE.Scene());
-  scene.current.add(cube.current);
-  const camera = useRef(new THREE.PerspectiveCamera(75, width / height));
-  camera.current.position.z = 5;
-
-  const light = useRef(new THREE.DirectionalLight(0xffffff, 1));
-  light.current.position.set(0, 10, 0);
-  light.current.target.position.set(-5, 0, 0);
-  scene.current.add(light.current);
-  scene.current.add(light.current.target);
-
+  // Game Loop
   useEffect(() => {
-    const currentRenderer = renderer.current;
-    const existingRef = mountRef.current;
+    const gameLoop = () => {
+      requestAnimationFrame(gameLoop);
 
-    mountRef.current?.appendChild(renderer.current.domElement);
-
-    const onWindowResize = () => {
-      camera.current.aspect = width / height;
-      camera.current.updateProjectionMatrix();
-      renderer.current.setSize(width, height);
+      // Detect Scene Change
+      if (GAME.scene.title !== sceneTitle) {
+        setSceneTitle(GAME.scene.title);
+      }
     };
-    onWindowResize();
+    gameLoop();
+  }, [sceneTitle]);
 
-    return () => {
-      existingRef?.removeChild(currentRenderer.domElement);
-    };
-  });
-
-  useAnimation(() => {
-    cube.current.rotation.x += 0.01;
-    cube.current.rotation.y += 0.01;
-    cube.current.rotation.z += 0.01;
-    renderer.current.render(scene.current, camera.current);
-  });
+  // Start tracking game objects on the DOM
 
   return (
-    <Provider store={store}>
-      <div ref={mountRef} />
-      <Stage {...props}>
-        <h2>Game</h2>
-        {props.children}
-      </Stage>
-    </Provider>
+    <SceneTitleContext.Provider value={sceneTitle}>
+      {props.children}
+    </SceneTitleContext.Provider>
   );
 };

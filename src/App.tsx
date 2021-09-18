@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 import { Game, Scene, useAnimation } from "./gamehook";
 import { Cube } from "./gamehook/objects";
 
-import { setSceneTitle } from "./gamehook/store/scene";
-import { useAppDispatch } from "./gamehook/store";
 import { ObjectPosition, ObjectRotation } from "./gamehook/objects/types";
 
 const RunawayCube = () => {
@@ -25,13 +23,11 @@ const RotatingCube = () => {
 };
 
 const LoadingScene = () => {
-  const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(setSceneTitle("Loading"));
     setTimeout(() => {
-      dispatch(setSceneTitle("Intro"));
-    }, 5000);
-  }, [dispatch]);
+      GAME.scene.setSceneTitle("Intro");
+    }, 3000);
+  }, []);
 
   return (
     <Scene title="Loading">

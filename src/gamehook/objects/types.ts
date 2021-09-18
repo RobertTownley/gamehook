@@ -1,3 +1,5 @@
+import * as THREE from "three";
+
 type ObjectState =
   | "Ready"
   | "Initializing"
@@ -10,5 +12,8 @@ export type ObjectPosition = [number, number, number];
 
 export interface GameObject {
   id: string;
+  obj: THREE.Mesh;
+  position: ObjectPosition;
+  rotation: ObjectRotation;
   state: ObjectState;
 }

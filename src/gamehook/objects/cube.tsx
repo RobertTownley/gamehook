@@ -1,24 +1,54 @@
-import { ObjectPosition, ObjectRotation } from "./types";
+import * as THREE from "three";
+import { useEffect, useRef } from "react";
+import { generateUUID } from "three/src/math/MathUtils";
+import { GameObject, ObjectPosition, ObjectRotation } from "./types";
+import { useAnimation } from "../hooks";
 
 interface CubeProps {
+  geometry?: THREE.BoxGeometry;
+  material?: THREE.MeshBasicMaterial;
   position?: ObjectPosition;
   rotation?: ObjectRotation;
 }
 
-export const Cube = ({ position, rotation }: CubeProps) => {
-  const pos = position || [0, 0, 0];
-  const rot = rotation || [0, 0, 0];
+const defaultPosition: ObjectPosition = [0, 0, 0];
+const defaultRotation: ObjectRotation = [0, 0, 0];
+const defaultMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+const defaultGeometry = new THREE.BoxGeometry(1, 1, 1);
+
+export const Cube = ({
+  geometry = defaultGeometry,
+  material = defaultMaterial,
+  position = defaultPosition,
+  rotation = defaultRotation,
+}: CubeProps) => {
+  const obj = useRef<GameObject>({
+    id: generateUUID(),
+    obj: new THREE.Mesh(geometry, material),
+    state: "Ready",
+    position,
+    rotation,
+  });
+
+  useEffect(() => {
+    const current = obj.current;
+    GAME.scene.addObjectToScene(current);
+
+    return () => {
+      GAME.scene.removeObjectFromScene(current);
+    };
+  }, []);
+  obj.current.obj.position.set(...position);
+  obj.current.obj.rotation.set(...rotation);
 
   return (
     <div>
+      <h3>Cube</h3>
       <div>
-        <b>I will be a cube once Townley figures out the API</b>
+        <i>Position: {position.join(", ")}</i>
       </div>
       <div>
-        <i>Position: {pos.join(", ")}</i>
-      </div>
-      <div>
-        <i>Rotation: {rot.join(", ")}</i>
+        <i>Rotation: {rotation.join(", ")}</i>
       </div>
     </div>
   );
