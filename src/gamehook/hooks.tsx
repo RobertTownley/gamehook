@@ -49,12 +49,19 @@ export const useTimeline = (
   step: number
 ) => {
   const animate = useCallback(() => {
-    console.log("I should be called once");
     const duration = end - start;
     for (let x = start; x <= end; x += step) {
       const completion = (x - start) / duration;
       setTimeout(() => callback(completion), x);
     }
   }, [callback, start, end, step]);
-  useEffect(animate, [animate]);
+  useEffect(() => {
+    let mounted = true;
+    if (mounted) {
+      animate();
+    }
+    return () => {
+      mounted = false;
+    };
+  }, [animate]);
 };

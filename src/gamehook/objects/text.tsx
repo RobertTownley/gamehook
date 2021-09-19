@@ -53,9 +53,13 @@ export const Text = ({
 
   useEffect(() => {
     const current = obj.current;
-    GAME.scene.addObjectToScene(current);
+    let mounted = true;
+    if (mounted) {
+      GAME.scene.addObjectToScene(current);
+    }
 
     return () => {
+      mounted = false;
       current.obj.dispose();
       GAME.scene.removeObjectFromScene(current);
     };
@@ -82,23 +86,20 @@ export const FadeInText = ({
   const [intermediateColor, setIntermediateColor] =
     useState<number>(startColor);
 
-  useTimeline(
-    useCallback(
-      (duration) => {
-        const value = getAnimatedValue(startColor, otherProps.color, duration);
-        setIntermediateColor(value);
-        if (onComplete && duration === 0) {
-          setTimeout(() => {
-            onComplete();
-          }, start + end);
-        }
-      },
-      [startColor, otherProps.color, start, end, onComplete]
-    ),
-    start,
-    end,
-    step
+  const callback = useCallback(
+    (duration) => {
+      const value = getAnimatedValue(startColor, otherProps.color, duration);
+      setIntermediateColor(value);
+      if (onComplete && duration === 0) {
+        setTimeout(() => {
+          onComplete();
+        }, start + end);
+      }
+    },
+    [startColor, otherProps.color, start, end, onComplete]
   );
+
+  useTimeline(callback, start, end, step);
   const textProps = {
     ...otherProps,
     color: intermediateColor,

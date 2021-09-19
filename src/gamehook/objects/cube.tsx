@@ -29,10 +29,15 @@ export const Cube = ({
   });
 
   useEffect(() => {
+    let mounted = true;
     const current = obj.current;
-    GAME.scene.addObjectToScene(current);
+
+    if (mounted) {
+      GAME.scene.addObjectToScene(current);
+    }
 
     return () => {
+      mounted = false;
       GAME.scene.removeObjectFromScene(current);
     };
   }, []);

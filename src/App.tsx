@@ -27,7 +27,7 @@ const RotatingCube = ({ position = [0, 0, 0] }: RotatingCubeProps) => {
 };
 
 const LoadingScene = () => {
-  const INTRO_DURATION = 8000;
+  const INTRO_DURATION = 6000;
   useEffect(() => {
     setTimeout(() => {
       GAME.transitionToScene("Intro");
@@ -76,7 +76,7 @@ const IntroScene = () => (
 
 function App() {
   return (
-    <Game initialSceneTitle="Loading">
+    <Game>
       <LoadingScene />
       <IntroScene />
     </Game>

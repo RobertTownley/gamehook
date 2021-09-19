@@ -33,7 +33,6 @@ export interface GameData {
 
 interface GameProps {
   children: Array<ReactNode>;
-  initialSceneTitle: string;
 }
 
 export const getInitialGameData = (): GameData => {
@@ -93,7 +92,7 @@ export const SceneTitleContext = createContext("Loading");
 export const useSceneTitleContext = () => useContext(SceneTitleContext);
 
 export const Game = (props: GameProps) => {
-  const [sceneTitle, setSceneTitle] = useState(props.initialSceneTitle);
+  const [sceneTitle, setSceneTitle] = useState("Loading");
 
   // Game Loop
   const FPS = 2;
