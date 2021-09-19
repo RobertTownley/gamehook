@@ -1,13 +1,16 @@
+import { useCallback, useEffect, useState, useRef } from "react";
 import { Text as TroikaText } from "troika-three-text";
-import { useEffect, useRef } from "react";
 import { generateUUID } from "three/src/math/MathUtils";
+
+import { getAnimatedValue } from "../animation";
 import { GameObject, ObjectPosition, ObjectRotation } from "./types";
 import { defaultPosition, defaultRotation } from "./defaults";
+import { useTimeline } from "../hooks";
 
-interface Props {
+interface TextProps {
   anchorX?: string;
   anchorY?: string;
-  color?: number;
+  color: number;
   curveRadius?: number;
   fontSize?: number;
   position?: ObjectPosition;
@@ -24,7 +27,7 @@ export const Text = ({
   position = defaultPosition,
   rotation = defaultRotation,
   value,
-}: Props) => {
+}: TextProps) => {
   const obj = useRef<GameObject>({
     id: generateUUID(),
     obj: new TroikaText(),
@@ -58,4 +61,40 @@ export const Text = ({
     };
   }, []);
   return <></>;
+};
+
+interface FadeInTextProps extends TextProps {
+  start: number;
+  end: number;
+  step?: number;
+  startColor?: number;
+}
+
+export const FadeInText = ({
+  startColor = 0x000000,
+  start,
+  end,
+  step = 25,
+  ...otherProps
+}: FadeInTextProps) => {
+  const [intermediateColor, setIntermediateColor] =
+    useState<number>(startColor);
+
+  useTimeline(
+    useCallback(
+      (duration) => {
+        const value = getAnimatedValue(startColor, otherProps.color, duration);
+        setIntermediateColor(value);
+      },
+      [startColor, otherProps.color]
+    ),
+    start,
+    end,
+    step
+  );
+  const textProps = {
+    ...otherProps,
+    color: intermediateColor,
+  };
+  return <Text {...textProps} />;
 };

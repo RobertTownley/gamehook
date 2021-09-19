@@ -1,18 +1,26 @@
+import * as THREE from "three";
 import { ReactNode, useEffect, useRef } from "react";
 
 import { useSceneTitleContext } from "../game";
 import { useAnimation } from "../hooks";
 
 interface SceneProps {
+  backgroundColor?: string;
   children: ReactNode;
   title: string;
 }
 
-export const Scene = ({ children, title }: SceneProps) => {
+export const Scene = ({
+  backgroundColor = "#000",
+  children,
+  title,
+}: SceneProps) => {
   const mountRef = useRef<HTMLDivElement>(null);
   const sceneTitle = useSceneTitleContext();
   const isActive = sceneTitle === title;
 
+  // Mount Scene
+  // TODO: This causes a flash. Maybe the scene can just be re-used?
   useEffect(() => {
     const existingRef = mountRef.current;
     if (!isActive) return;
@@ -23,6 +31,11 @@ export const Scene = ({ children, title }: SceneProps) => {
       existingRef?.removeChild(GAME.renderer.domElement);
     };
   }, [isActive]);
+
+  // Set Background Color
+  useEffect(() => {
+    GAME.scene.threeScene.background = new THREE.Color(backgroundColor);
+  }, [backgroundColor]);
 
   useAnimation(() => {
     if (!isActive) return null;

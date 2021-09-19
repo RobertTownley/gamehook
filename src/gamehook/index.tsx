@@ -1,3 +1,3 @@
 export { Game } from "./game";
 export { Scene } from "./scene";
-export { useAnimation } from "./hooks";
+export { useAnimation, useTimeline } from "./hooks";

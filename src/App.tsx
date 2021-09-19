@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-import { Game, Scene, useAnimation } from "./gamehook";
+import { Game, Scene, useAnimation, useTimeline } from "./gamehook";
+import { getAnimatedValue } from "./gamehook/animation";
 import { Cube, Text } from "./gamehook/objects";
+import { FadeInText } from "./gamehook/objects/text";
 
 import { ObjectPosition, ObjectRotation } from "./gamehook/objects/types";
 
@@ -26,20 +28,36 @@ const RotatingCube = ({ position = [0, 0, 0] }: RotatingCubeProps) => {
 };
 
 const LoadingScene = () => {
+  const INTRO_DURATION = 8000;
   useEffect(() => {
     setTimeout(() => {
       GAME.transitionToScene("Intro");
-    }, 35000);
+    }, INTRO_DURATION);
   }, []);
 
   return (
     <Scene title="Loading">
-      <Text value="Hello World" position={[0, 0, 0]} />
+      <FadeInText
+        value="Hello World"
+        color={0x00aaff}
+        start={1500}
+        end={3000}
+        position={[0, 0.5, 0]}
+      />
+      <FadeInText
+        value="Welcome to GameHook"
+        color={0x00aaff}
+        start={3500}
+        end={6000}
+        position={[0, -0.5, 0]}
+      />
     </Scene>
   );
 };
 const IntroScene = () => (
   <Scene title="Intro">
+    <RunawayCube />
+
     <RotatingCube position={[0, 2, 0]} />
     <RotatingCube position={[0, -2, 0]} />
     <RotatingCube position={[2, 0, 0]} />

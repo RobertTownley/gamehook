@@ -11,19 +11,21 @@ import { generateUUID } from "three/src/math/MathUtils";
 import { GameObject } from "./objects/types";
 import { getCanvasDimensions } from "./window";
 
+export interface Scene {
+  camera: THREE.PerspectiveCamera;
+  id: string;
+  objects: { [key: string]: GameObject };
+  threeScene: THREE.Scene;
+  title: string;
+  // Object Methods
+  addObjectToScene: (obj: GameObject) => void;
+  removeObjectFromScene: (obj: GameObject) => void;
+}
+
 export interface GameData {
   id: string;
-  scene: {
-    camera: THREE.PerspectiveCamera;
-    id: string;
-    objects: { [key: string]: GameObject };
-    threeScene: THREE.Scene;
-    title: string;
-    // Object Methods
-    addObjectToScene: (obj: GameObject) => void;
-    removeObjectFromScene: (obj: GameObject) => void;
-  };
   renderer: THREE.WebGLRenderer;
+  scene: Scene;
   transitionToScene: (title: string) => void;
   // Window Methods
   onWindowResize: () => void;
