@@ -1,16 +1,13 @@
 import * as THREE from "three";
 
 import { getMouseVectorForEvent } from "./mouse";
-import { MouseEventHandler, EventHandlerMap, InteractionMap } from "./types";
+import { EventHandlerMap, InteractionMap } from "./types";
 
 const handleMouseEvent = (
   event: MouseEvent,
   eventType: keyof InteractionMap
 ) => {
   event.preventDefault();
-  if (eventType !== "onMouseMove") {
-    console.log("MOUSE EVENT", eventType);
-  }
   const { scene } = GAME;
   const interactables = Object.values(scene.objects).filter((obj) => {
     const interactions = obj.interactions;
