@@ -1,20 +1,21 @@
 import * as THREE from "three";
 import { useEffect, useRef } from "react";
 import { generateUUID } from "three/src/math/MathUtils";
-import { GameObject, ObjectPosition, ObjectRotation } from "./types";
-import { defaultPosition, defaultRotation } from "./defaults";
 
-interface CubeProps {
+import { GameObject, Positionalable } from "./types";
+import { defaultPosition, defaultRotation } from "./defaults";
+import { Interactable } from "../interactions/types";
+
+interface CubeProps extends Interactable, Positionalable {
   geometry?: THREE.BoxGeometry;
   material?: THREE.MeshBasicMaterial;
-  position?: ObjectPosition;
-  rotation?: ObjectRotation;
 }
 
 const defaultMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 const defaultGeometry = new THREE.BoxGeometry(1, 1, 1);
 
 export const Cube = ({
+  interactions,
   geometry = defaultGeometry,
   material = defaultMaterial,
   position = defaultPosition,
@@ -23,6 +24,7 @@ export const Cube = ({
   const obj = useRef<GameObject>({
     id: generateUUID(),
     obj: new THREE.Mesh(geometry, material),
+    interactions,
     state: "Ready",
     position,
     rotation,

@@ -10,6 +10,11 @@ import { generateUUID } from "three/src/math/MathUtils";
 
 import { GameObject } from "./objects/types";
 import { getCanvasDimensions } from "./window";
+import { EventHandlerMap } from "./interactions/types";
+import {
+  buildEventHandlerMap,
+  initializeEventHandlers,
+} from "./interactions/eventHandler";
 
 export interface Scene {
   camera: THREE.PerspectiveCamera;
@@ -24,6 +29,7 @@ export interface Scene {
 
 export interface GameData {
   id: string;
+  eventHandlers: EventHandlerMap;
   renderer: THREE.WebGLRenderer;
   scene: Scene;
   transitionToScene: (title: string) => void;
@@ -42,6 +48,7 @@ export const getInitialGameData = (): GameData => {
 
   return {
     id: generateUUID(),
+    eventHandlers: buildEventHandlerMap(),
     scene: {
       camera,
       id: generateUUID(),
@@ -79,14 +86,18 @@ export const getInitialGameData = (): GameData => {
 };
 
 window.GAME = getInitialGameData();
-window.addEventListener(
-  "resize",
-  () => {
-    window.GAME.onWindowResize();
-  },
+initializeEventHandlers();
+window.GAME.onWindowResize();
+document.addEventListener(
+  "mousedown",
+  window.GAME.eventHandlers.onMouseDown,
   false
 );
-window.GAME.onWindowResize();
+document.addEventListener(
+  "mousemove",
+  window.GAME.eventHandlers.onMouseMove,
+  false
+);
 
 export const SceneTitleContext = createContext("Loading");
 export const useSceneTitleContext = () => useContext(SceneTitleContext);

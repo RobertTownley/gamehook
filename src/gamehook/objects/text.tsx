@@ -3,38 +3,44 @@ import { Text as TroikaText } from "troika-three-text";
 import { generateUUID } from "three/src/math/MathUtils";
 
 import { getAnimatedValue } from "../animation";
-import { GameObject, ObjectPosition, ObjectRotation } from "./types";
+import { GameObject, Positionalable } from "./types";
 import { defaultPosition, defaultRotation } from "./defaults";
 import { useTimeline } from "../hooks";
+import { Interactable } from "../interactions/types";
 
-interface TextProps {
+const DEFAULT_TEXT_COLOR = 0xffffff;
+
+interface TextProps extends Positionalable, Interactable {
   anchorX?: string;
   anchorY?: string;
-  color: number;
+  color?: number;
   curveRadius?: number;
   fontSize?: number;
-  position?: ObjectPosition;
-  rotation?: ObjectRotation;
   value: string;
 }
 
-export const Text = ({
-  anchorX = "center",
-  anchorY = "center",
-  color = 0x9966ff,
-  curveRadius = 0,
-  fontSize = 0.4,
-  position = defaultPosition,
-  rotation = defaultRotation,
-  value,
-}: TextProps) => {
+export const Text = (props: TextProps) => {
+  const {
+    anchorX = "center",
+    anchorY = "center",
+    color = DEFAULT_TEXT_COLOR,
+    curveRadius = 0,
+    fontSize = 0.4,
+    interactions,
+    position = defaultPosition,
+    rotation = defaultRotation,
+    value,
+  } = props;
+
   const obj = useRef<GameObject>({
     id: generateUUID(),
     obj: new TroikaText(),
+    interactions,
     state: "Ready",
     position,
     rotation,
   });
+
   const textObj = obj.current.obj;
   textObj.anchorX = anchorX;
   textObj.anchorY = anchorY;
@@ -55,6 +61,7 @@ export const Text = ({
     const current = obj.current;
     let mounted = true;
     if (mounted) {
+      // Add to current scene
       GAME.scene.addObjectToScene(current);
     }
 
@@ -63,7 +70,7 @@ export const Text = ({
       current.obj.dispose();
       GAME.scene.removeObjectFromScene(current);
     };
-  }, []);
+  }, [props.interactions]);
   return <></>;
 };
 
@@ -81,6 +88,7 @@ export const FadeInText = ({
   start,
   end,
   step = 25,
+  color = DEFAULT_TEXT_COLOR,
   ...otherProps
 }: FadeInTextProps) => {
   const [intermediateColor, setIntermediateColor] =
@@ -88,7 +96,7 @@ export const FadeInText = ({
 
   const callback = useCallback(
     (duration) => {
-      const value = getAnimatedValue(startColor, otherProps.color, duration);
+      const value = getAnimatedValue(startColor, color, duration);
       setIntermediateColor(value);
       if (onComplete && duration === 0) {
         setTimeout(() => {
@@ -96,7 +104,7 @@ export const FadeInText = ({
         }, start + end);
       }
     },
-    [startColor, otherProps.color, start, end, onComplete]
+    [startColor, color, start, end, onComplete]
   );
 
   useTimeline(callback, start, end, step);
