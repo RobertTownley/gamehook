@@ -66,11 +66,13 @@ export const Text = ({
 interface FadeInTextProps extends TextProps {
   start: number;
   end: number;
+  onComplete?: () => void;
   step?: number;
   startColor?: number;
 }
 
 export const FadeInText = ({
+  onComplete,
   startColor = 0x000000,
   start,
   end,
@@ -85,8 +87,13 @@ export const FadeInText = ({
       (duration) => {
         const value = getAnimatedValue(startColor, otherProps.color, duration);
         setIntermediateColor(value);
+        if (onComplete && duration === 0) {
+          setTimeout(() => {
+            onComplete();
+          }, start + end);
+        }
       },
-      [startColor, otherProps.color]
+      [startColor, otherProps.color, start, end, onComplete]
     ),
     start,
     end,

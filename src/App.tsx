@@ -1,8 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-import { Game, Scene, useAnimation, useTimeline } from "./gamehook";
-import { getAnimatedValue } from "./gamehook/animation";
-import { Cube, Text } from "./gamehook/objects";
+import { Game, Scene, useAnimation } from "./gamehook";
+import { Cube } from "./gamehook/objects";
 import { FadeInText } from "./gamehook/objects/text";
 
 import { ObjectPosition, ObjectRotation } from "./gamehook/objects/types";
@@ -10,7 +9,7 @@ import { ObjectPosition, ObjectRotation } from "./gamehook/objects/types";
 const RunawayCube = () => {
   const [position, setPosition] = useState<ObjectPosition>([0, 0, 0]);
   useAnimation(() => {
-    setPosition((prev) => [prev[0], prev[1], prev[2] + 0.01]);
+    setPosition((prev) => [prev[0], prev[1], prev[2] - 0.01]);
   });
 
   return <Cube position={position} />;
@@ -41,14 +40,14 @@ const LoadingScene = () => {
         value="Hello World"
         color={0x00aaff}
         start={1500}
-        end={3000}
+        end={2500}
         position={[0, 0.5, 0]}
       />
       <FadeInText
         value="Welcome to GameHook"
         color={0x00aaff}
-        start={3500}
-        end={6000}
+        start={3000}
+        end={4000}
         position={[0, -0.5, 0]}
       />
     </Scene>
