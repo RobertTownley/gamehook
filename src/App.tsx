@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { MovingCube } from "./examples/objects";
 
 import { Game, Scene, useAnimation } from "./gamehook";
 import { Cube } from "./gamehook/objects";
@@ -45,7 +46,7 @@ const LoadingScene = () => {
   const INTRO_DURATION = 5;
   useEffect(() => {
     setTimeout(() => {
-      GAME.transitionToScene("Battle");
+      GAME.transitionToScene("Intro");
     }, INTRO_DURATION);
   }, []);
 
@@ -70,22 +71,7 @@ const LoadingScene = () => {
 };
 const IntroScene = () => (
   <Scene title="Intro">
-    <RunawayCube />
-
-    <RotatingCube position={[0, 2, 0]} />
-    <RotatingCube position={[0, -2, 0]} />
-    <RotatingCube position={[2, 0, 0]} />
-    <RotatingCube position={[-2, 0, 0]} />
-
-    <RotatingCube position={[-2, 0, -10]} />
-    <RotatingCube position={[2, 0, -10]} />
-    <RotatingCube position={[0, 2, -10]} />
-    <RotatingCube position={[0, -2, -10]} />
-
-    <RotatingCube position={[5, -5, -8]} />
-    <RotatingCube position={[-5, 5, -8]} />
-    <RotatingCube position={[-5, -5, -8]} />
-    <RotatingCube position={[5, 5, -8]} />
+    <MovingCube />
   </Scene>
 );
 
