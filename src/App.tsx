@@ -19,18 +19,23 @@ interface RotatingCubeProps {
   position?: ObjectPosition;
 }
 const RotatingCube = ({ position = [0, 0, 0] }: RotatingCubeProps) => {
+  const [clicked, setClicked] = useState(false);
+  const color = clicked ? 0x000fff : 0xff00aa;
   const [rotation, setRotation] = useState<ObjectRotation>([0, 0, 0]);
   useAnimation(() => {
     setRotation((prev) => [prev[0], prev[1] + 0.01, prev[2] + 0.01]);
   });
+
+  const handleClick = () => {
+    setClicked((prev) => !prev);
+  };
   return (
     <Cube
       rotation={rotation}
       position={position}
+      color={color}
       interactions={{
-        onClick: () => {
-          console.log("You clicked into a rotating cube");
-        },
+        onClick: handleClick,
       }}
     />
   );
@@ -90,26 +95,13 @@ const BattleScene = () => {
   return (
     <Scene title="Battle">
       <Text
+        value="Click Me"
         interactions={{
-          onClick: () => {
-            console.log("I, a block of text, got clicked!");
-          },
-          onMouseOver: () => {
-            console.log("GETTING HOVERED");
-            setHovered(true);
-          },
-          onMouseEnter: () => {
-            setHovered(true);
-          },
-          onMouseOut: () => {
-            setHovered(false);
-          },
-          onMouseLeave: () => {
-            setHovered(false);
+          onClick: (event) => {
+            setHovered((prev) => !prev);
           },
         }}
-        value="Click Me"
-        color={0x00aaff}
+        color={color}
         position={[0, 1, 0]}
       />
       <Text value="I am not clickable" position={[0, -1, 0]} color={color} />

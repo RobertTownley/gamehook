@@ -7,7 +7,12 @@ const handleMouseEvent = (
   event: MouseEvent,
   eventType: keyof InteractionMap
 ) => {
+  if (eventType !== "onClick") {
+    return;
+  }
   event.preventDefault();
+
+  // Determine which scene objects are listening for this interaction
   const { scene } = GAME;
   const interactables = Object.values(scene.objects).filter((obj) => {
     const interactions = obj.interactions;
@@ -16,17 +21,24 @@ const handleMouseEvent = (
     return (interactions as InteractionMap)[eventType] ? true : false;
   });
 
+  // Cast a ray to see which listening object the mouse click intersects with
   const mouse = getMouseVectorForEvent(event);
   const raycaster = new THREE.Raycaster();
   raycaster.setFromCamera(mouse, scene.camera);
   const intersects = raycaster.intersectObjects(
-    interactables.map((i) => i.obj)
+    interactables.map((i) => {
+      i.obj.updateMatrixWorld();
+      return i.obj;
+    })
   );
+  // const intersects = raycaster.intersectObjects(interactables.map((i) => i.obj));
   if (!intersects.length) return;
 
   const selected = interactables.find(
     (i) => i.obj.uuid === intersects[0].object.uuid
   );
+
+  // Call the interacted element's event handler
   const interactions = selected?.interactions;
   if (!interactions) return;
   const handler = interactions[eventType];

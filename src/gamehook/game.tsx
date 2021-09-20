@@ -43,7 +43,7 @@ interface GameProps {
 
 export const getInitialGameData = (): GameData => {
   const { width, height } = getCanvasDimensions();
-  const camera = new THREE.PerspectiveCamera(75, width / height);
+  const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
   camera.position.z = 5;
 
   return {

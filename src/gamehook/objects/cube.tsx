@@ -7,6 +7,7 @@ import { defaultPosition, defaultRotation } from "./defaults";
 import { Interactable } from "../interactions/types";
 
 interface CubeProps extends Interactable, Positionalable {
+  color?: number;
   geometry?: THREE.BoxGeometry;
   material?: THREE.MeshBasicMaterial;
 }
@@ -15,6 +16,7 @@ const defaultMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 const defaultGeometry = new THREE.BoxGeometry(1, 1, 1);
 
 export const Cube = ({
+  color,
   interactions,
   geometry = defaultGeometry,
   material = defaultMaterial,
@@ -29,6 +31,10 @@ export const Cube = ({
     position,
     rotation,
   });
+
+  useEffect(() => {
+    obj.current.obj.material.color.set(color);
+  }, [color]);
 
   useEffect(() => {
     let mounted = true;

@@ -28,7 +28,9 @@ export const Scene = ({
     mountRef.current?.appendChild(GAME.renderer.domElement);
 
     return () => {
-      existingRef?.removeChild(GAME.renderer.domElement);
+      if (existingRef?.contains(GAME.renderer.domElement)) {
+        existingRef?.removeChild(GAME.renderer.domElement);
+      }
     };
   }, [isActive]);
 

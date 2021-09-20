@@ -19,19 +19,17 @@ interface TextProps extends Positionalable, Interactable {
   value: string;
 }
 
-export const Text = (props: TextProps) => {
-  const {
-    anchorX = "center",
-    anchorY = "center",
-    color = DEFAULT_TEXT_COLOR,
-    curveRadius = 0,
-    fontSize = 0.4,
-    interactions,
-    position = defaultPosition,
-    rotation = defaultRotation,
-    value,
-  } = props;
-
+export const Text = ({
+  anchorX = "center",
+  anchorY = "center",
+  color = DEFAULT_TEXT_COLOR,
+  curveRadius = 0,
+  fontSize = 0.4,
+  interactions,
+  position = defaultPosition,
+  rotation = defaultRotation,
+  value,
+}: TextProps) => {
   const obj = useRef<GameObject>({
     id: generateUUID(),
     obj: new TroikaText(),
@@ -70,7 +68,7 @@ export const Text = (props: TextProps) => {
       current.obj.dispose();
       GAME.scene.removeObjectFromScene(current);
     };
-  }, [props.interactions]);
+  }, [interactions]);
   return <></>;
 };
 
