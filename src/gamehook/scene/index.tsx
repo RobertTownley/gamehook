@@ -41,15 +41,6 @@ export const Scene = ({
 
   useAnimation(() => {
     if (!isActive) return null;
-    // Determine objects to add/remove from scene
-    for (const obj of Object.values(GAME.scene.objects)) {
-      if (obj.state === "Ready") {
-        // Add object to scene
-        obj.state = "Initialized";
-      } else if (obj.state === "Terminating") {
-        obj.state = "Terminated";
-      }
-    }
     GAME.renderer.render(GAME.scene.threeScene, GAME.scene.camera);
   });
 

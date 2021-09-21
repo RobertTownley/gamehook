@@ -69,12 +69,24 @@ const LoadingScene = () => {
     </Scene>
   );
 };
-const IntroScene = () => (
-  <Scene title="Intro">
-    <MovingCube />
-  </Scene>
-);
+const IntroScene = () => {
+  const positions: ObjectPosition[] = [];
+  for (let i = -2; i < 2; i += 0.2) {
+    positions.push([i, 2, 0]);
+    positions.push([2, -i, 0]);
+    positions.push([-2, -i, 0]);
+    positions.push([-i, -2, 0]);
+  }
+  return (
+    <Scene title="Intro">
+      {positions.map((pos, i) => (
+        <MovingCube initialPosition={pos} key={i} />
+      ))}
+    </Scene>
+  );
+};
 
+/*
 const BattleScene = () => {
   const [hovered, setHovered] = useState(false);
   const color = hovered ? 0xffffff : 0xff00ff;
@@ -95,13 +107,13 @@ const BattleScene = () => {
     </Scene>
   );
 };
+*/
 
 function App() {
   return (
     <Game>
       <LoadingScene />
       <IntroScene />
-      <BattleScene />
     </Game>
   );
 }

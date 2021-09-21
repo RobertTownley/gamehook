@@ -88,16 +88,6 @@ export const getInitialGameData = (): GameData => {
 window.GAME = getInitialGameData();
 initializeEventHandlers();
 window.GAME.onWindowResize();
-document.addEventListener(
-  "mousedown",
-  window.GAME.eventHandlers.onMouseDown,
-  false
-);
-document.addEventListener(
-  "mousemove",
-  window.GAME.eventHandlers.onMouseMove,
-  false
-);
 
 export const SceneTitleContext = createContext("Loading");
 export const useSceneTitleContext = () => useContext(SceneTitleContext);
@@ -106,7 +96,7 @@ export const Game = (props: GameProps) => {
   const [sceneTitle, setSceneTitle] = useState("Loading");
 
   // Game Loop
-  const FPS = 2;
+  const FPS = 1;
   useEffect(() => {
     const gameLoop = () => {
       setTimeout(() => {

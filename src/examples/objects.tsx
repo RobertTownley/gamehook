@@ -5,7 +5,7 @@ import { useAnimation } from "../gamehook/hooks";
 import { Cube } from "../gamehook/objects";
 
 const calculateNewPosition = (position: ObjectPosition): ObjectPosition => {
-  const bound = 1;
+  const bound = 2;
   const negBound = 0 - bound;
   const step = 0.01;
 
@@ -24,10 +24,13 @@ const calculateNewPosition = (position: ObjectPosition): ObjectPosition => {
   return [x, y, z];
 };
 
-export const MovingCube = () => {
+interface MovingCubeProps {
+  initialPosition: ObjectPosition;
+}
+export const MovingCube = ({ initialPosition }: MovingCubeProps) => {
   const [clicked, setClicked] = useState(false);
   const color = clicked ? 0xffffff : 0xaaff;
-  const [position, setPosition] = useState<ObjectPosition>([0, 0, 0]);
+  const [position, setPosition] = useState<ObjectPosition>(initialPosition);
   useAnimation(() => {
     setPosition((prev) => calculateNewPosition(prev));
   });
@@ -40,6 +43,7 @@ export const MovingCube = () => {
       }}
       position={position}
       color={color}
+      size={0.1}
     />
   );
 };
