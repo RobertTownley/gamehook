@@ -23,10 +23,23 @@ const calculateNewPosition = (position: ObjectPosition): ObjectPosition => {
   }
   return [x, y, z];
 };
+
 export const MovingCube = () => {
+  const [clicked, setClicked] = useState(false);
+  const color = clicked ? 0xffffff : 0xaaff;
   const [position, setPosition] = useState<ObjectPosition>([0, 0, 0]);
   useAnimation(() => {
     setPosition((prev) => calculateNewPosition(prev));
   });
-  return <Cube position={position} color={0x00aaff} />;
+  return (
+    <Cube
+      interactions={{
+        onClick: () => {
+          setClicked((prev) => !prev);
+        },
+      }}
+      position={position}
+      color={color}
+    />
+  );
 };

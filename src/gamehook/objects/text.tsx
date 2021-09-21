@@ -3,14 +3,14 @@ import { Text as TroikaText } from "troika-three-text";
 import { generateUUID } from "three/src/math/MathUtils";
 
 import { getAnimatedValue } from "../animation";
-import { GameObject, Positionalable } from "./types";
+import { GameObject, Positionable } from "./types";
 import { defaultPosition, defaultRotation } from "./defaults";
 import { useTimeline } from "../hooks";
 import { Interactable } from "../interactions/types";
 
 const DEFAULT_TEXT_COLOR = 0xffffff;
 
-interface TextProps extends Positionalable, Interactable {
+interface TextProps extends Positionable, Interactable {
   anchorX?: string;
   anchorY?: string;
   color?: number;

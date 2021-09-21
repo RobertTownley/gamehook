@@ -12,7 +12,7 @@ type ObjectState =
 export type ObjectRotation = [number, number, number];
 export type ObjectPosition = [number, number, number];
 
-export interface Positionalable {
+export interface Positionable {
   position?: ObjectPosition;
   rotation?: ObjectRotation;
 }

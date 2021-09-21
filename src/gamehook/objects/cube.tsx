@@ -1,56 +1,36 @@
 import * as THREE from "three";
-import { useEffect, useRef } from "react";
-import { generateUUID } from "three/src/math/MathUtils";
 
-import { GameObject, Positionalable } from "./types";
+import { Positionable } from "./types";
 import { defaultPosition, defaultRotation } from "./defaults";
 import { Interactable } from "../interactions/types";
+import { Mesh } from "./mesh";
 
-interface CubeProps extends Interactable, Positionalable {
+interface CubeProps extends Interactable, Positionable {
   color?: number;
   geometry?: THREE.BoxGeometry;
   material?: THREE.MeshBasicMaterial;
+  size?: number;
 }
-
-const defaultMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-const defaultGeometry = new THREE.BoxGeometry(1, 1, 1);
 
 export const Cube = ({
   color,
   interactions,
-  geometry = defaultGeometry,
-  material = defaultMaterial,
+  geometry,
+  material,
   position = defaultPosition,
   rotation = defaultRotation,
+  size = 1,
 }: CubeProps) => {
-  const obj = useRef<GameObject>({
-    id: generateUUID(),
-    obj: new THREE.Mesh(geometry, material),
-    interactions,
-    state: "Ready",
-    position,
-    rotation,
-  });
+  const _geometry = geometry || new THREE.BoxGeometry(size, size, size);
 
-  useEffect(() => {
-    obj.current.obj.material.color.set(color);
-  }, [color]);
-
-  useEffect(() => {
-    let mounted = true;
-    const current = obj.current;
-
-    if (mounted) {
-      GAME.scene.addObjectToScene(current);
-    }
-
-    return () => {
-      mounted = false;
-      GAME.scene.removeObjectFromScene(current);
-    };
-  }, []);
-  obj.current.obj.position.set(...position);
-  obj.current.obj.rotation.set(...rotation);
-
-  return <></>;
+  return (
+    <Mesh
+      color={color}
+      interactions={interactions}
+      position={position}
+      material={material}
+      geometry={_geometry}
+      rotation={rotation}
+    />
+  );
 };
