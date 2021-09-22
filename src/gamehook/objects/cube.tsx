@@ -1,14 +1,10 @@
 import * as THREE from "three";
 
-import { Positionable } from "./types";
-import { defaultPosition, defaultRotation } from "./defaults";
-import { Interactable } from "../interactions/types";
+import { BasicMeshType } from "./types";
 import { Mesh } from "./mesh";
 
-interface CubeProps extends Interactable, Positionable {
-  color?: number;
+interface CubeProps extends BasicMeshType {
   geometry?: THREE.BoxGeometry;
-  material?: THREE.MeshBasicMaterial;
   size?: number;
 }
 
@@ -19,29 +15,12 @@ const defaultGeometry = new THREE.BoxGeometry(
   DEFAULT_CUBE_SIZE
 );
 
-export const Cube = ({
-  color,
-  interactions,
-  geometry,
-  material,
-  position = defaultPosition,
-  rotation = defaultRotation,
-  size = 1,
-}: CubeProps) => {
+export const Cube = ({ geometry, material, size = 1, ...props }: CubeProps) => {
   const _geometry = (() => {
     if (geometry) return geometry;
     if (size === 1) return defaultGeometry; // Memory saving
     return new THREE.BoxGeometry(size, size, size);
   })();
 
-  return (
-    <Mesh
-      color={color}
-      interactions={interactions}
-      position={position}
-      material={material}
-      geometry={_geometry}
-      rotation={rotation}
-    />
-  );
+  return <Mesh geometry={_geometry} {...props} />;
 };

@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { Text as TroikaText } from "troika-three-text";
-import { InteractionMap } from "../interactions/types";
+import { Collidable } from "../interactions/collisions";
+import { Interactable, InteractionMap } from "../interactions/types";
 
 type ObjectState =
   | "Ready"
@@ -28,4 +29,13 @@ export interface GameObject {
   state: ObjectState;
 }
 
-// Interactions
+export interface Designable {
+  color?: number;
+  material?: THREE.Material;
+}
+
+export interface BasicMeshType
+  extends Collidable,
+    Designable,
+    Interactable,
+    Positionable {}

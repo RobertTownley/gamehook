@@ -2,7 +2,9 @@ import { ReactNode, useEffect, useRef } from "react";
 import * as THREE from "three";
 import { generateUUID } from "three/src/math/MathUtils";
 
+import { Collidable } from "../interactions/collisions";
 import { Interactable } from "../interactions/types";
+import { defaultPosition, defaultRotation } from "./defaults";
 import {
   GameObject,
   ObjectPosition,
@@ -10,13 +12,13 @@ import {
   Positionable,
 } from "./types";
 
-interface MeshProps extends Interactable, Positionable {
+interface MeshProps extends Collidable, Interactable, Positionable {
   color?: number;
   children?: ReactNode;
-  geometry: THREE.BoxGeometry;
+  geometry: THREE.BufferGeometry;
   material?: THREE.Material;
-  position: ObjectPosition;
-  rotation: ObjectRotation;
+  position?: ObjectPosition;
+  rotation?: ObjectRotation;
 }
 
 const defaultMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
@@ -32,8 +34,8 @@ const determineMaterial = (
 export const Mesh = ({
   color,
   interactions,
-  position,
-  rotation,
+  position = defaultPosition,
+  rotation = defaultRotation,
   geometry,
   material,
 }: MeshProps) => {

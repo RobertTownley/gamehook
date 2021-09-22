@@ -16,6 +16,11 @@ import {
   initializeEventHandlers,
 } from "./interactions/eventHandler";
 
+type Animation = {
+  id: string;
+  callback: () => void;
+};
+
 export interface Scene {
   camera: THREE.PerspectiveCamera;
   id: string;
@@ -25,6 +30,7 @@ export interface Scene {
   // Object Methods
   addObjectToScene: (obj: GameObject) => void;
   removeObjectFromScene: (obj: GameObject) => void;
+  animations: Animation[];
 }
 
 export interface GameData {
@@ -38,7 +44,7 @@ export interface GameData {
 }
 
 interface GameProps {
-  children: Array<ReactNode>;
+  children: ReactNode | Array<ReactNode>;
 }
 
 export const getInitialGameData = (): GameData => {
@@ -50,6 +56,7 @@ export const getInitialGameData = (): GameData => {
     id: generateUUID(),
     eventHandlers: buildEventHandlerMap(),
     scene: {
+      animations: [],
       camera,
       id: generateUUID(),
       threeScene: new THREE.Scene(),

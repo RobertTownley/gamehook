@@ -3,35 +3,30 @@ import { useCallback, useEffect, useRef } from "react";
 type Animation = (val: number) => void;
 
 export const useAnimation = (callback: Animation) => {
-  // Use useRef for mutable variables that we want to persist
-  // without triggering a re-render on their change
-  const callable = useCallback(callback, [callback]);
-  const requestRef = useRef(0);
-  const previousTimeRef = useRef(0);
-
-  const animate = useCallback(
-    (time: number) => {
-      if (previousTimeRef.current !== undefined) {
-        const deltaTime = time - previousTimeRef.current;
-        callable(deltaTime);
-      }
-      previousTimeRef.current = time;
-      requestRef.current = requestAnimationFrame(animate);
-    },
-    [callable]
-  );
+  const savedCallback = useRef<(elapsed: number) => void>();
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
 
   useEffect(() => {
-    let isMounted = true;
-    let id: number;
-    if (isMounted) {
-      id = requestAnimationFrame(animate);
+    let animationFrame: number;
+    let startTime: number;
+    function tick() {
+      const elapsed = Date.now() - startTime;
+      startTime = Date.now();
+      loop();
+      savedCallback.current && savedCallback.current(elapsed);
     }
+
+    function loop() {
+      animationFrame = requestAnimationFrame(tick);
+    }
+    startTime = Date.now();
+    loop();
     return () => {
-      isMounted = false;
-      cancelAnimationFrame(id);
+      cancelAnimationFrame(animationFrame);
     };
-  }, [animate]);
+  }, []);
 };
 
 /* Sets timeouts for the provided callback, returning a decimal value

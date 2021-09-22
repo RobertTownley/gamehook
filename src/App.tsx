@@ -4,6 +4,7 @@ import { MovingCube } from "./examples/objects";
 import { Game, Scene, useAnimation } from "./gamehook";
 import { Cube } from "./gamehook/objects";
 import { Text, FadeInText } from "./gamehook/objects/text";
+import { Pong } from "./examples/games/pong";
 
 import { ObjectPosition, ObjectRotation } from "./gamehook/objects/types";
 
@@ -70,8 +71,15 @@ const LoadingScene = () => {
   );
 };
 const IntroScene = () => {
+  return (
+    <Scene title="Intro">
+      <Pong />
+    </Scene>
+  );
+};
+/*
   const positions: ObjectPosition[] = [];
-  for (let i = -2; i < 2; i += 0.2) {
+  for (let i = -2; i < 2; i += 1) {
     positions.push([i, 2, 0]);
     positions.push([2, -i, 0]);
     positions.push([-2, -i, 0]);
@@ -84,7 +92,7 @@ const IntroScene = () => {
       ))}
     </Scene>
   );
-};
+  */
 
 /*
 const BattleScene = () => {
