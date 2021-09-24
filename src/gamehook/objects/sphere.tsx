@@ -30,8 +30,8 @@ export const Sphere: FC<Props> = ({
 };
 
 const DEFAULT_RADIUS = 1;
-const DEFAULT_WIDTH_SEGMENTS = 32;
-const DEFAULT_HEIGHT_SEGMENTS = 16;
+const DEFAULT_WIDTH_SEGMENTS = 16;
+const DEFAULT_HEIGHT_SEGMENTS = 8;
 const defaultGeometry = new THREE.SphereGeometry(
   DEFAULT_RADIUS,
   DEFAULT_WIDTH_SEGMENTS,

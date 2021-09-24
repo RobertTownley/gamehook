@@ -71,7 +71,6 @@ export const getInitialGameData = (): GameData => {
         this.threeScene.remove(obj.obj);
         delete this.objects[obj.id];
       },
-      // Scene Methods
     },
     renderer: new THREE.WebGLRenderer(),
     transitionToScene: function (title: string) {

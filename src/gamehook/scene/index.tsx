@@ -3,6 +3,7 @@ import { ReactNode, useEffect, useRef } from "react";
 
 import { useSceneTitleContext } from "../game";
 import { useAnimation } from "../hooks";
+import { detectCollisions } from "../interactions/collisions";
 
 interface SceneProps {
   backgroundColor?: string;
@@ -41,6 +42,7 @@ export const Scene = ({
 
   useAnimation(() => {
     if (!isActive) return null;
+    detectCollisions();
     GAME.renderer.render(GAME.scene.threeScene, GAME.scene.camera);
   });
 
