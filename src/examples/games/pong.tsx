@@ -40,15 +40,15 @@ const Ball: FC<BallProps> = ({ setBallGone }) => {
 
   useAnimation(() => {
     // Determine if it's gone too far off the screen
-    //
-    // Move the ball
-    // TODO: Determine why the position state hook is only accurate
-    // inside the callback of the setter. As in, why this won't work here:
     const isGone = Math.abs(position[1]) > BOUNDARY;
     setBallGone(isGone);
-    setPosition((prev) => {
-      return [prev[0] + vector[0], prev[1] + vector[1], prev[2] + vector[2]];
-    });
+
+    // Move the ball
+    setPosition([
+      position[0] + vector[0],
+      position[1] + vector[1],
+      position[2] + vector[2],
+    ]);
   });
 
   const handleCollision = (other: unknown) => {
