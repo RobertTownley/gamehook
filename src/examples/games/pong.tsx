@@ -1,11 +1,4 @@
-import {
-  Dispatch,
-  FC,
-  SetStateAction,
-  useEffect,
-  useLayoutEffect,
-  useState,
-} from "react";
+import { Dispatch, FC, SetStateAction, useLayoutEffect, useState } from "react";
 import * as THREE from "three";
 
 import { Game, Scene } from "../../gamehook";
@@ -27,6 +20,9 @@ const Brick: FC<{ position: ObjectPosition }> = ({ position }) => {
       material={BrickMaterial}
       position={position}
       triggersCollisions
+      onClick={() => {
+        console.log("BRICK CLICK");
+      }}
     />
   );
 };

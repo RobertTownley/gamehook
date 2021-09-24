@@ -4,9 +4,9 @@ import { generateUUID } from "three/src/math/MathUtils";
 
 import { getAnimatedValue } from "../animation";
 import { GameObject, Positionable } from "./types";
-import { defaultPosition, defaultRotation } from "./defaults";
 import { useTimeline } from "../hooks";
 import { Interactable } from "../interactions/types";
+import { defaultPosition, defaultRotation } from "./defaults";
 
 const DEFAULT_TEXT_COLOR = 0xffffff;
 
@@ -25,18 +25,18 @@ export const Text = ({
   color = DEFAULT_TEXT_COLOR,
   curveRadius = 0,
   fontSize = 0.4,
-  interactions,
+  value,
   position = defaultPosition,
   rotation = defaultRotation,
-  value,
+  ...gameObjectProps
 }: TextProps) => {
   const obj = useRef<GameObject>({
     id: generateUUID(),
     obj: new TroikaText(),
-    interactions,
-    state: "Ready",
     position,
     rotation,
+    state: "Ready",
+    ...gameObjectProps,
   });
 
   const textObj = obj.current.obj;
@@ -68,7 +68,7 @@ export const Text = ({
       current.obj.dispose();
       GAME.scene.removeObjectFromScene(current);
     };
-  }, [interactions]);
+  }, []);
   return <></>;
 };
 

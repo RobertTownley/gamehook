@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { Text as TroikaText } from "troika-three-text";
 import { Collidable } from "../interactions/collisions";
-import { Interactable, InteractionMap } from "../interactions/types";
+import { Interactable } from "../interactions/types";
 
 type ObjectState =
   | "Ready"
@@ -20,9 +20,8 @@ export interface Positionable {
 
 export type ThreeGameObject = THREE.Mesh | typeof TroikaText;
 
-export interface GameObject {
+export interface GameObject extends Collidable, Interactable, Positionable {
   id: string;
-  interactions?: InteractionMap;
   obj: ThreeGameObject;
   position: ObjectPosition;
   rotation: ObjectRotation;

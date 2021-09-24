@@ -1,6 +1,6 @@
 export type MouseEventHandler = (event: MouseEvent) => void;
 
-export interface InteractionMap {
+export interface Interactable {
   onClick?: MouseEventHandler;
   onMouseMove?: MouseEventHandler;
   onMouseOver?: MouseEventHandler;
@@ -9,10 +9,6 @@ export interface InteractionMap {
   onMouseDown?: MouseEventHandler;
   onMouseEnter?: MouseEventHandler;
   onMouseLeave?: MouseEventHandler;
-}
-
-export interface Interactable {
-  interactions?: InteractionMap;
 }
 
 export interface EventHandlerMap {

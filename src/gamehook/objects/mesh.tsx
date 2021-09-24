@@ -33,21 +33,21 @@ const determineMaterial = (
 
 export const Mesh = ({
   color,
-  interactions,
   position = defaultPosition,
   rotation = defaultRotation,
   geometry,
   material,
+  ...gameObjectProps
 }: MeshProps) => {
   const _material = determineMaterial(material, color);
 
   const obj = useRef<GameObject>({
     id: generateUUID(),
     obj: new THREE.Mesh(geometry, _material),
-    interactions,
     state: "Ready",
     position,
     rotation,
+    ...gameObjectProps,
   });
 
   useEffect(() => {
