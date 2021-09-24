@@ -5,7 +5,7 @@ import { Game, Scene } from "../../gamehook";
 import { Mesh } from "../../gamehook/objects/mesh";
 import { Sphere } from "../../gamehook/objects/sphere";
 import { useAnimation } from "../../gamehook/hooks";
-import { ObjectPosition } from "../../gamehook/objects/types";
+import { GameObject, ObjectPosition } from "../../gamehook/objects/types";
 
 const BOUNDARY = 4; // How far the ball travels before the game ends
 const BrickGeometry = new THREE.BoxGeometry(0.5, 0.125, 0.01);
@@ -28,10 +28,11 @@ const Brick: FC<{ position: ObjectPosition }> = ({ position }) => {
 };
 
 interface BallProps {
+  onCollision: (brick: GameObject) => void;
   setBallGone: Dispatch<SetStateAction<boolean>>;
+  vector: ObjectPosition;
 }
-const Ball: FC<BallProps> = ({ setBallGone }) => {
-  const [vector, setVector] = useState([0.01, 0.01, 0]);
+const Ball: FC<BallProps> = ({ onCollision, setBallGone, vector }) => {
   const [position, setPosition] = useState<ObjectPosition>([0, 1, 0]);
 
   useAnimation(() => {
@@ -47,17 +48,12 @@ const Ball: FC<BallProps> = ({ setBallGone }) => {
     ]);
   });
 
-  const handleCollision = (other: unknown) => {
-    console.log("I collided!");
-    console.log({ other });
-  };
-
   return (
     <Sphere
       color={0xffff00}
       position={position}
       radius={0.125}
-      onCollision={handleCollision}
+      onCollision={onCollision}
     />
   );
 };
@@ -74,17 +70,39 @@ const Paddle = () => {
 };
 
 export const Pong = () => {
-  const brickPositions: ObjectPosition[] = [];
+  const initialBrickPositions = (() => {
+    const brickPositions: ObjectPosition[] = [];
+    for (let i = -3; i <= 3; i += 1) {
+      brickPositions.push([i, 2, 0]);
+      brickPositions.push([i + 0.5, 2.5, 0]);
+      brickPositions.push([i, 3, 0]);
+    }
+    return brickPositions;
+  })();
   const [ballGone, setBallGone] = useState(false);
+  const [brickPositions, setBrickPositions] = useState(initialBrickPositions);
+  const [ballVector, setBallVector] = useState<ObjectPosition>([0.01, 0.01, 0]);
 
-  for (let i = -3; i <= 3; i += 1) {
-    brickPositions.push([i, 2, 0]);
-    brickPositions.push([i + 0.5, 2.5, 0]);
-    brickPositions.push([i, 3, 0]);
-  }
   useLayoutEffect(() => {
     console.log({ ballGone });
   }, [ballGone]);
+
+  const handleCollision = (brick: GameObject) => {
+    // Change ball's path
+    const newVector: ObjectPosition = [
+      ballVector[0],
+      0 - Math.abs(ballVector[0]),
+      ballVector[2],
+    ];
+    setBallVector(newVector);
+
+    // Remove the brick
+    const newBrickPositions = brickPositions.filter(
+      (position) => position !== brick.position
+    );
+    setBrickPositions(newBrickPositions);
+    console.log({ brick });
+  };
   return (
     <>
       {ballGone && <h1>Game Over!</h1>}
@@ -94,7 +112,11 @@ export const Pong = () => {
             <Brick position={position} key={i} />
           ))}
           <Paddle />
-          <Ball setBallGone={setBallGone} />
+          <Ball
+            onCollision={handleCollision}
+            setBallGone={setBallGone}
+            vector={ballVector}
+          />
         </Scene>
       </Game>
     </>

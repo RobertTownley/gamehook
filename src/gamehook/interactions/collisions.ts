@@ -43,6 +43,7 @@ interface DetectCollisionParams {
   method: "sample" | "exact";
 }
 const COLLISION_DISTANCE = 0.025;
+const SAMPLE_SIZE = 50;
 export const detectCollision = ({
   collider,
   collidables,
@@ -54,7 +55,7 @@ export const detectCollision = ({
   const colliderCenter = new THREE.Vector3(position.x, position.y, position.z);
   const colliderSampleVertices =
     method === "sample"
-      ? _.sampleSize(getVerticesForObject(collider.obj), 10)
+      ? _.sampleSize(getVerticesForObject(collider.obj), SAMPLE_SIZE)
       : getVerticesForObject(collider.obj);
   for (const collidable of collidables) {
     // First, detect if it's within the bounding box
@@ -73,7 +74,7 @@ export const detectCollision = ({
     // Then, detect if there are overlapping vectors
     const colSampleVertices =
       method === "sample"
-        ? _.sampleSize(getVerticesForObject(collidable.obj), 10)
+        ? _.sampleSize(getVerticesForObject(collidable.obj), SAMPLE_SIZE)
         : getVerticesForObject(collidable.obj);
     for (const v1 of colliderSampleVertices) {
       for (const v2 of colSampleVertices) {
