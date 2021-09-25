@@ -79,13 +79,10 @@ export const Pong = () => {
     }
     return brickPositions;
   })();
+
   const [ballGone, setBallGone] = useState(false);
   const [brickPositions, setBrickPositions] = useState(initialBrickPositions);
   const [ballVector, setBallVector] = useState<ObjectPosition>([0.01, 0.01, 0]);
-
-  useLayoutEffect(() => {
-    console.log({ ballGone });
-  }, [ballGone]);
 
   const handleCollision = (brick: GameObject) => {
     // Change ball's path
