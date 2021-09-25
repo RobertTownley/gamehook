@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import _, { sampleSize } from "lodash";
+import _ from "lodash";
 import { GameObject } from "../objects/types";
 
 import { getVerticesForObject } from "./utils";
@@ -84,81 +84,4 @@ export const detectCollision = ({
       }
     }
   }
-
-  /*
-  const colliderVertices = _.sampleSize(collection);
-
-  for (const collidable of collidables) {
-    const { boundingSphere } = collidable.obj.geometry;
-    if (!boundingSphere) continue;
-    const { center, radius } = boundingSphere;
-    const centerVector = new THREE.Vector3(center.x, center.y, center.z);
-    const distance = colliderCenterVector.distanceTo(centerVector);
-    const radialDistance = colliderSphere.radius + radius;
-    if (_.random(0, 1000) === 1) {
-      console.log({
-        collider,
-        collidable,
-      });
-    }
-
-    /*
-    /*
-    if (!collidable.obj.geometry.boundingSphere) {
-        console.log(collidable);
-      }
-      */
-  // const { center, radius } = collidable.obj.geometry.boundingSphere;
-  /*
-  if (method !== "sample") {
-    throw new Error("Non-sample methods for detection not yet supported");
-  }
-  const sampleSize = 10;
-  const colliderSamples = _.sampleSize(
-    getVerticesForObject(collider.obj),
-    sampleSize
-  );
-
-  for (const collidable of collidables) {
-    const collidableSamples = _.sampleSize(
-      getVerticesForObject(collidable.obj),
-      sampleSize
-    );
-
-    for (const colliderSample of colliderSamples) {
-      for (const collidableSample of collidableSamples) {
-        const distance = colliderSample.distanceTo(collidableSample);
-        if (_.random(1, 5000) === 1) {
-          console.log(collidable);
-          console.log(distance);
-        }
-      }
-    }
-  }
-
-  /*
-  const vertices = getVerticesForObject(collider.obj);
-
-  // Choose vertices to ray trace against, rather than test every vertex
-  const sampleSize = 10;
-  const samples = _.sampleSize(vertices, sampleSize);
-
-  for (const collidable of collidables) {
-    console.log({ Distance: collider.obj.distanceTo(collidable.obj) });
-  }
-
-  /*
-  // Iterate through collidable objects and detect collision
-  for (const collidable of collidables) {
-    const collidableVertices = getVerticesForObject(collidable.obj);
-    const collidableSamples = _.sampleSize(collidableVertices, sampleSize);
-    for (const sample of samples) {
-      for (const collidableSample of collidableSamples) {
-        if (sample.distanceTo(collidableSample) < COLLISION_DISTANCE) {
-          return collidable;
-        }
-      }
-    }
-  }
-  */
 };
