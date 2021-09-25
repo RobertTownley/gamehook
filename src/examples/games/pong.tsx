@@ -52,17 +52,35 @@ const Ball: FC<BallProps> = ({ onCollision, setBallGone, vector }) => {
       position={position}
       radius={0.125}
       onCollision={onCollision}
+      triggersCollisions
     />
   );
 };
 
-const Paddle = () => {
-  const position: ObjectPosition = [0, -2, 0];
+interface PaddleProps {
+  onCollision: (obj: GameObject) => void;
+}
+
+const Paddle = ({ onCollision }: PaddleProps) => {
+  const step = 0.1;
+  const [position, setPosition] = useState<ObjectPosition>([0, -2, 0]);
+  const handleKeyPress = (event: KeyboardEvent) => {
+    if (event.key === "ArrowLeft") {
+      setPosition([position[0] - step, position[1], position[2]]);
+    } else if (event.key === "ArrowRight") {
+      setPosition([position[0] + step, position[1], position[2]]);
+    }
+  };
+
   return (
     <Mesh
       geometry={PaddleGeometry}
       material={PaddleMaterial}
       position={position}
+      onKeyDown={handleKeyPress}
+      onCollision={onCollision}
+      triggersCollisions
+      name="paddle"
     />
   );
 };
@@ -82,26 +100,24 @@ export const Pong = () => {
   const [brickPositions, setBrickPositions] = useState(initialBrickPositions);
   const [ballVector, setBallVector] = useState<ObjectPosition>([0.01, 0.01, 0]);
 
-  const handleCollision = (obj: GameObject) => {
-    if (obj.name === "brick") {
-      // Change ball's path
-      const newVector: ObjectPosition = [
-        ballVector[0],
-        0 - Math.abs(ballVector[0]),
-        ballVector[2],
-      ];
-      setBallVector(newVector);
+  const handleBrickCollision = (obj: GameObject) => {
+    // Change ball's path
+    const newVector: ObjectPosition = [
+      ballVector[0],
+      0 - Math.abs(ballVector[0]),
+      ballVector[2],
+    ];
+    setBallVector(newVector);
 
-      // Remove the brick
-      const newBrickPositions = brickPositions.filter(
-        (position) => position !== obj.position
-      );
-      setBrickPositions(newBrickPositions);
-    } else if (obj.name === "boundary") {
-      // TODO
-    } else if (obj.name === "paddle") {
-      // TODO
-    }
+    // Remove the brick
+    const newBrickPositions = brickPositions.filter(
+      (position) => position !== obj.position
+    );
+    setBrickPositions(newBrickPositions);
+  };
+
+  const handlePaddleCollision = () => {
+    console.log("Hit the paddle!");
   };
 
   return (
@@ -112,9 +128,9 @@ export const Pong = () => {
           {brickPositions.map((position, i) => (
             <Brick position={position} key={i} />
           ))}
-          <Paddle />
+          <Paddle onCollision={handlePaddleCollision} />
           <Ball
-            onCollision={handleCollision}
+            onCollision={handleBrickCollision}
             setBallGone={setBallGone}
             vector={ballVector}
           />

@@ -28,7 +28,7 @@ export const detectCollisions = () => {
     const method = "sample"; // TODO: Customize by object
     const collided = detectCollision({
       collider,
-      collidables,
+      collidables: collidables.filter((c) => c.id !== collider.id),
       method,
     });
     if (collided && collider.onCollision) {
@@ -57,6 +57,7 @@ export const detectCollision = ({
     method === "sample"
       ? _.sampleSize(getVerticesForObject(collider.obj), SAMPLE_SIZE)
       : getVerticesForObject(collider.obj);
+
   for (const collidable of collidables) {
     // First, detect if it's within the bounding box
     const { geometry: colGeometry, position: colPosition } = collidable.obj;

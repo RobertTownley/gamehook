@@ -38,6 +38,10 @@ export const Mesh = ({
   rotation = defaultRotation,
   geometry,
   material,
+
+  onCollision,
+  onKeyDown,
+  onClick,
   ...gameObjectProps
 }: MeshProps) => {
   const _material = determineMaterial(material, color);
@@ -46,6 +50,7 @@ export const Mesh = ({
     id: generateUUID(),
     obj: new THREE.Mesh(geometry, _material),
     state: "Ready",
+    onKeyDown,
     position,
     rotation,
     ...gameObjectProps,
@@ -62,6 +67,24 @@ export const Mesh = ({
       obj.current.obj.material = new THREE.MeshBasicMaterial({ color });
     }
   }, [color]);
+
+  // TODO: Do this with every event type, or find a more efficient way
+  // to have the new setter event copied to the object
+  useEffect(() => {
+    if (onKeyDown) {
+      obj.current.onKeyDown = onKeyDown;
+    }
+  }, [onKeyDown]);
+  useEffect(() => {
+    if (onClick) {
+      obj.current.onClick = onClick;
+    }
+  }, [onClick]);
+  useEffect(() => {
+    if (onCollision) {
+      obj.current.onCollision = onCollision;
+    }
+  }, [onCollision]);
 
   useEffect(() => {
     let mounted = true;

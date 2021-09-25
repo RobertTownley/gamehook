@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { GameObject } from "../objects/types";
 
 import { getMouseVectorForEvent } from "./mouse";
-import { EventHandlerMap, Interactable } from "./types";
+import { EventHandlerMap, KeyboardEventType, Interactable } from "./types";
 
 const handleMouseEvent = (event: MouseEvent, eventType: keyof Interactable) => {
   if (eventType !== "onClick") {
@@ -40,8 +40,25 @@ const handleMouseEvent = (event: MouseEvent, eventType: keyof Interactable) => {
   }
 };
 
+const handleKeyboardEvent = (event: KeyboardEvent) => {
+  event.preventDefault();
+  const listenerName = {
+    keyup: "onKeyUp",
+    keydown: "onKeyDown",
+  }[event.type] as KeyboardEventType;
+
+  // Unlike mouse events, call for each object listening for keypresses
+  // TODO: Allow a user to filter by objects listening for specific key presses
+  Object.values(GAME.scene.objects).forEach((obj) => {
+    const handler = obj[listenerName];
+    if (!handler) return;
+    handler(event as KeyboardEvent);
+  });
+};
+
 export const buildEventHandlerMap = (): EventHandlerMap => {
   return {
+    // Mouse
     onClick: (event: MouseEvent) => handleMouseEvent(event, "onClick"),
     onMouseOver: (event: MouseEvent) => handleMouseEvent(event, "onMouseOver"),
     onMouseMove: (event: MouseEvent) => handleMouseEvent(event, "onMouseMove"),
@@ -52,6 +69,9 @@ export const buildEventHandlerMap = (): EventHandlerMap => {
       handleMouseEvent(event, "onMouseEnter"),
     onMouseLeave: (event: MouseEvent) =>
       handleMouseEvent(event, "onMouseLeave"),
+    // Keyboard
+    onKeyDown: (event: KeyboardEvent) => handleKeyboardEvent(event),
+    onKeyUp: (event: KeyboardEvent) => handleKeyboardEvent(event),
   };
 };
 
@@ -64,6 +84,8 @@ export const initializeEventHandlers = () => {
     false
   );
   const { eventHandlers } = window.GAME;
+
+  // Mouse
   window.addEventListener("click", eventHandlers.onClick, false);
   window.addEventListener("mouseup", eventHandlers.onMouseUp, false);
   window.addEventListener("mouseout", eventHandlers.onMouseOut, false);
@@ -72,4 +94,8 @@ export const initializeEventHandlers = () => {
   window.addEventListener("mouseover", eventHandlers.onMouseOver, false);
   window.addEventListener("mouseenter", eventHandlers.onMouseEnter, false);
   window.addEventListener("mouseleave", eventHandlers.onMouseLeave, false);
+
+  // Keyboard
+  window.addEventListener("keyup", eventHandlers.onKeyUp, false);
+  window.addEventListener("keydown", eventHandlers.onKeyDown, false);
 };
