@@ -13,6 +13,10 @@ type ObjectState =
 export type ObjectRotation = [number, number, number];
 export type ObjectPosition = [number, number, number];
 
+export interface Nameable {
+  name?: string;
+  labels?: string[];
+}
 export interface Positionable {
   position?: ObjectPosition;
   rotation?: ObjectRotation;
@@ -20,12 +24,18 @@ export interface Positionable {
 
 export type ThreeGameObject = THREE.Mesh | typeof TroikaText;
 
-export interface GameObject extends Collidable, Interactable, Positionable {
+export interface GameObject
+  extends Collidable,
+    Interactable,
+    Nameable,
+    Positionable {
   id: string;
   obj: ThreeGameObject;
   position: ObjectPosition;
   rotation: ObjectRotation;
   state: ObjectState;
+  name?: string;
+  labels?: string[];
 }
 
 export interface Designable {

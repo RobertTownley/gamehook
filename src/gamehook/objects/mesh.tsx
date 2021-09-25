@@ -7,12 +7,13 @@ import { Interactable } from "../interactions/types";
 import { defaultPosition, defaultRotation } from "./defaults";
 import {
   GameObject,
+  Nameable,
   ObjectPosition,
   ObjectRotation,
   Positionable,
 } from "./types";
 
-interface MeshProps extends Collidable, Interactable, Positionable {
+interface MeshProps extends Collidable, Interactable, Nameable, Positionable {
   color?: number;
   children?: ReactNode;
   geometry: THREE.BufferGeometry;

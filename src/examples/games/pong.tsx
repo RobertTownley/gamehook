@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction, useLayoutEffect, useState } from "react";
+import { Dispatch, FC, SetStateAction, useState } from "react";
 import * as THREE from "three";
 
 import { Game, Scene } from "../../gamehook";
@@ -19,10 +19,8 @@ const Brick: FC<{ position: ObjectPosition }> = ({ position }) => {
       geometry={BrickGeometry}
       material={BrickMaterial}
       position={position}
+      name="brick"
       triggersCollisions
-      onClick={() => {
-        console.log("BRICK CLICK");
-      }}
     />
   );
 };
@@ -84,22 +82,28 @@ export const Pong = () => {
   const [brickPositions, setBrickPositions] = useState(initialBrickPositions);
   const [ballVector, setBallVector] = useState<ObjectPosition>([0.01, 0.01, 0]);
 
-  const handleCollision = (brick: GameObject) => {
-    // Change ball's path
-    const newVector: ObjectPosition = [
-      ballVector[0],
-      0 - Math.abs(ballVector[0]),
-      ballVector[2],
-    ];
-    setBallVector(newVector);
+  const handleCollision = (obj: GameObject) => {
+    if (obj.name === "brick") {
+      // Change ball's path
+      const newVector: ObjectPosition = [
+        ballVector[0],
+        0 - Math.abs(ballVector[0]),
+        ballVector[2],
+      ];
+      setBallVector(newVector);
 
-    // Remove the brick
-    const newBrickPositions = brickPositions.filter(
-      (position) => position !== brick.position
-    );
-    setBrickPositions(newBrickPositions);
-    console.log({ brick });
+      // Remove the brick
+      const newBrickPositions = brickPositions.filter(
+        (position) => position !== obj.position
+      );
+      setBrickPositions(newBrickPositions);
+    } else if (obj.name === "boundary") {
+      // TODO
+    } else if (obj.name === "paddle") {
+      // TODO
+    }
   };
+
   return (
     <>
       {ballGone && <h1>Game Over!</h1>}
