@@ -6,6 +6,7 @@ import { Mesh } from "../../gamehook/objects/mesh";
 import { Sphere } from "../../gamehook/objects/sphere";
 import { useAnimation } from "../../gamehook/hooks";
 import { GameObject, ObjectPosition } from "../../gamehook/objects/types";
+import { CollisionResolver } from "../../gamehook/interactions/collisions";
 
 const BOUNDARY = 4; // How far the ball travels before the game ends
 const BrickGeometry = new THREE.BoxGeometry(0.5, 0.125, 0.01);
@@ -26,7 +27,7 @@ const Brick: FC<{ position: ObjectPosition }> = ({ position }) => {
 };
 
 interface BallProps {
-  onCollision: (brick: GameObject) => void;
+  onCollision: CollisionResolver;
   setBallGone: Dispatch<SetStateAction<boolean>>;
   vector: ObjectPosition;
 }
@@ -53,22 +54,26 @@ const Ball: FC<BallProps> = ({ onCollision, setBallGone, vector }) => {
       radius={0.125}
       onCollision={onCollision}
       triggersCollisions
+      name="ball"
     />
   );
 };
 
 interface PaddleProps {
-  onCollision: (obj: GameObject) => void;
+  position: ObjectPosition;
+  setPaddlePosition: Dispatch<SetStateAction<ObjectPosition>>;
+  onCollision: CollisionResolver;
 }
 
-const Paddle = ({ onCollision }: PaddleProps) => {
-  const step = 0.1;
-  const [position, setPosition] = useState<ObjectPosition>([0, -2, 0]);
+// Game speed constant
+const STEP = 0.1;
+
+const Paddle = ({ position, onCollision, setPaddlePosition }: PaddleProps) => {
   const handleKeyPress = (event: KeyboardEvent) => {
     if (event.key === "ArrowLeft") {
-      setPosition([position[0] - step, position[1], position[2]]);
+      setPaddlePosition([position[0] - STEP, position[1], position[2]]);
     } else if (event.key === "ArrowRight") {
-      setPosition([position[0] + step, position[1], position[2]]);
+      setPaddlePosition([position[0] + STEP, position[1], position[2]]);
     }
   };
 
@@ -99,25 +104,41 @@ export const Pong = () => {
   const [ballGone, setBallGone] = useState(false);
   const [brickPositions, setBrickPositions] = useState(initialBrickPositions);
   const [ballVector, setBallVector] = useState<ObjectPosition>([0.01, 0.01, 0]);
+  const [paddlePosition, setPaddlePosition] = useState<ObjectPosition>([
+    0, -2, 0,
+  ]);
 
-  const handleBrickCollision = (obj: GameObject) => {
-    // Change ball's path
+  const reverseBallYDirection = () => {
     const newVector: ObjectPosition = [
       ballVector[0],
       0 - Math.abs(ballVector[0]),
       ballVector[2],
     ];
     setBallVector(newVector);
+  };
+
+  const handleBrickCollision: CollisionResolver = ({ collided }) => {
+    if (collided.name !== "brick") return;
+
+    // Change ball's path
+    reverseBallYDirection();
 
     // Remove the brick
     const newBrickPositions = brickPositions.filter(
-      (position) => position !== obj.position
+      (position) => position !== collided.position
     );
     setBrickPositions(newBrickPositions);
   };
 
-  const handlePaddleCollision = () => {
-    console.log("Hit the paddle!");
+  const handlePaddleCollision: CollisionResolver = ({ collided, collider }) => {
+    if (collided.name !== "ball") return;
+
+    // Determine new X vector for the ball based on paddle position
+    const ballX = collided.obj.position.x;
+    const paddleX = collider.obj.position.x;
+    const x =
+      ((ballX - paddleX) / collider.obj.geometry.boundingSphere.radius) * STEP;
+    setBallVector((prev) => [x, 0 - prev[1], prev[2]]);
   };
 
   return (
@@ -128,7 +149,11 @@ export const Pong = () => {
           {brickPositions.map((position, i) => (
             <Brick position={position} key={i} />
           ))}
-          <Paddle onCollision={handlePaddleCollision} />
+          <Paddle
+            position={paddlePosition}
+            setPaddlePosition={setPaddlePosition}
+            onCollision={handlePaddleCollision}
+          />
           <Ball
             onCollision={handleBrickCollision}
             setBallGone={setBallGone}

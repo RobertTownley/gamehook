@@ -47,4 +47,5 @@ export interface BasicMeshType
   extends Collidable,
     Designable,
     Interactable,
+    Nameable,
     Positionable {}
