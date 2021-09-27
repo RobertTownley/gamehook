@@ -3,6 +3,7 @@ import _ from "lodash";
 import { GameObject } from "../objects/types";
 
 import { getVerticesForObject } from "./utils";
+import { createObjectLiteral } from "typescript";
 
 type CollisionResolverParams = {
   collider: GameObject;
@@ -50,6 +51,7 @@ export const detectCollisions = () => {
 interface DetectCollisionParams {
   collider: GameObject;
   collidables: GameObject[];
+  edgeDetection?: boolean;
   method: "sample" | "exact";
 }
 const COLLISION_DISTANCE = 0.025;
@@ -57,6 +59,7 @@ const SAMPLE_SIZE = 50;
 export const detectCollision = ({
   collider,
   collidables,
+  edgeDetection = true,
   method,
 }: DetectCollisionParams): GameObject | undefined => {
   const { geometry, position } = collider.obj;
@@ -67,6 +70,32 @@ export const detectCollision = ({
     method === "sample"
       ? _.sampleSize(getVerticesForObject(collider.obj), SAMPLE_SIZE)
       : getVerticesForObject(collider.obj);
+
+  if (edgeDetection) {
+    // For each consecutive pairing of vertices, append a list of intermediate
+    // positions along the edge to act as a collision detection vertex
+    // const vertices = [...colliderSampleVertices];
+    /*
+    vertices.forEach((v1, index) => {
+      const v2 = colliderSampleVertices[index + 1];
+      if (!v2) return;
+
+      const vDistance = v1.distanceTo(v2);
+      const edgeSamples = Math.floor(vDistance / COLLISION_DISTANCE);
+      if (edgeSamples < 1) return;
+      _.range(0, edgeSamples).forEach((x) => {
+        const delta = vDistance / x;
+        colliderSampleVertices.push(
+          new THREE.Vector3(
+            v1.x + delta * (v1.x - v2.x),
+            v1.y + delta * (v1.y - v2.y),
+            v1.z + delta * (v1.z - v2.z)
+          )
+        );
+      });
+    });
+    */
+  }
 
   for (const collidable of collidables) {
     // First, detect if it's within the bounding box
@@ -82,48 +111,23 @@ export const detectCollision = ({
     const distance = colliderCenter.distanceTo(colCenter);
     if (distance > bothRadiuses) continue;
 
-    // Then, detect if there are overlapping vectors
+    // Then, detect if there are overlapping edges
+    // TODO: This is probably not accurate angle detection
     const colSampleVertices =
       method === "sample"
         ? _.sampleSize(getVerticesForObject(collidable.obj), SAMPLE_SIZE)
         : getVerticesForObject(collidable.obj);
-    for (const v1 of colliderSampleVertices) {
-      for (const s1 of colSampleVertices) {
-        if (v1.distanceTo(s1) < COLLISION_DISTANCE) {
+
+    for (let i = 0; i < colliderSampleVertices.length; i++) {
+      const p = colliderSampleVertices[i];
+      const q = colliderSampleVertices[i + 1] || colliderSampleVertices[0];
+      for (const r of colSampleVertices) {
+        const pq = new THREE.Vector3(q.x - p.x, q.y - p.y, q.z - p.z);
+        const pr = new THREE.Vector3(r.x - p.x, r.y - p.y, r.z - p.z);
+        if (pq.angleTo(pr) < COLLISION_DISTANCE) {
           return collidable;
         }
       }
     }
-
-    // Finally, do edge detectCollision
-    // TODO: This is not really good edge detection. Make it better
-    let edgeCollision: GameObject | undefined = undefined;
-    colliderSampleVertices.forEach((v1, v1index) => {
-      const v2 = colliderSampleVertices[v1index + 1];
-      if (!v2) return;
-
-      colSampleVertices.forEach((s1, s1index) => {
-        const s2 = colSampleVertices[s1index + 1];
-        if (!s2) return;
-
-        // Generate a random point along the edge created by
-        // two sets of vertices and check if the two random
-        // points are within the collision distance
-        const vNew = new THREE.Vector3(
-          v1.x + Math.random() * Math.abs(v1.x - v2.x),
-          v1.y + Math.random() * Math.abs(v1.y - v2.y),
-          v1.z + Math.random() * Math.abs(v1.z - v2.z)
-        );
-        const sNew = new THREE.Vector3(
-          s1.x + Math.random() * Math.abs(s1.x - s2.x),
-          s1.y + Math.random() * Math.abs(s1.y - s2.y),
-          s1.z + Math.random() * Math.abs(s1.z - s2.z)
-        );
-        if (vNew.distanceTo(sNew) < COLLISION_DISTANCE) {
-          edgeCollision = collidable;
-        }
-      });
-    });
-    return edgeCollision;
   }
 };

@@ -5,7 +5,7 @@ import { Game, Scene } from "../../gamehook";
 import { Mesh } from "../../gamehook/objects/mesh";
 import { Sphere } from "../../gamehook/objects/sphere";
 import { useAnimation } from "../../gamehook/hooks";
-import { GameObject, ObjectPosition } from "../../gamehook/objects/types";
+import { ObjectPosition } from "../../gamehook/objects/types";
 import { CollisionResolver } from "../../gamehook/interactions/collisions";
 
 const BOUNDARY = 4; // How far the ball travels before the game ends
@@ -66,7 +66,7 @@ interface PaddleProps {
 }
 
 // Game speed constant
-const STEP = 0.1;
+const STEP = 0.5;
 
 const Paddle = ({ position, onCollision, setPaddlePosition }: PaddleProps) => {
   const handleKeyPress = (event: KeyboardEvent) => {
@@ -108,20 +108,16 @@ export const Pong = () => {
     0, -2, 0,
   ]);
 
-  const reverseBallYDirection = () => {
+  const handleBrickCollision: CollisionResolver = ({ collided }) => {
+    if (collided.name !== "brick") return;
+
+    // Change ball's path
     const newVector: ObjectPosition = [
       ballVector[0],
       0 - Math.abs(ballVector[0]),
       ballVector[2],
     ];
     setBallVector(newVector);
-  };
-
-  const handleBrickCollision: CollisionResolver = ({ collided }) => {
-    if (collided.name !== "brick") return;
-
-    // Change ball's path
-    reverseBallYDirection();
 
     // Remove the brick
     const newBrickPositions = brickPositions.filter(
@@ -134,11 +130,7 @@ export const Pong = () => {
     if (collided.name !== "ball") return;
 
     // Determine new X vector for the ball based on paddle position
-    const ballX = collided.obj.position.x;
-    const paddleX = collider.obj.position.x;
-    const x =
-      ((ballX - paddleX) / collider.obj.geometry.boundingSphere.radius) * STEP;
-    setBallVector((prev) => [x, 0 - prev[1], prev[2]]);
+    setBallVector((prev) => [-0.01, Math.abs(prev[1]), prev[2]]);
   };
 
   return (
