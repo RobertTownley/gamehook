@@ -121,8 +121,8 @@ export const detectCollision = ({
     for (let i = 0; i < colliderSampleVertices.length; i++) {
       const p = colliderSampleVertices[i];
       const q = colliderSampleVertices[i + 1] || colliderSampleVertices[0];
+      const pq = new THREE.Vector3(q.x - p.x, q.y - p.y, q.z - p.z);
       for (const r of colSampleVertices) {
-        const pq = new THREE.Vector3(q.x - p.x, q.y - p.y, q.z - p.z);
         const pr = new THREE.Vector3(r.x - p.x, r.y - p.y, r.z - p.z);
         if (pq.angleTo(pr) < COLLISION_DISTANCE) {
           return collidable;
