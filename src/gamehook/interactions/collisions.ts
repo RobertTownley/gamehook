@@ -51,7 +51,6 @@ export const detectCollisions = () => {
 interface DetectCollisionParams {
   collider: GameObject;
   collidables: GameObject[];
-  edgeDetection?: boolean;
   method: "sample" | "exact";
 }
 const COLLISION_DISTANCE = 0.025;
@@ -59,7 +58,6 @@ const SAMPLE_SIZE = 50;
 export const detectCollision = ({
   collider,
   collidables,
-  edgeDetection = true,
   method,
 }: DetectCollisionParams): GameObject | undefined => {
   const { geometry, position } = collider.obj;
@@ -70,32 +68,6 @@ export const detectCollision = ({
     method === "sample"
       ? _.sampleSize(getVerticesForObject(collider.obj), SAMPLE_SIZE)
       : getVerticesForObject(collider.obj);
-
-  if (edgeDetection) {
-    // For each consecutive pairing of vertices, append a list of intermediate
-    // positions along the edge to act as a collision detection vertex
-    // const vertices = [...colliderSampleVertices];
-    /*
-    vertices.forEach((v1, index) => {
-      const v2 = colliderSampleVertices[index + 1];
-      if (!v2) return;
-
-      const vDistance = v1.distanceTo(v2);
-      const edgeSamples = Math.floor(vDistance / COLLISION_DISTANCE);
-      if (edgeSamples < 1) return;
-      _.range(0, edgeSamples).forEach((x) => {
-        const delta = vDistance / x;
-        colliderSampleVertices.push(
-          new THREE.Vector3(
-            v1.x + delta * (v1.x - v2.x),
-            v1.y + delta * (v1.y - v2.y),
-            v1.z + delta * (v1.z - v2.z)
-          )
-        );
-      });
-    });
-    */
-  }
 
   for (const collidable of collidables) {
     // First, detect if it's within the bounding box
