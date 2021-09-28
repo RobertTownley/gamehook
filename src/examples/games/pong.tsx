@@ -65,8 +65,9 @@ interface PaddleProps {
   onCollision: CollisionResolver;
 }
 
-// Game speed constant
+// Game speed constants
 const STEP = 0.5;
+const BALL_SPEED = 0.025;
 
 const Paddle = ({ position, onCollision, setPaddlePosition }: PaddleProps) => {
   const handleKeyPress = (event: KeyboardEvent) => {
@@ -103,7 +104,11 @@ export const Pong = () => {
 
   const [ballGone, setBallGone] = useState(false);
   const [brickPositions, setBrickPositions] = useState(initialBrickPositions);
-  const [ballVector, setBallVector] = useState<ObjectPosition>([0.01, 0.01, 0]);
+  const [ballVector, setBallVector] = useState<ObjectPosition>([
+    BALL_SPEED,
+    BALL_SPEED,
+    0,
+  ]);
   const [paddlePosition, setPaddlePosition] = useState<ObjectPosition>([
     0, -2, 0,
   ]);

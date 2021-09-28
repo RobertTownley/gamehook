@@ -3,16 +3,12 @@ import _ from "lodash";
 import { GameObject } from "../objects/types";
 
 import { getVerticesForObject } from "./utils";
-import { createObjectLiteral } from "typescript";
 
-type CollisionResolverParams = {
+type Collision = {
   collider: GameObject;
   collided: GameObject;
 };
-export type CollisionResolver = ({
-  collider,
-  collided,
-}: CollisionResolverParams) => void;
+export type CollisionResolver = (collision: Collision) => void;
 type Collides = (other: GameObject) => boolean;
 
 export interface Collidable {
@@ -53,8 +49,7 @@ interface DetectCollisionParams {
   collidables: GameObject[];
   method: "sample" | "exact";
 }
-const COLLISION_DISTANCE = 0.025;
-const SAMPLE_SIZE = 50;
+const SAMPLE_SIZE = 10;
 export const detectCollision = ({
   collider,
   collidables,
@@ -78,13 +73,14 @@ export const detectCollision = ({
       colPosition.y,
       colPosition.z
     );
-    const bothRadiuses =
-      geometry.boundingSphere.radius + colGeometry.boundingSphere.radius;
+    const biggerRadius = Math.min(
+      geometry.boundingSphere.radius,
+      colGeometry.boundingSphere.radius
+    );
     const distance = colliderCenter.distanceTo(colCenter);
-    if (distance > bothRadiuses) continue;
+    if (distance > biggerRadius) continue;
 
     // Then, detect if there are overlapping edges
-    // TODO: This is probably not accurate angle detection
     const colSampleVertices =
       method === "sample"
         ? _.sampleSize(getVerticesForObject(collidable.obj), SAMPLE_SIZE)
@@ -93,10 +89,10 @@ export const detectCollision = ({
     for (let i = 0; i < colliderSampleVertices.length; i++) {
       const p = colliderSampleVertices[i];
       const q = colliderSampleVertices[i + 1] || colliderSampleVertices[0];
-      const pq = new THREE.Vector3(q.x - p.x, q.y - p.y, q.z - p.z);
-      for (const r of colSampleVertices) {
-        const pr = new THREE.Vector3(r.x - p.x, r.y - p.y, r.z - p.z);
-        if (pq.angleTo(pr) < COLLISION_DISTANCE) {
+      const r = colliderSampleVertices[i + 2] || colliderSampleVertices[1];
+      const triangle = new THREE.Triangle(p, q, r);
+      for (const x of colSampleVertices) {
+        if (triangle.containsPoint(x)) {
           return collidable;
         }
       }
