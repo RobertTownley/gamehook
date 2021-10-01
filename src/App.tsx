@@ -1,7 +1,11 @@
-import { Game, AmbientLight, Scene } from "./gamehook";
+import { Game, AmbientLight, useCamera, Scene, useAnimation } from "./gamehook";
 import { ModelExample } from "./examples/usage/modelExample";
 
 const LoadingScene = () => {
+  const camera = useCamera();
+  useAnimation(() => {
+    camera.position.z += 0.1;
+  });
   return (
     <Scene title="Loading">
       <AmbientLight />

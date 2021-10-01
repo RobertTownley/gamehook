@@ -60,3 +60,7 @@ export const useTimeline = (
     };
   }, [animate]);
 };
+
+export const useCamera = (): THREE.PerspectiveCamera => {
+  return GAME.scene.camera;
+};
