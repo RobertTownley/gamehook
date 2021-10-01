@@ -49,6 +49,7 @@ interface DetectCollisionParams {
   collidables: GameObject[];
   method: "sample" | "exact";
 }
+const COLLISION_DISTANCE = 0.01;
 const SAMPLE_SIZE = 10;
 export const detectCollision = ({
   collider,
@@ -92,7 +93,9 @@ export const detectCollision = ({
       const r = colliderSampleVertices[i + 2] || colliderSampleVertices[1];
       const triangle = new THREE.Triangle(p, q, r);
       for (const x of colSampleVertices) {
-        if (triangle.containsPoint(x)) {
+        if (p.distanceTo(x) < COLLISION_DISTANCE) {
+          return collidable;
+        } else if (triangle.containsPoint(x)) {
           return collidable;
         }
       }

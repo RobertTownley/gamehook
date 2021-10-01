@@ -131,7 +131,7 @@ export const Pong = () => {
     setBrickPositions(newBrickPositions);
   };
 
-  const handlePaddleCollision: CollisionResolver = ({ collided, collider }) => {
+  const handlePaddleCollision: CollisionResolver = ({ collided }) => {
     if (collided.name !== "ball") return;
 
     // Determine new X vector for the ball based on paddle position
