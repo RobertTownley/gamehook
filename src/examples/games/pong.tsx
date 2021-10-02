@@ -10,15 +10,13 @@ import { CollisionResolver } from "../../gamehook/interactions/collisions";
 
 const BOUNDARY = 4; // How far the ball travels before the game ends
 const BrickGeometry = new THREE.BoxGeometry(0.5, 0.125, 0.01);
-const BrickMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 const PaddleGeometry = new THREE.BoxGeometry(2, 0.125, 0.01);
-const PaddleMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
 
 const Brick: FC<{ position: ObjectPosition }> = ({ position }) => {
   return (
     <Mesh
       geometry={BrickGeometry}
-      material={BrickMaterial}
+      material={{ color: 0x00ff00, type: "basic" }}
       position={position}
       name="brick"
       triggersCollisions
@@ -49,7 +47,7 @@ const Ball: FC<BallProps> = ({ onCollision, setBallGone, vector }) => {
 
   return (
     <Sphere
-      color={0xffff00}
+      material={{ color: 0xffff00, type: "basic" }}
       position={position}
       radius={0.125}
       onCollision={onCollision}
@@ -81,7 +79,7 @@ const Paddle = ({ position, onCollision, setPaddlePosition }: PaddleProps) => {
   return (
     <Mesh
       geometry={PaddleGeometry}
-      material={PaddleMaterial}
+      material={{ color: 0x00ffff, type: "basic" }}
       position={position}
       onKeyDown={handleKeyPress}
       onCollision={onCollision}

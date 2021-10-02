@@ -1,4 +1,4 @@
-import { Game, AmbientLight, useCamera, Scene, useAnimation } from "./gamehook";
+import { Game, AmbientLight, Scene } from "./gamehook";
 import { GameScene } from "./gamehook/scene/index";
 import { ModelExample } from "./examples/usage/modelExample";
 import { Text } from "./gamehook/objects";
@@ -7,7 +7,10 @@ import { FadeScene } from "./gamehook/scene/FadeInOutScene";
 const InitialScene: GameScene = () => {
   return (
     <FadeScene startFadeIn={500} finishFadeIn={1500} nextScene="Another">
-      <Text material="basic" value="Built With GameHook" />
+      <Text
+        material={{ type: "standard", color: 0xffff99 }}
+        value="Built With GameHook"
+      />
     </FadeScene>
   );
 };
