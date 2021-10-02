@@ -142,7 +142,7 @@ export const Pong = () => {
     <>
       {ballGone && <h1>Game Over!</h1>}
       <Game>
-        <Scene title="Intro">
+        <Scene>
           {brickPositions.map((position, i) => (
             <Brick position={position} key={i} />
           ))}

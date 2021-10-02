@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useMemo, useEffect, useRef, useContext } from "react";
+import { RouterContext } from "./router";
 
 type Animation = (val: number) => void;
 
@@ -63,4 +64,18 @@ export const useTimeline = (
 
 export const useCamera = (): THREE.PerspectiveCamera => {
   return GAME.scene.camera;
+};
+
+export const useGameRouter = () => {
+  const routerContext = useContext(RouterContext);
+  return useMemo(() => {
+    return {
+      changeScene: (key: string) => {
+        console.log("Changing scene", key);
+        if (key !== routerContext.sceneKey) {
+          routerContext.setSceneKey(key);
+        }
+      },
+    };
+  }, [routerContext]);
 };

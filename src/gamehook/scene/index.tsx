@@ -1,56 +1,32 @@
 import * as THREE from "three";
-import { ReactNode, useEffect, useRef } from "react";
+import { ReactNode, useEffect } from "react";
 
-import { useSceneTitleContext } from "../game";
 import { useAnimation } from "../hooks";
 import { detectCollisions } from "../interactions/collisions";
 
 interface SceneProps {
   backgroundColor?: string;
   children: ReactNode;
-  title: string;
 }
 
-export const Scene = ({
-  backgroundColor = "#000",
-  children,
-  title,
-}: SceneProps) => {
-  const mountRef = useRef<HTMLDivElement>(null);
-  const sceneTitle = useSceneTitleContext();
-  const isActive = sceneTitle === title;
+export interface GameSceneProps {
+  key: string;
+}
+export type GameScene = React.FC<GameSceneProps>;
 
-  // Mount Scene
-  // TODO: This causes a flash. Maybe the scene can just be re-used?
-  useEffect(() => {
-    const existingRef = mountRef.current;
-    if (!isActive) return;
-
-    mountRef.current?.appendChild(GAME.renderer.domElement);
-
-    return () => {
-      if (existingRef?.contains(GAME.renderer.domElement)) {
-        existingRef?.removeChild(GAME.renderer.domElement);
-      }
-    };
-  }, [isActive]);
-
+export const Scene = ({ backgroundColor = "#000", children }: SceneProps) => {
   // Set Background Color
   useEffect(() => {
     GAME.scene.threeScene.background = new THREE.Color(backgroundColor);
   }, [backgroundColor]);
 
   useAnimation(() => {
-    if (!isActive) return null;
     detectCollisions();
     GAME.renderer.render(GAME.scene.threeScene, GAME.scene.camera);
   });
 
-  if (!isActive) return null;
-
   return (
     <div>
-      <div ref={mountRef} />
       <>{children}</>
     </div>
   );

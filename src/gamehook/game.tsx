@@ -1,11 +1,5 @@
 import * as THREE from "three";
-import {
-  ReactNode,
-  createContext,
-  useEffect,
-  useState,
-  useContext,
-} from "react";
+import { ReactElement, useEffect, useRef, useState } from "react";
 import { generateUUID } from "three/src/math/MathUtils";
 
 import { GameObject } from "./objects/types";
@@ -15,31 +9,52 @@ import {
   buildEventHandlerMap,
   initializeEventHandlers,
 } from "./interactions/eventHandler";
+import { GameSceneProps } from "./scene";
+import { DEFAULT_INITIAL_SCENE_KEY, RouterContext } from "./router";
 
 export interface Scene {
   camera: THREE.PerspectiveCamera;
   id: string;
   objects: { [key: string]: GameObject };
   threeScene: THREE.Scene;
-  title: string;
   // Object Methods
   addObjectToScene: (obj: GameObject) => void;
   removeObjectFromScene: (obj: GameObject) => void;
 }
 
+export interface GameRouter {
+  currentSceneKey: string;
+  push: (key: string) => void;
+}
 export interface GameData {
   id: string;
   eventHandlers: EventHandlerMap;
   renderer: THREE.WebGLRenderer;
+  router: GameRouter;
   scene: Scene;
-  transitionToScene: (title: string) => void;
   // Window Methods
   onWindowResize: () => void;
 }
 
+type SceneNode = ReactElement<GameSceneProps>;
 interface GameProps {
-  children: ReactNode | Array<ReactNode>;
+  children: SceneNode | Array<SceneNode>;
 }
+
+const handleSceneChange = (key: string) => {
+  if (GAME.router.currentSceneKey === key) return;
+
+  // Remove objects from scene
+  Object.values(GAME.scene.objects).forEach((obj) => {
+    GAME.scene.removeObjectFromScene(obj);
+  });
+
+  // Set the new key
+  GAME.router.currentSceneKey = key;
+
+  // Resize TODO: is this necessary?
+  GAME.onWindowResize();
+};
 
 export const getInitialGameData = (): GameData => {
   const { width, height } = getCanvasDimensions();
@@ -49,12 +64,15 @@ export const getInitialGameData = (): GameData => {
   return {
     id: generateUUID(),
     eventHandlers: buildEventHandlerMap(),
+    router: {
+      currentSceneKey: DEFAULT_INITIAL_SCENE_KEY,
+      push: handleSceneChange,
+    },
     scene: {
       camera,
       id: generateUUID(),
       threeScene: new THREE.Scene(),
       objects: {},
-      title: "Loading",
       // Object Methods
       addObjectToScene: function (obj: GameObject) {
         this.threeScene.add(obj.obj);
@@ -66,15 +84,6 @@ export const getInitialGameData = (): GameData => {
       },
     },
     renderer: new THREE.WebGLRenderer(),
-    transitionToScene: function (title: string) {
-      // Remove objects from scene
-      Object.values(this.scene.objects).forEach((obj) => {
-        this.scene.removeObjectFromScene(obj);
-      });
-      this.scene.threeScene = new THREE.Scene();
-      this.scene.title = title;
-      this.onWindowResize();
-    },
     onWindowResize: function () {
       const { width, height } = getCanvasDimensions();
       this.scene.camera.aspect = width / height;
@@ -88,28 +97,47 @@ window.GAME = getInitialGameData();
 initializeEventHandlers();
 window.GAME.onWindowResize();
 
-export const SceneTitleContext = createContext("Loading");
-export const useSceneTitleContext = () => useContext(SceneTitleContext);
-
 export const Game = (props: GameProps) => {
-  const [sceneTitle, setSceneTitle] = useState("Loading");
+  const mountRef = useRef<HTMLDivElement>(null);
+  const [sceneKey, setSceneKey] = useState(DEFAULT_INITIAL_SCENE_KEY);
 
   // Game Loop
   useEffect(() => {
     const gameLoop = () => {
       requestAnimationFrame(gameLoop);
+    };
 
-      // Detect Scene Change
-      if (GAME.scene.title !== sceneTitle) {
-        setSceneTitle(GAME.scene.title);
+    gameLoop();
+  }, []);
+
+  // Mount scene
+  useEffect(() => {
+    let mounted = true;
+    const existingRef = mountRef.current;
+    if (mounted) {
+      mountRef.current?.appendChild(GAME.renderer.domElement);
+    }
+    return () => {
+      mounted = false;
+      if (existingRef?.contains(GAME.renderer.domElement)) {
+        existingRef?.removeChild(GAME.renderer.domElement);
       }
     };
-    gameLoop();
-  }, [sceneTitle]);
+  }, []);
+
+  const scenes = Array.isArray(props.children)
+    ? props.children
+    : [props.children];
+
+  const scene = scenes.find((scene) => {
+    return scene.key === sceneKey;
+  });
+  if (!scene) return null;
 
   return (
-    <SceneTitleContext.Provider value={sceneTitle}>
-      {props.children}
-    </SceneTitleContext.Provider>
+    <RouterContext.Provider value={{ sceneKey, setSceneKey }}>
+      <div ref={mountRef} />
+      {scene}
+    </RouterContext.Provider>
   );
 };

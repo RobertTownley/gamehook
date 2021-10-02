@@ -1,10 +1,15 @@
-import { Game, AmbientLight, useCamera, Scene, useAnimation } from "./gamehook";
-import { ModelExample } from "./examples/usage/modelExample";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const LoadingScene = () => {
+import { Game, AmbientLight, useCamera, Scene, useAnimation } from "./gamehook";
+import { GameScene } from "./gamehook/scene/index";
+import { ModelExample } from "./examples/usage/modelExample";
+import { useGameRouter } from "./gamehook/hooks";
+
+const InitialScene: GameScene = () => {
   const camera = useCamera();
+  const router = useGameRouter();
   const [heading, setHeading] = useState(0.05);
+
   useAnimation(() => {
     if (camera.position.z > 10) {
       setHeading(-0.05);
@@ -16,8 +21,23 @@ const LoadingScene = () => {
     camera.position.z += heading;
   });
 
+  useEffect(() => {
+    setTimeout(() => {
+      router.changeScene("Another");
+    }, 3000);
+  }, [router]);
+
   return (
-    <Scene title="Loading">
+    <Scene>
+      <AmbientLight />
+      <ModelExample />
+    </Scene>
+  );
+};
+
+const AnotherScene: GameScene = () => {
+  return (
+    <Scene>
       <AmbientLight />
       <ModelExample />
     </Scene>
@@ -27,7 +47,8 @@ const LoadingScene = () => {
 function App() {
   return (
     <Game>
-      <LoadingScene />
+      <InitialScene key="Initial" />
+      <AnotherScene key="Another" />
     </Game>
   );
 }
