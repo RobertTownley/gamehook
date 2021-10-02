@@ -1,37 +1,14 @@
-import { useEffect, useState } from "react";
-
 import { Game, AmbientLight, useCamera, Scene, useAnimation } from "./gamehook";
 import { GameScene } from "./gamehook/scene/index";
 import { ModelExample } from "./examples/usage/modelExample";
-import { useGameRouter } from "./gamehook/hooks";
+import { Text } from "./gamehook/objects";
+import { FadeScene } from "./gamehook/scene/FadeInOutScene";
 
 const InitialScene: GameScene = () => {
-  const camera = useCamera();
-  const router = useGameRouter();
-  const [heading, setHeading] = useState(0.05);
-
-  useAnimation(() => {
-    if (camera.position.z > 10) {
-      setHeading(-0.05);
-    } else if (camera.position.z < 5) {
-      setHeading(0.05);
-    }
-    camera.position.x -= heading * 1.25;
-    camera.position.y += heading * 1.25;
-    camera.position.z += heading;
-  });
-
-  useEffect(() => {
-    setTimeout(() => {
-      router.changeScene("Another");
-    }, 3000);
-  }, [router]);
-
   return (
-    <Scene>
-      <AmbientLight />
-      <ModelExample />
-    </Scene>
+    <FadeScene startFadeIn={500} finishFadeIn={1500} nextScene="Another">
+      <Text material="basic" value="Built With GameHook" />
+    </FadeScene>
   );
 };
 

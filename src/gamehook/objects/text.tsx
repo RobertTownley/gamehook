@@ -3,14 +3,13 @@ import { Text as TroikaText } from "troika-three-text";
 import { generateUUID } from "three/src/math/MathUtils";
 
 import { getAnimatedValue } from "../animation";
-import { GameObject, Positionable } from "./types";
+import { BasicMeshType, GameObject } from "./types";
 import { useTimeline } from "../hooks";
-import { Interactable } from "../interactions/types";
 import { defaultPosition, defaultRotation } from "./defaults";
 
 const DEFAULT_TEXT_COLOR = 0xffffff;
 
-interface TextProps extends Positionable, Interactable {
+interface TextProps extends BasicMeshType {
   anchorX?: string;
   anchorY?: string;
   color?: number;
@@ -28,14 +27,13 @@ export const Text = ({
   value,
   position = defaultPosition,
   rotation = defaultRotation,
-  ...gameObjectProps
+  material,
 }: TextProps) => {
   const obj = useRef<GameObject>({
     id: generateUUID(),
-    obj: new TroikaText(),
+    obj: new TroikaText({ material }),
     position,
     rotation,
-    ...gameObjectProps,
   });
 
   const textObj = obj.current.obj;
@@ -46,13 +44,14 @@ export const Text = ({
   textObj.text = value;
   textObj.fontSize = fontSize;
 
-  textObj.position.x = position[0];
-  textObj.position.y = position[1];
-  textObj.position.z = position[2];
+  useEffect(() => {
+    obj.current.obj.position.set(...position);
+  }, [position]);
+  useEffect(() => {
+    obj.current.obj.rotation.set(...rotation);
+  }, [rotation]);
 
-  textObj.rotation.x = rotation[0];
-  textObj.rotation.y = rotation[1];
-  textObj.rotation.z = rotation[2];
+  useEffect(() => {}, [color, material]);
 
   useEffect(() => {
     const current = obj.current;

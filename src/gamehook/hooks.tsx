@@ -71,7 +71,6 @@ export const useGameRouter = () => {
   return useMemo(() => {
     return {
       changeScene: (key: string) => {
-        console.log("Changing scene", key);
         if (key !== routerContext.sceneKey) {
           routerContext.setSceneKey(key);
         }
