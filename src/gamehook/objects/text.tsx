@@ -35,7 +35,6 @@ export const Text = ({
     obj: new TroikaText(),
     position,
     rotation,
-    state: "Ready",
     ...gameObjectProps,
   });
 

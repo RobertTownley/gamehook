@@ -49,7 +49,6 @@ export const Mesh = ({
   const obj = useRef<GameObject>({
     id: generateUUID(),
     obj: new THREE.Mesh(geometry, _material),
-    state: "Ready",
     onKeyDown,
     position,
     rotation,

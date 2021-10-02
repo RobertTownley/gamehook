@@ -41,7 +41,6 @@ const handleMouseEvent = (event: MouseEvent, eventType: keyof Interactable) => {
 };
 
 const handleKeyboardEvent = (event: KeyboardEvent) => {
-  event.preventDefault();
   const listenerName = {
     keyup: "onKeyUp",
     keydown: "onKeyDown",

@@ -12,7 +12,6 @@ export const AmbientLight = ({ color = 0xffffff }: Props) => {
     obj: new THREE.AmbientLight(color),
     position: [0, 0, 0],
     rotation: [0, 0, 0],
-    state: "Ready",
   });
   useEffect(() => {
     let mounted = true;

@@ -15,6 +15,7 @@ const LoadingScene = () => {
     camera.position.y += heading * 1.25;
     camera.position.z += heading;
   });
+
   return (
     <Scene title="Loading">
       <AmbientLight />

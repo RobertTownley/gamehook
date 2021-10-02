@@ -3,13 +3,6 @@ import { Text as TroikaText } from "troika-three-text";
 import { Collidable } from "../interactions/collisions";
 import { Interactable } from "../interactions/types";
 
-type ObjectState =
-  | "Ready"
-  | "Initializing"
-  | "Initialized"
-  | "Terminating"
-  | "Terminated";
-
 export type ObjectRotation = [number, number, number];
 export type ObjectPosition = [number, number, number];
 
@@ -33,7 +26,6 @@ export interface GameObject
   obj: ThreeGameObject;
   position: ObjectPosition;
   rotation: ObjectRotation;
-  state: ObjectState;
   name?: string;
   labels?: string[];
 }
