@@ -1,5 +1,9 @@
 import { ReactNode, useState } from "react";
+
+import { AmbientLight } from "../lights/AmbientLight";
 import { Scene } from "../scene";
+import { getAnimatedValue } from "../animation";
+import { useTimeline } from "../hooks";
 
 type SceneChanger = () => void;
 interface Props {
@@ -24,6 +28,23 @@ interface Props {
  * where the studio's credits and attributions fade in and out.
  * */
 export const FadeScene = ({ children }: Props) => {
-  const [color, setColor] = useState(0x000000);
-  return <Scene>{children}</Scene>;
+  const START_COLOR = 0x000000;
+  const END_COLOR = 0xffffff;
+  const [color, setColor] = useState(START_COLOR);
+
+  useTimeline(
+    (completion) => {
+      const newColor = getAnimatedValue(START_COLOR, END_COLOR, completion);
+      setColor(newColor);
+    },
+    1000,
+    5000,
+    100
+  );
+  return (
+    <Scene>
+      <AmbientLight color={color} />
+      {children}
+    </Scene>
+  );
 };

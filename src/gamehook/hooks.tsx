@@ -44,22 +44,27 @@ export const useTimeline = (
   end: number,
   step: number
 ) => {
-  const animate = useCallback(() => {
+  const initialized = useRef(false);
+  const savedCallback = useRef<Animation>(callback);
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  const result = useCallback(() => {
     const duration = end - start;
     for (let x = start; x <= end; x += step) {
       const completion = (x - start) / duration;
-      setTimeout(() => callback(completion), x);
+      setTimeout(() => {
+        savedCallback.current(completion);
+      }, x);
     }
-  }, [callback, start, end, step]);
-  useEffect(() => {
-    let mounted = true;
-    if (mounted) {
-      animate();
-    }
-    return () => {
-      mounted = false;
-    };
-  }, [animate]);
+  }, [start, step, end]);
+
+  if (!initialized.current) {
+    result();
+    initialized.current = true;
+  }
+  return result;
 };
 
 export const useCamera = (): THREE.PerspectiveCamera => {
