@@ -6,7 +6,13 @@ import { FadeScene } from "./gamehook/scene/FadeInOutScene";
 
 const InitialScene: GameScene = () => {
   return (
-    <FadeScene startFadeIn={500} finishFadeIn={1500} nextScene="Another">
+    <FadeScene
+      startFadeIn={500}
+      finishFadeIn={1000}
+      startFadeOut={2500}
+      finishFadeOut={3000}
+      nextScene="Another"
+    >
       <Text
         material={{ type: "standard", color: 0xffff99 }}
         value="Built With GameHook"
