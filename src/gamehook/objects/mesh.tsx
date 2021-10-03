@@ -37,6 +37,13 @@ export const Mesh = ({
   });
 
   useEffect(() => {
+    obj.current.obj.material = createMaterial(material);
+  }, [material]);
+  useEffect(() => {
+    obj.current.obj.geometry = createGeometry(geometry);
+  }, [geometry]);
+
+  useEffect(() => {
     obj.current.obj.position.set(...position);
   }, [position]);
   useEffect(() => {

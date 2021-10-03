@@ -6,6 +6,7 @@ import { EventHandlerMap } from "./interactions/types";
 import { SceneData } from "./scene";
 import { GameObject } from "./objects/types";
 import { DEFAULT_INITIAL_SCENE_KEY } from "./router";
+import { GameListener } from "./listeners";
 
 export interface GameRouter {
   currentSceneKey: string;
@@ -58,8 +59,8 @@ export const getInitialGameData = ({ width, height }: Params): GameData => {
       camera,
       id: generateUUID(),
       threeScene: new THREE.Scene(),
+
       objects: {},
-      // Object Methods
       addObjectToScene: function (obj: GameObject) {
         this.threeScene.add(obj.obj);
         this.objects[obj.id] = obj;
@@ -67,6 +68,14 @@ export const getInitialGameData = ({ width, height }: Params): GameData => {
       removeObjectFromScene: function (obj: GameObject) {
         this.threeScene.remove(obj.obj);
         delete this.objects[obj.id];
+      },
+
+      listeners: {},
+      addListenerToScene: function (listener: GameListener) {
+        this.listeners[listener.id] = listener;
+      },
+      removeListenerFromScene: function (listener: GameListener) {
+        delete this.listeners[listener.id];
       },
     },
     renderer: new THREE.WebGLRenderer(),

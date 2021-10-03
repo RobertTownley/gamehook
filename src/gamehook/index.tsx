@@ -1,5 +1,6 @@
 export { Game } from "./game";
 export { Scene } from "./scene";
+export { CameraControl } from "./camera";
 export { useAnimation, useCamera, useGameRouter, useTimeline } from "./hooks";
 export { AmbientLight } from "./lights/AmbientLight";
 export { Mesh } from "./objects/mesh";

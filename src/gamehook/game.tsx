@@ -18,7 +18,6 @@ interface GameProps {
   initialScene?: string;
   width?: number;
 }
-
 export const Game = ({
   children,
   height,
@@ -30,7 +29,6 @@ export const Game = ({
 
   // Initialize Game Data
   useLayoutEffect(() => {
-    window.GAME = getInitialGameData({ width, height });
     initializeEventHandlers();
     window.GAME.onWindowResize();
   }, [height, width]);
@@ -73,3 +71,8 @@ export const Game = ({
     </RouterContext.Provider>
   );
 };
+
+window.GAME = getInitialGameData({
+  width: window.innerWidth,
+  height: window.innerHeight,
+});

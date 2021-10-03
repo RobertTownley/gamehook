@@ -4,6 +4,7 @@ import { ReactNode, useEffect } from "react";
 import { useAnimation } from "../hooks";
 import { GameObject } from "../objects/types";
 import { detectCollisions } from "../interactions/collisions";
+import { GameListener } from "../listeners";
 
 interface SceneProps {
   backgroundColor?: string;
@@ -13,11 +14,15 @@ interface SceneProps {
 export interface SceneData {
   camera: THREE.PerspectiveCamera;
   id: string;
-  objects: { [key: string]: GameObject };
   threeScene: THREE.Scene;
-  // Object Methods
+  // Objects
+  objects: { [key: string]: GameObject };
   addObjectToScene: (obj: GameObject) => void;
   removeObjectFromScene: (obj: GameObject) => void;
+  // Listeners
+  listeners: { [key: string]: GameListener };
+  addListenerToScene: (listener: GameListener) => void;
+  removeListenerFromScene: (listener: GameListener) => void;
 }
 
 export interface GameSceneProps {

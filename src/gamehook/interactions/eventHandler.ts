@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { GameListener } from "../listeners";
 import { GameObject } from "../objects/types";
 
 import { getMouseVectorForEvent } from "./mouse";
@@ -53,6 +54,13 @@ const handleKeyboardEvent = (event: KeyboardEvent) => {
   const sceneObjects: GameObject[] = Object.values(GAME.scene.objects);
   sceneObjects.forEach((obj) => {
     const handler = obj[listenerName];
+    if (!handler) return;
+    handler(event as KeyboardEvent);
+  });
+
+  const listeners: GameListener[] = Object.values(GAME.scene.listeners);
+  listeners.forEach((listener) => {
+    const handler = listener[listenerName];
     if (!handler) return;
     handler(event as KeyboardEvent);
   });
