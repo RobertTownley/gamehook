@@ -7,7 +7,7 @@ import { useTimeline } from "../hooks";
 import { RouterContext } from "../router";
 
 type SceneChanger = () => void;
-interface Props {
+export interface FadeSceneProps {
   children: ReactNode;
   startFadeIn: number;
   finishFadeIn: number;
@@ -37,7 +37,7 @@ export const FadeScene = ({
   startFadeOut,
   finishFadeOut,
   nextScene,
-}: Props) => {
+}: FadeSceneProps) => {
   const START_COLOR = 0x000000;
   const END_COLOR = 0xffffff;
   const [color, setColor] = useState(START_COLOR);

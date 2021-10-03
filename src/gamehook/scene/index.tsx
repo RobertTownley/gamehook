@@ -23,7 +23,7 @@ export interface SceneData {
 export interface GameSceneProps {
   key: string;
 }
-export type GameScene = React.FC<GameSceneProps>;
+export type GameScene<T = {}> = React.FC<GameSceneProps & T>;
 
 export const Scene = ({ backgroundColor = "#000", children }: SceneProps) => {
   // Set Background Color

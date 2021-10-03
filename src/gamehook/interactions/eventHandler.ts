@@ -12,9 +12,12 @@ const handleMouseEvent = (event: MouseEvent, eventType: keyof Interactable) => {
 
   // Determine which scene objects are listening for this interaction
   const { scene } = GAME;
-  const interactables: GameObject[] = Object.values(scene.objects).filter(
-    (obj) => (obj[eventType] ? true : false)
-  );
+  const sceneObjects: GameObject[] = Object.values(scene.objects);
+  const interactables: GameObject[] = sceneObjects.filter((obj) => {
+    if (obj.obj.type !== "Mesh") return false;
+    console.log({ obj });
+    return obj[eventType] ? true : false;
+  });
 
   // Cast a ray to see which listening object the mouse click intersects with
   const mouse = getMouseVectorForEvent(event);
@@ -48,7 +51,8 @@ const handleKeyboardEvent = (event: KeyboardEvent) => {
 
   // Unlike mouse events, call for each object listening for keypresses
   // TODO: Allow a user to filter by objects listening for specific key presses
-  Object.values(GAME.scene.objects).forEach((obj) => {
+  const sceneObjects: GameObject[] = Object.values(GAME.scene.objects);
+  sceneObjects.forEach((obj) => {
     const handler = obj[listenerName];
     if (!handler) return;
     handler(event as KeyboardEvent);

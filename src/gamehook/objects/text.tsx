@@ -23,6 +23,7 @@ export const Text = ({
   position = defaultPosition,
   rotation = defaultRotation,
   material,
+  ...props
 }: TextProps) => {
   const _material = createMaterial(material);
   const obj = useRef<GameObject>({
@@ -30,6 +31,7 @@ export const Text = ({
     obj: new TroikaText(),
     position,
     rotation,
+    ...props,
   });
 
   const textObj = obj.current.obj;
