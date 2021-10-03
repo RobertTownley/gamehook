@@ -32,16 +32,10 @@ const AnotherScene: GameScene = () => {
 
 function App() {
   return (
-    <div>
-      <p style={{ padding: 8 }}>
-        A user should be able to embed the game or make it take up the full
-        width
-      </p>
-      <Game>
-        <InitialScene key="Initial" />
-        <AnotherScene key="Another" />
-      </Game>
-    </div>
+    <Game>
+      <InitialScene key="Initial" />
+      <AnotherScene key="Another" />
+    </Game>
   );
 }
 

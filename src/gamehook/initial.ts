@@ -1,7 +1,6 @@
 import * as THREE from "three";
 
 import { generateUUID } from "three/src/math/MathUtils";
-import { getCanvasDimensions } from "./window";
 import { buildEventHandlerMap } from "./interactions/eventHandler";
 import { EventHandlerMap } from "./interactions/types";
 import { SceneData } from "./scene";
@@ -38,9 +37,14 @@ const handleSceneChange = (key: string) => {
   GAME.onWindowResize();
 };
 
-export const getInitialGameData = (): GameData => {
-  const { width, height } = getCanvasDimensions();
-  const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+interface Params {
+  width?: number;
+  height?: number;
+}
+export const getInitialGameData = ({ width, height }: Params): GameData => {
+  const _width = width || window.innerWidth;
+  const _height = height || window.innerHeight;
+  const camera = new THREE.PerspectiveCamera(75, _width / _height, 0.1, 1000);
   camera.position.z = 5;
 
   return {
@@ -67,10 +71,11 @@ export const getInitialGameData = (): GameData => {
     },
     renderer: new THREE.WebGLRenderer(),
     onWindowResize: function () {
-      const { width, height } = getCanvasDimensions();
-      this.scene.camera.aspect = width / height;
+      const _width = width || window.innerWidth;
+      const _height = height || window.innerHeight;
+      this.scene.camera.aspect = _width / _height;
       this.scene.camera.updateProjectionMatrix();
-      this.renderer.setSize(width, height);
+      this.renderer.setSize(_width, _height);
     },
   };
 };

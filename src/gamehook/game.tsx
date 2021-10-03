@@ -1,4 +1,10 @@
-import { ReactElement, useEffect, useRef, useState } from "react";
+import {
+  ReactElement,
+  useLayoutEffect,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { initializeEventHandlers } from "./interactions/eventHandler";
 import { GameSceneProps } from "./scene";
@@ -8,15 +14,20 @@ import { getInitialGameData } from "./initial";
 type SceneNode = ReactElement<GameSceneProps>;
 interface GameProps {
   children: SceneNode | Array<SceneNode>;
+  height?: number;
+  width?: number;
 }
 
-window.GAME = getInitialGameData();
-initializeEventHandlers();
-window.GAME.onWindowResize();
-
-export const Game = (props: GameProps) => {
+export const Game = ({ children, height, width }: GameProps) => {
   const mountRef = useRef<HTMLDivElement>(null);
   const [sceneKey, setSceneKey] = useState(DEFAULT_INITIAL_SCENE_KEY);
+
+  // Initialize Game Data
+  useLayoutEffect(() => {
+    window.GAME = getInitialGameData({ width, height });
+    initializeEventHandlers();
+    window.GAME.onWindowResize();
+  }, [height, width]);
 
   // Game Loop
   useEffect(() => {
@@ -28,7 +39,7 @@ export const Game = (props: GameProps) => {
   }, []);
 
   // Mount scene
-  useEffect(() => {
+  useLayoutEffect(() => {
     let mounted = true;
     const existingRef = mountRef.current;
     if (mounted) {
@@ -42,9 +53,7 @@ export const Game = (props: GameProps) => {
     };
   }, []);
 
-  const scenes = Array.isArray(props.children)
-    ? props.children
-    : [props.children];
+  const scenes = Array.isArray(children) ? children : [children];
 
   const scene = scenes.find((scene) => {
     return scene.key === sceneKey;
