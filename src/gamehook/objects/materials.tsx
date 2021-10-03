@@ -20,7 +20,7 @@ interface StandardMaterialOptions extends AbstractMaterialOptions {
   type: "standard";
 }
 
-type MaterialOptions =
+export type MaterialOptions =
   | BasicMaterialOptions
   | NormalMaterialOptions
   | StandardMaterialOptions;

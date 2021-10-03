@@ -34,7 +34,11 @@ export const CameraControl = ({
   }
 };
 
-const SkyCamCameraControl = ({ step = 0.1 }: SkyCamCameraControlOptions) => {
+const SkyCamCameraControl = ({
+  initialPosition,
+  initialRotation,
+  step = 0.1,
+}: SkyCamCameraControlOptions) => {
   const camera = useCamera();
   const handleKeyDown = (event: KeyboardEvent) => {
     switch (event.code) {
@@ -58,9 +62,26 @@ const SkyCamCameraControl = ({ step = 0.1 }: SkyCamCameraControlOptions) => {
     id: generateUUID(),
     onKeyDown: handleKeyDown,
   });
+
   useLayoutEffect(() => {
     camera.rotation.x = 0.2;
   }, [camera]);
+  useLayoutEffect(() => {
+    if (!initialPosition) return;
+    camera.position.set(
+      initialPosition[0],
+      initialPosition[1],
+      initialPosition[2]
+    );
+  }, [camera, initialPosition]);
+  useLayoutEffect(() => {
+    if (!initialRotation) return;
+    camera.rotation.set(
+      initialRotation[0],
+      initialRotation[1],
+      initialRotation[2]
+    );
+  }, [camera, initialRotation]);
 
   useLayoutEffect(() => {
     let mounted = true;
