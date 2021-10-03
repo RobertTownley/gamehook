@@ -4,6 +4,7 @@ import { Text as TroikaText } from "troika-three-text";
 import { Collidable } from "../interactions/collisions";
 import { Interactable } from "../interactions/types";
 import { Designable } from "./materials";
+import { Shapeable } from "./geometries";
 
 export type ObjectRotation = [number, number, number];
 export type ObjectPosition = [number, number, number];
@@ -37,4 +38,5 @@ export interface BasicMeshType
     Designable,
     Interactable,
     Nameable,
-    Positionable {}
+    Positionable,
+    Shapeable {}

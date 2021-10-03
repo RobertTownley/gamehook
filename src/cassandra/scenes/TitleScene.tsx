@@ -18,7 +18,6 @@ const SceneChangeButton = ({
 }: SceneChangeButtonProps) => {
   const router = useGameRouter();
   const handleClick = () => {
-    console.log("A CLICK");
     router.changeScene(nextScene);
   };
   return <Text value={label} onClick={handleClick} {...props} />;

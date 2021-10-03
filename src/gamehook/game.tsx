@@ -15,12 +15,18 @@ type SceneNode = ReactElement<GameSceneProps>;
 interface GameProps {
   children: SceneNode | Array<SceneNode>;
   height?: number;
+  initialScene?: string;
   width?: number;
 }
 
-export const Game = ({ children, height, width }: GameProps) => {
+export const Game = ({
+  children,
+  height,
+  initialScene = DEFAULT_INITIAL_SCENE_KEY,
+  width,
+}: GameProps) => {
   const mountRef = useRef<HTMLDivElement>(null);
-  const [sceneKey, setSceneKey] = useState(DEFAULT_INITIAL_SCENE_KEY);
+  const [sceneKey, setSceneKey] = useState(initialScene);
 
   // Initialize Game Data
   useLayoutEffect(() => {

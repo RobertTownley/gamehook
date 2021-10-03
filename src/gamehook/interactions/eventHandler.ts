@@ -15,7 +15,6 @@ const handleMouseEvent = (event: MouseEvent, eventType: keyof Interactable) => {
   const sceneObjects: GameObject[] = Object.values(scene.objects);
   const interactables: GameObject[] = sceneObjects.filter((obj) => {
     if (obj.obj.type !== "Mesh") return false;
-    console.log({ obj });
     return obj[eventType] ? true : false;
   });
 

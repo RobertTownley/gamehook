@@ -1,5 +1,4 @@
 import { Dispatch, FC, SetStateAction, useState } from "react";
-import * as THREE from "three";
 
 import { Game, Scene } from "../../gamehook";
 import { Mesh } from "../../gamehook/objects/mesh";
@@ -9,13 +8,11 @@ import { ObjectPosition } from "../../gamehook/objects/types";
 import { CollisionResolver } from "../../gamehook/interactions/collisions";
 
 const BOUNDARY = 4; // How far the ball travels before the game ends
-const BrickGeometry = new THREE.BoxGeometry(0.5, 0.125, 0.01);
-const PaddleGeometry = new THREE.BoxGeometry(2, 0.125, 0.01);
 
 const Brick: FC<{ position: ObjectPosition }> = ({ position }) => {
   return (
     <Mesh
-      geometry={BrickGeometry}
+      geometry={{ type: "box", width: 0.5, height: 0.125, depth: 0.01 }}
       material={{ color: 0x00ff00, type: "basic" }}
       position={position}
       name="brick"
@@ -78,7 +75,7 @@ const Paddle = ({ position, onCollision, setPaddlePosition }: PaddleProps) => {
 
   return (
     <Mesh
-      geometry={PaddleGeometry}
+      geometry={{ type: "box", width: 2, height: 0.125, depth: 0.01 }}
       material={{ color: 0x00ffff, type: "basic" }}
       position={position}
       onKeyDown={handleKeyPress}

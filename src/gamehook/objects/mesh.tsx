@@ -3,13 +3,13 @@ import * as THREE from "three";
 import { generateUUID } from "three/src/math/MathUtils";
 
 import { defaultPosition, defaultRotation } from "./defaults";
+import { createGeometry } from "./geometries";
 import { createMaterial } from "./materials";
 import { BasicMeshType, GameObject } from "./types";
 
 interface MeshProps extends BasicMeshType {
   color?: number;
   children?: ReactNode;
-  geometry: THREE.BufferGeometry;
 }
 
 export const Mesh = ({
@@ -24,11 +24,12 @@ export const Mesh = ({
   onClick,
   ...gameObjectProps
 }: MeshProps) => {
+  const _geometry = createGeometry(geometry);
   const _material = createMaterial(material);
 
   const obj = useRef<GameObject>({
     id: generateUUID(),
-    obj: new THREE.Mesh(geometry, _material),
+    obj: new THREE.Mesh(_geometry, _material),
     onKeyDown,
     position,
     rotation,
