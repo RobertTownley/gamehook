@@ -2,11 +2,22 @@ import * as THREE from "three";
 import { ReactNode, useEffect } from "react";
 
 import { useAnimation } from "../hooks";
+import { GameObject } from "../objects/types";
 import { detectCollisions } from "../interactions/collisions";
 
 interface SceneProps {
   backgroundColor?: string;
   children: ReactNode;
+}
+
+export interface SceneData {
+  camera: THREE.PerspectiveCamera;
+  id: string;
+  objects: { [key: string]: GameObject };
+  threeScene: THREE.Scene;
+  // Object Methods
+  addObjectToScene: (obj: GameObject) => void;
+  removeObjectFromScene: (obj: GameObject) => void;
 }
 
 export interface GameSceneProps {
