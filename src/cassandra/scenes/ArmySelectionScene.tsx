@@ -1,34 +1,9 @@
-import { CameraControl, MaterialOptions, Mesh } from "../../gamehook";
+import { CameraControl, useGameRouter } from "../../gamehook";
 import { AmbientLight, Scene } from "../../gamehook";
 
-const BoundingBox = () => {
-  const material: MaterialOptions = { type: "normal" };
-  return (
-    <>
-      <Mesh
-        material={material}
-        geometry={{ type: "box", width: 10, height: 10, depth: 0.1 }}
-      />
-      <Mesh
-        material={material}
-        geometry={{ type: "box", width: 0.1, height: 10, depth: 10 }}
-        position={[5, 0, 5]}
-      />
-      <Mesh
-        material={material}
-        geometry={{ type: "box", width: 0.1, height: 10, depth: 10 }}
-        position={[-5, 0, 5]}
-      />
-      <Mesh
-        material={material}
-        geometry={{ type: "box", width: 10, height: 0.1, depth: 10 }}
-        position={[0, 5, 5]}
-      />
-    </>
-  );
-};
 export const ArmySelectionScene = () => {
-  console.log("Scene");
+  const router = useGameRouter();
+  console.log(router.params);
   return (
     <Scene>
       <CameraControl
@@ -36,7 +11,6 @@ export const ArmySelectionScene = () => {
         initialRotation={[1.0, 0, 0]}
       />
       <AmbientLight />
-      <BoundingBox />
     </Scene>
   );
 };

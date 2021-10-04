@@ -1,6 +1,8 @@
+import { MutableRefObject, useEffect } from "react";
 import * as THREE from "three";
 import { GameListener } from "../listeners";
 import { GameObject } from "../objects/types";
+import { Collidable } from "./collisions";
 
 import { getMouseVectorForEvent } from "./mouse";
 import { EventHandlerMap, KeyboardEventType, Interactable } from "./types";
@@ -108,4 +110,25 @@ export const initializeEventHandlers = () => {
   // Keyboard
   window.addEventListener("keyup", eventHandlers.onKeyUp, false);
   window.addEventListener("keydown", eventHandlers.onKeyDown, false);
+};
+
+// Wrapper around hooks for each of the event listener the object
+// needs to be ready for changes to. Required as the object's properties
+// change. Without this, state is not maintained between renders if children
+// use useState.
+export const useEventListener = (
+  obj: MutableRefObject<GameObject>,
+  { onClick, onCollision, onKeyDown }: Partial<Interactable & Collidable>
+) => {
+  useEffect(() => {
+    obj.current.onClick = onClick;
+  }, [obj, onClick]);
+
+  useEffect(() => {
+    obj.current.onKeyDown = onKeyDown;
+  }, [obj, onKeyDown]);
+
+  useEffect(() => {
+    obj.current.onCollision = onCollision;
+  }, [obj, onCollision]);
 };

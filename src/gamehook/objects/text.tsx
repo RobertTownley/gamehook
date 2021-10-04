@@ -4,6 +4,7 @@ import { generateUUID } from "three/src/math/MathUtils";
 
 import { BasicMeshType, GameObject } from "./types";
 import { defaultPosition, defaultRotation } from "./defaults";
+import { useEventListener } from "../interactions/eventHandler";
 import { createMaterial } from "./materials";
 
 interface TextProps extends BasicMeshType {
@@ -48,6 +49,12 @@ export const Text = ({
   useEffect(() => {
     obj.current.obj.rotation.set(...rotation);
   }, [rotation]);
+  useEffect(() => {
+    const _material = createMaterial(material);
+    textObj.material = _material;
+  }, [material, textObj]);
+
+  useEventListener(obj, props);
 
   useEffect(() => {
     const current = obj.current;

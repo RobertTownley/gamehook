@@ -7,10 +7,10 @@ import { TitleScene } from "./cassandra/scenes/TitleScene";
 
 function App() {
   return (
-    <Game initialScene="Army Selection">
+    <Game initialScene="Title">
       <GamehookCreditsScene key="Initial" nextScene="Title" />
       <TitleScene key="Title" />
-      <ArmySelectionScene key="Army Selection" />
+      <ArmySelectionScene key="Force Selection" />
       <BattleScene key="Battle" />
     </Game>
   );

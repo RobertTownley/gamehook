@@ -75,11 +75,11 @@ export const useGameRouter = () => {
   const routerContext = useContext(RouterContext);
   return useMemo(() => {
     return {
-      changeScene: (key: string) => {
-        if (key !== routerContext.sceneKey) {
-          routerContext.setSceneKey(key);
-        }
+      changeScene: (key: string, routerParams?: any) => {
+        routerContext.setRouterParams(routerParams);
+        routerContext.setSceneKey(key);
       },
+      params: routerContext.routerParams,
     };
   }, [routerContext]);
 };

@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useRef } from "react";
 import * as THREE from "three";
 import { generateUUID } from "three/src/math/MathUtils";
+import { useEventListener } from "../interactions/eventHandler";
 
 import { defaultPosition, defaultRotation } from "./defaults";
 import { createGeometry } from "./geometries";
@@ -50,23 +51,7 @@ export const Mesh = ({
     obj.current.obj.rotation.set(...rotation);
   }, [rotation]);
 
-  // TODO: Do this with every event type, or find a more efficient way
-  // to have the new setter event copied to the object
-  useEffect(() => {
-    if (onKeyDown) {
-      obj.current.onKeyDown = onKeyDown;
-    }
-  }, [onKeyDown]);
-  useEffect(() => {
-    if (onClick) {
-      obj.current.onClick = onClick;
-    }
-  }, [onClick]);
-  useEffect(() => {
-    if (onCollision) {
-      obj.current.onCollision = onCollision;
-    }
-  }, [onCollision]);
+  useEventListener(obj, gameObjectProps);
 
   useEffect(() => {
     let mounted = true;

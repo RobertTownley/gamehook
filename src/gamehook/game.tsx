@@ -25,6 +25,7 @@ export const Game = ({
   width,
 }: GameProps) => {
   const mountRef = useRef<HTMLDivElement>(null);
+  const [routerParams, setRouterParams] = useState(undefined);
   const [sceneKey, setSceneKey] = useState(initialScene);
 
   // Initialize Game Data
@@ -65,7 +66,9 @@ export const Game = ({
   if (!scene) return null;
 
   return (
-    <RouterContext.Provider value={{ sceneKey, setSceneKey }}>
+    <RouterContext.Provider
+      value={{ routerParams, setRouterParams, sceneKey, setSceneKey }}
+    >
       <div ref={mountRef} />
       {scene}
     </RouterContext.Provider>
