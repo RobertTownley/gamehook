@@ -13,6 +13,12 @@ interface CircleGeometryOptions {
   segments: number;
 }
 
+interface PlaneGeometryOptions {
+  type: "plane";
+  width: number;
+  height: number;
+}
+
 interface SphereGeometryOptions {
   type: "sphere";
   radius: number;
@@ -23,6 +29,7 @@ interface SphereGeometryOptions {
 type GeometryOptions =
   | BoxGeometryOptions
   | CircleGeometryOptions
+  | PlaneGeometryOptions
   | SphereGeometryOptions;
 export interface Shapeable {
   geometry?: GeometryOptions;
@@ -42,6 +49,8 @@ export const createGeometry = (
       return createBoxGeometry(opt);
     case "circle":
       return createCircleGeometry(opt);
+    case "plane":
+      return createPlaneGeometry(opt);
     case "sphere":
       return createSphereGeometry(opt);
   }
@@ -73,6 +82,10 @@ const createCircleGeometry = ({
   segments,
 }: CircleGeometryOptions): THREE.CircleGeometry => {
   return new THREE.CircleGeometry(radius, segments);
+};
+
+const createPlaneGeometry = ({ width, height }: PlaneGeometryOptions) => {
+  return new THREE.PlaneGeometry(width, height);
 };
 
 const createSphereGeometry = ({
