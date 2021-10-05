@@ -43,16 +43,16 @@ const SkyCamCameraControl = ({
   const handleKeyDown = (event: KeyboardEvent) => {
     switch (event.code) {
       case "ArrowUp":
-        camera.position.y += step;
+        camera.moveY(step);
         break;
       case "ArrowDown":
-        camera.position.y -= step;
+        camera.moveY(0 - step);
         break;
       case "ArrowRight":
-        camera.position.x += step;
+        camera.moveX(step);
         break;
       case "ArrowLeft":
-        camera.position.x -= step;
+        camera.moveX(0 - step);
         break;
       default:
         console.log(event);
@@ -64,23 +64,20 @@ const SkyCamCameraControl = ({
   });
 
   useLayoutEffect(() => {
-    camera.rotation.x = 0.2;
+    camera.setXRotation(0.2);
   }, [camera]);
+
   useLayoutEffect(() => {
     if (!initialPosition) return;
-    camera.position.set(
-      initialPosition[0],
-      initialPosition[1],
-      initialPosition[2]
-    );
+    camera.setXPosition(initialPosition[0]);
+    camera.setYPosition(initialPosition[1]);
+    camera.setZPosition(initialPosition[2]);
   }, [camera, initialPosition]);
   useLayoutEffect(() => {
     if (!initialRotation) return;
-    camera.rotation.set(
-      initialRotation[0],
-      initialRotation[1],
-      initialRotation[2]
-    );
+    camera.setXRotation(initialRotation[0]);
+    camera.setYRotation(initialRotation[1]);
+    camera.setZRotation(initialRotation[2]);
   }, [camera, initialRotation]);
 
   useLayoutEffect(() => {

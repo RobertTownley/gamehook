@@ -1,5 +1,4 @@
 import _ from "lodash";
-import { useCamera } from "../../../gamehook";
 import { Mesh } from "../../../gamehook/objects/mesh";
 import { ObjectPosition } from "../../../gamehook/objects/types";
 
@@ -40,10 +39,6 @@ const Floor = () => {
 };
 
 const StoreBackground = () => {
-  const camera = useCamera();
-  camera.position.y = 2;
-  camera.position.x = 2;
-  camera.rotation.x = 1;
   return (
     <>
       <Floor />

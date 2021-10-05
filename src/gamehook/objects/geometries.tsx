@@ -13,6 +13,18 @@ interface CircleGeometryOptions {
   segments: number;
 }
 
+interface CylinderGeometryOptions {
+  type: "cylinder";
+  radiusTop?: number;
+  radiusBottom?: number;
+  height?: number;
+  radialSegments?: number;
+  heightSegments?: number;
+  openEnded?: boolean;
+  thetaStart?: number;
+  thetaLength?: number;
+}
+
 interface PlaneGeometryOptions {
   type: "plane";
   width: number;
@@ -29,6 +41,7 @@ interface SphereGeometryOptions {
 type GeometryOptions =
   | BoxGeometryOptions
   | CircleGeometryOptions
+  | CylinderGeometryOptions
   | PlaneGeometryOptions
   | SphereGeometryOptions;
 export interface Shapeable {
@@ -49,6 +62,8 @@ export const createGeometry = (
       return createBoxGeometry(opt);
     case "circle":
       return createCircleGeometry(opt);
+    case "cylinder":
+      return createCylinderGeometry(opt);
     case "plane":
       return createPlaneGeometry(opt);
     case "sphere":
@@ -82,6 +97,28 @@ const createCircleGeometry = ({
   segments,
 }: CircleGeometryOptions): THREE.CircleGeometry => {
   return new THREE.CircleGeometry(radius, segments);
+};
+
+const createCylinderGeometry = ({
+  radiusTop = 1,
+  radiusBottom = 1,
+  height = 1,
+  radialSegments = 8,
+  heightSegments = 1,
+  openEnded = false,
+  thetaStart = 0,
+  thetaLength = 2 * Math.PI,
+}: CylinderGeometryOptions): THREE.CylinderGeometry => {
+  return new THREE.CylinderGeometry(
+    radiusTop,
+    radiusBottom,
+    height,
+    radialSegments,
+    heightSegments,
+    openEnded,
+    thetaStart,
+    thetaLength
+  );
 };
 
 const createPlaneGeometry = ({ width, height }: PlaneGeometryOptions) => {

@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useEffect, useRef, useContext } from "react";
+import { ObjectPosition, ObjectRotation } from "./objects/types";
 import { RouterContext } from "./router";
 
 type Animation = (val: number) => void;
@@ -67,8 +68,111 @@ export const useTimeline = (
   return result;
 };
 
-export const useCamera = (): THREE.PerspectiveCamera => {
-  return GAME.scene.camera;
+interface GamehookCamera {
+  getPosition: () => ObjectPosition;
+  getXPosition: () => number;
+  getYPosition: () => number;
+  getZPosition: () => number;
+
+  moveX: (n: number) => void;
+  moveY: (n: number) => void;
+  moveZ: (n: number) => void;
+
+  setPosition: (position: ObjectPosition) => void;
+  setXPosition: (x: number) => void;
+  setYPosition: (y: number) => void;
+  setZPosition: (z: number) => void;
+
+  getRotation: () => ObjectRotation;
+  getXRotation: () => number;
+  getYRotation: () => number;
+  getZRotation: () => number;
+
+  rotateX: (n: number) => void;
+  rotateY: (n: number) => void;
+  rotateZ: (n: number) => void;
+
+  setRotation: (rotation: ObjectRotation) => void;
+  setXRotation: (x: number) => void;
+  setYRotation: (y: number) => void;
+  setZRotation: (z: number) => void;
+}
+export const useCamera = (): GamehookCamera => {
+  const cameraRef = useRef(GAME.scene.camera);
+  return {
+    getPosition: () => {
+      return cameraRef.current.camera.position;
+    },
+    getXPosition: () => {
+      return cameraRef.current.position.x;
+    },
+    getYPosition: () => {
+      return cameraRef.current.position.y;
+    },
+    getZPosition: () => {
+      return cameraRef.current.position.z;
+    },
+    getRotation: () => {
+      return cameraRef.current.rotation;
+    },
+    getXRotation: () => {
+      return cameraRef.current.rotation.x;
+    },
+    getYRotation: () => {
+      return cameraRef.current.rotation.y;
+    },
+    getZRotation: () => {
+      return cameraRef.current.rotation.z;
+    },
+    moveX: (n: number) => {
+      cameraRef.current.position.x += n;
+    },
+    moveY: (n: number) => {
+      cameraRef.current.position.y += n;
+    },
+    moveZ: (n: number) => {
+      cameraRef.current.position.z += n;
+    },
+    rotateX: (n: number) => {
+      cameraRef.current.rotation.x += n;
+    },
+    rotateY: (n: number) => {
+      cameraRef.current.rotation.y += n;
+    },
+    rotateZ: (n: number) => {
+      cameraRef.current.rotation.z += n;
+    },
+
+    setPosition: (position: ObjectPosition) => {
+      cameraRef.current.position.x = position[0];
+      cameraRef.current.position.y = position[1];
+      cameraRef.current.position.z = position[2];
+    },
+    setXPosition: (x: number) => {
+      cameraRef.current.position.x = x;
+    },
+    setYPosition: (y: number) => {
+      cameraRef.current.position.y = y;
+    },
+    setZPosition: (z: number) => {
+      cameraRef.current.position.z = z;
+    },
+
+    setRotation: (rotation: ObjectRotation) => {
+      cameraRef.current.rotation.x = rotation[0];
+      cameraRef.current.rotation.y = rotation[1];
+      cameraRef.current.rotation.z = rotation[2];
+    },
+    setXRotation: (x: number) => {
+      cameraRef.current.rotation.x = x;
+    },
+    setYRotation: (y: number) => {
+      cameraRef.current.rotation.y = y;
+    },
+    setZRotation: (z: number) => {
+      cameraRef.current.rotation.z = z;
+    },
+  };
 };
 
 export const useGameRouter = () => {
