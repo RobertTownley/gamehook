@@ -1,10 +1,10 @@
 export type ArmyName =
   | "The Big Guy"
   | "The Consensus"
-  | "Humans"
-  | "Metal Rays"
-  | "Squishies"
   | "Stone Cats"
+  | "Humans"
+  | "Lightsmiths"
+  | "Squishies"
   | "Wise Guys";
 
 export interface Army {

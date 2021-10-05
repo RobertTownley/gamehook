@@ -4,15 +4,17 @@ import { CameraControl, useCamera, useGameRouter } from "../../../gamehook";
 import { AmbientLight, Scene } from "../../../gamehook";
 
 import { Background } from "./background";
-import { Pedistal } from "./pedistal";
+import { Pedistals } from "./pedistal";
 import { Army } from "../../armies/types";
+import { Armies } from "../../armies";
 
 interface GameDetails {
-  availableArmies?: Army[];
+  availableArmies: Army[];
   playerCount: number;
   pointValue: number;
 }
 const DefaultGameDetails: GameDetails = {
+  availableArmies: Armies,
   playerCount: 2,
   pointValue: 1000,
 };
@@ -24,19 +26,20 @@ interface SelectedForce {
 export const ForceSelectionScene = () => {
   const camera = useCamera();
   useEffect(() => {
-    camera.setPosition([2, 0, 5]);
-    camera.setRotation([Math.PI / 3, 0, 0]);
+    camera.setPosition([0, -5, 10]);
+    camera.setRotation([(Math.PI * 2) / 5, 0, 0]);
   }, [camera]);
 
   const router = useGameRouter();
   const gameDetails: GameDetails = router.params || DefaultGameDetails;
   const [selectedForce, setSelectedForce] = useState<SelectedForce>({});
+
   return (
     <Scene>
       <CameraControl />
       <AmbientLight />
       <Background variant="store" />
-      <Pedistal position={[0, 5, 0.5]} />
+      <Pedistals />
     </Scene>
   );
 };
