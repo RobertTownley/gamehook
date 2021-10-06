@@ -4,7 +4,7 @@ export { CameraControl } from "./camera";
 export { useAnimation, useCamera, useGameRouter, useTimeline } from "./hooks";
 export { AmbientLight } from "./lights/AmbientLight";
 export type { MaterialOptions } from "./objects/materials";
-export type { ObjectPosition } from "./objects/types";
+export type { ObjectPosition, ObjectRotation } from "./objects/types";
 export { Mesh } from "./objects/mesh";
 export { Text } from "./objects/text";
 export type { BasicMeshType } from "./objects/types";

@@ -1,20 +1,28 @@
-import { ReactNode, useEffect, useRef } from "react";
+import _ from "lodash";
 import * as THREE from "three";
+import {
+  Children,
+  cloneElement,
+  isValidElement,
+  ReactElement,
+  useEffect,
+  useRef,
+} from "react";
 import { generateUUID } from "three/src/math/MathUtils";
-import { useEventListener } from "../interactions/eventHandler";
 
+import { useEventListener } from "../interactions/eventHandler";
 import { defaultPosition, defaultRotation } from "./defaults";
 import { createGeometry } from "./geometries";
 import { createMaterial } from "./materials";
 import { BasicMeshType, GameObject } from "./types";
 
 interface MeshProps extends BasicMeshType {
-  color?: number;
-  children?: ReactNode;
+  children?: ReactElement | ReactElement[];
+  parent?: GameObject;
 }
 
 export const Mesh = ({
-  color,
+  children,
   position = defaultPosition,
   rotation = defaultRotation,
   geometry,
@@ -23,6 +31,7 @@ export const Mesh = ({
   onCollision,
   onKeyDown,
   onClick,
+  parent,
   ...gameObjectProps
 }: MeshProps) => {
   const _geometry = createGeometry(geometry);
@@ -64,5 +73,6 @@ export const Mesh = ({
       GAME.scene.removeObjectFromScene(current);
     };
   }, []);
+
   return <></>;
 };

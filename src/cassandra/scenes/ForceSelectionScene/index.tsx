@@ -1,13 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-import { CameraControl, useCamera, useGameRouter } from "../../../gamehook";
+import { CameraControl, useCamera } from "../../../gamehook";
 import { AmbientLight, Scene } from "../../../gamehook";
 
 import { Background } from "./background";
 import { Pedistals } from "./pedistal";
-import { Army } from "../../armies/types";
-import { Armies } from "../../armies";
+// import { Army } from "../../armies/types";
+// import { Armies } from "../../armies";
 
+/*
 interface GameDetails {
   availableArmies: Army[];
   playerCount: number;
@@ -22,6 +23,7 @@ const DefaultGameDetails: GameDetails = {
 interface SelectedForce {
   armies?: Army[];
 }
+*/
 
 export const ForceSelectionScene = () => {
   const camera = useCamera();
@@ -30,9 +32,9 @@ export const ForceSelectionScene = () => {
     camera.setRotation([(Math.PI * 2) / 5, 0, 0]);
   }, [camera]);
 
-  const router = useGameRouter();
-  const gameDetails: GameDetails = router.params || DefaultGameDetails;
-  const [selectedForce, setSelectedForce] = useState<SelectedForce>({});
+  // const router = useGameRouter();
+  // const gameDetails: GameDetails = router.params || DefaultGameDetails;
+  // const [selectedForce, setSelectedForce] = useState<SelectedForce>({});
 
   return (
     <Scene>

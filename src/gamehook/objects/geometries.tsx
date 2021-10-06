@@ -2,9 +2,9 @@ import * as THREE from "three";
 
 interface BoxGeometryOptions {
   type: "box";
-  width: number;
-  height: number;
-  depth: number;
+  width?: number;
+  height?: number;
+  depth?: number;
 }
 
 interface CircleGeometryOptions {
@@ -33,9 +33,9 @@ interface PlaneGeometryOptions {
 
 interface SphereGeometryOptions {
   type: "sphere";
-  radius: number;
-  widthSegments: number;
-  heightSegments: number;
+  radius?: number;
+  widthSegments?: number;
+  heightSegments?: number;
 }
 
 type GeometryOptions =
@@ -85,9 +85,9 @@ const defaultGeometryOptions: GeometryOptions = {
 };
 
 const createBoxGeometry = ({
-  width,
-  height,
-  depth,
+  width = 1,
+  height = 1,
+  depth = 1,
 }: BoxGeometryOptions): THREE.BoxGeometry => {
   return new THREE.BoxGeometry(width, height, depth);
 };
@@ -126,9 +126,9 @@ const createPlaneGeometry = ({ width, height }: PlaneGeometryOptions) => {
 };
 
 const createSphereGeometry = ({
-  radius,
-  heightSegments,
-  widthSegments,
+  radius = 1,
+  heightSegments = 16,
+  widthSegments = 32,
 }: SphereGeometryOptions): THREE.SphereGeometry => {
   return new THREE.SphereGeometry(radius, widthSegments, heightSegments);
 };

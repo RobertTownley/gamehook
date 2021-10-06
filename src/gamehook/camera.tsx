@@ -55,7 +55,7 @@ const SkyCamCameraControl = ({
         camera.moveX(0 - step);
         break;
       default:
-        console.log(event);
+      // console.log(event);
     }
   };
   const obj = useRef<GameListener>({
