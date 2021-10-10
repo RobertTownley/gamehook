@@ -38,7 +38,7 @@ interface SphereGeometryOptions {
   heightSegments?: number;
 }
 
-type GeometryOptions =
+export type GeometryOptions =
   | BoxGeometryOptions
   | CircleGeometryOptions
   | CylinderGeometryOptions
@@ -57,18 +57,34 @@ export const createGeometry = (
   } else if (isGeometryGuard(opt)) {
     return opt;
   }
-  switch (opt.type) {
-    case "box":
-      return createBoxGeometry(opt);
-    case "circle":
-      return createCircleGeometry(opt);
-    case "cylinder":
-      return createCylinderGeometry(opt);
-    case "plane":
-      return createPlaneGeometry(opt);
-    case "sphere":
-      return createSphereGeometry(opt);
+
+  // Cache geometry creation
+  const useCache = true; // TODO parameterize
+  const geometryToken = JSON.stringify(opt);
+  if (useCache && GAME.resources.geometries[geometryToken]) {
+    return GAME.resources.geometries[geometryToken];
   }
+
+  const newGeometry = (() => {
+    switch (opt.type) {
+      case "box":
+        return createBoxGeometry(opt);
+      case "circle":
+        return createCircleGeometry(opt);
+      case "cylinder":
+        return createCylinderGeometry(opt);
+      case "plane":
+        return createPlaneGeometry(opt);
+      case "sphere":
+        return createSphereGeometry(opt);
+    }
+  })();
+  if (useCache) {
+    GAME.resources.geometries[geometryToken] = newGeometry;
+    return newGeometry;
+  }
+
+  return newGeometry;
 };
 
 function isGeometryGuard(

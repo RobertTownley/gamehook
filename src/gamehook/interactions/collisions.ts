@@ -29,7 +29,7 @@ export const detectCollisions = () => {
   if (!collidables) return;
 
   colliders.forEach((collider) => {
-    const method = "sample"; // TODO: Customize by object
+    const method = "exact"; // TODO: Customize by object
     const collided = detectCollision({
       collider,
       collidables: collidables.filter((c) => c.id !== collider.id),
@@ -56,8 +56,11 @@ export const detectCollision = ({
   collidables,
   method,
 }: DetectCollisionParams): GameObject | undefined => {
+  const c1center = getCenterPoint(collider);
+  if (!c1center) {
+    return;
+  }
   const { geometry, position } = collider.obj;
-  if (!geometry.boundingSphere) return;
 
   const colliderCenter = new THREE.Vector3(position.x, position.y, position.z);
   const colliderSampleVertices =
@@ -101,4 +104,17 @@ export const detectCollision = ({
       }
     }
   }
+};
+
+const getCenterPoint = (gameObj: GameObject): THREE.Vector3 | null => {
+  if (!gameObj.obj.geometry.boundingSphere) {
+    gameObj.obj.geometry.computeBoundingSphere();
+  }
+  const { boundingSphere } = gameObj.obj.geometry;
+
+  return new THREE.Vector3(
+    boundingSphere.center.x,
+    boundingSphere.center.y,
+    boundingSphere.center.z
+  );
 };

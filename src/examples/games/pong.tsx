@@ -2,7 +2,6 @@ import { Dispatch, FC, SetStateAction, useState } from "react";
 
 import { Game, Scene } from "../../gamehook";
 import { Mesh } from "../../gamehook/objects/mesh";
-import { Sphere } from "../../gamehook/objects/sphere";
 import { useAnimation } from "../../gamehook/hooks";
 import { ObjectPosition } from "../../gamehook/objects/types";
 import { CollisionResolver } from "../../gamehook/interactions/collisions";
@@ -27,7 +26,7 @@ interface BallProps {
   vector: ObjectPosition;
 }
 const Ball: FC<BallProps> = ({ onCollision, setBallGone, vector }) => {
-  const [position, setPosition] = useState<ObjectPosition>([0, 1, 0]);
+  const [position, setPosition] = useState<ObjectPosition>([-1, 1, 0]);
 
   useAnimation(() => {
     // Determine if it's gone too far off the screen
@@ -43,10 +42,10 @@ const Ball: FC<BallProps> = ({ onCollision, setBallGone, vector }) => {
   });
 
   return (
-    <Sphere
+    <Mesh
       material={{ color: 0xffff00, type: "basic" }}
+      geometry={{ type: "sphere", radius: 0.125 }}
       position={position}
-      radius={0.125}
       onCollision={onCollision}
       triggersCollisions
       name="ball"
@@ -61,8 +60,8 @@ interface PaddleProps {
 }
 
 // Game speed constants
-const STEP = 0.5;
-const BALL_SPEED = 0.025;
+const STEP = 0.1;
+const BALL_SPEED = 0.01;
 
 const Paddle = ({ position, onCollision, setPaddlePosition }: PaddleProps) => {
   const handleKeyPress = (event: KeyboardEvent) => {
@@ -136,8 +135,8 @@ export const Pong = () => {
   return (
     <>
       {ballGone && <h1>Game Over!</h1>}
-      <Game>
-        <Scene>
+      <Game initialScene="Pong">
+        <Scene key="Pong">
           {brickPositions.map((position, i) => (
             <Brick position={position} key={i} />
           ))}

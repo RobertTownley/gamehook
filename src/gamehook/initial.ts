@@ -1,22 +1,32 @@
 import * as THREE from "three";
-
 import { generateUUID } from "three/src/math/MathUtils";
+
 import { buildEventHandlerMap } from "./interactions/eventHandler";
+import { GeometryOptions } from "./objects/geometries";
 import { EventHandlerMap } from "./interactions/types";
 import { SceneData } from "./scene";
 import { GameObject } from "./objects/types";
 import { DEFAULT_INITIAL_SCENE_KEY } from "./router";
 import { GameListener } from "./listeners";
+import { MaterialOptions } from "./objects/materials";
 
 export interface GameRouter {
   currentSceneKey: string;
   push: (key: string) => void;
 }
 
+// Cache objects that can be cached, to avoid object recreation
+// TODO: This might interfere with object property changes at some point
+interface GameResources {
+  geometries: Record<string, GeometryOptions>;
+  materials: Record<string, MaterialOptions>;
+}
+
 export interface GameData {
   id: string;
   eventHandlers: EventHandlerMap;
   renderer: THREE.WebGLRenderer;
+  resources: GameResources;
   router: GameRouter;
   scene: SceneData;
   // Window Methods
@@ -51,6 +61,10 @@ export const getInitialGameData = ({ width, height }: Params): GameData => {
   return {
     id: generateUUID(),
     eventHandlers: buildEventHandlerMap(),
+    resources: {
+      geometries: {},
+      materials: {},
+    },
     router: {
       currentSceneKey: DEFAULT_INITIAL_SCENE_KEY,
       push: handleSceneChange,

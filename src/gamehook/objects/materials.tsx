@@ -37,14 +37,26 @@ export const createMaterial = (
   } else if (isMaterialGuard(opt)) {
     return opt;
   }
-  switch (opt?.type) {
-    case "basic":
-      return createBasicMaterial(opt);
-    case "normal":
-      return createNormalMaterial(opt);
-    case "standard":
-      return createStandardMaterial(opt);
+
+  const useCache = true; // TODO parameterize
+  const materialToken = JSON.stringify(opt);
+  if (useCache && GAME.resources.materials[materialToken]) {
+    return GAME.resources.materials[materialToken];
   }
+  const newMaterial = (() => {
+    switch (opt?.type) {
+      case "basic":
+        return createBasicMaterial(opt);
+      case "normal":
+        return createNormalMaterial(opt);
+      case "standard":
+        return createStandardMaterial(opt);
+    }
+  })();
+  if (useCache) {
+    GAME.resources.materials[materialToken] = newMaterial;
+  }
+  return newMaterial;
 };
 
 function isMaterialGuard(

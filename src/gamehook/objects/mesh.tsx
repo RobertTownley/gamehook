@@ -1,13 +1,5 @@
-import _ from "lodash";
 import * as THREE from "three";
-import {
-  Children,
-  cloneElement,
-  isValidElement,
-  ReactElement,
-  useEffect,
-  useRef,
-} from "react";
+import { ReactElement, useEffect, useRef } from "react";
 import { generateUUID } from "three/src/math/MathUtils";
 
 import { useEventListener } from "../interactions/eventHandler";
@@ -21,26 +13,20 @@ interface MeshProps extends BasicMeshType {
   parent?: GameObject;
 }
 
-export const Mesh = ({
-  children,
-  position = defaultPosition,
-  rotation = defaultRotation,
-  geometry,
-  material,
-
-  onCollision,
-  onKeyDown,
-  onClick,
-  parent,
-  ...gameObjectProps
-}: MeshProps) => {
-  const _geometry = createGeometry(geometry);
-  const _material = createMaterial(material);
+export const Mesh = (props: MeshProps) => {
+  const {
+    children,
+    position = defaultPosition,
+    rotation = defaultRotation,
+    geometry,
+    material,
+    parent,
+    ...gameObjectProps
+  } = props;
 
   const obj = useRef<GameObject>({
     id: generateUUID(),
-    obj: new THREE.Mesh(_geometry, _material),
-    onKeyDown,
+    obj: new THREE.Mesh(createGeometry(geometry), createMaterial(material)),
     position,
     rotation,
     ...gameObjectProps,
@@ -60,7 +46,7 @@ export const Mesh = ({
     obj.current.obj.rotation.set(...rotation);
   }, [rotation]);
 
-  useEventListener(obj, gameObjectProps);
+  useEventListener(obj, props);
 
   useEffect(() => {
     let mounted = true;
