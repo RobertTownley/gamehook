@@ -1,20 +1,17 @@
 import * as THREE from "three";
 
-interface AbstractMaterialOptions {
-  isMaterial?: boolean;
-}
-interface BasicMaterialOptions extends AbstractMaterialOptions {
+interface BasicMaterialOptions {
   type: "basic";
   color?: number;
   wireframe?: boolean;
 }
 
-interface NormalMaterialOptions extends AbstractMaterialOptions {
+interface NormalMaterialOptions {
   type: "normal";
   wireframe?: boolean;
 }
 
-interface StandardMaterialOptions extends AbstractMaterialOptions {
+interface StandardMaterialOptions {
   color?: number;
   metalness?: number;
   type: "standard";
@@ -28,63 +25,27 @@ export type MaterialOptions =
 export interface Designable {
   material?: MaterialOptions;
 }
-// Utility functions to build materials
-export const createMaterial = (
-  opt: MaterialOptions | THREE.Material | undefined
-): THREE.Material => {
-  if (!opt) {
-    return createMaterial(defaultMaterialOptions);
-  } else if (isMaterialGuard(opt)) {
-    return opt;
-  }
 
-  const useCache = true; // TODO parameterize
-  const materialToken = JSON.stringify(opt);
-  if (useCache && GAME.resources.materials[materialToken]) {
-    return GAME.resources.materials[materialToken];
+const defaultMaterialOptions: MaterialOptions = {
+  type: "normal",
+};
+export const createMaterial = (opts?: MaterialOptions): THREE.Material => {
+  const opt = opts ?? defaultMaterialOptions;
+  const token = JSON.stringify(opt);
+  const { materials } = _GAME.resources;
+  if (materials[token]) {
+    return materials[token];
   }
   const newMaterial = (() => {
     switch (opt?.type) {
       case "basic":
-        return createBasicMaterial(opt);
+        return new THREE.MeshBasicMaterial({ color: opt.color });
       case "normal":
-        return createNormalMaterial(opt);
+        return new THREE.MeshNormalMaterial({ wireframe: opt.wireframe });
       case "standard":
-        return createStandardMaterial(opt);
+        return new THREE.MeshStandardMaterial({ color: opt.color });
     }
   })();
-  if (useCache) {
-    GAME.resources.materials[materialToken] = newMaterial;
-  }
+  materials[token] = newMaterial;
   return newMaterial;
-};
-
-function isMaterialGuard(
-  opt: THREE.Material | MaterialOptions
-): opt is THREE.Material {
-  return opt.isMaterial === true;
-}
-
-export const createBasicMaterial = ({
-  color,
-}: BasicMaterialOptions): THREE.MeshBasicMaterial => {
-  return new THREE.MeshBasicMaterial({ color });
-};
-
-export const createNormalMaterial = ({
-  wireframe = false,
-}: NormalMaterialOptions): THREE.MeshNormalMaterial => {
-  return new THREE.MeshNormalMaterial({ wireframe });
-};
-
-export const createStandardMaterial = ({
-  color,
-}: StandardMaterialOptions): THREE.MeshStandardMaterial => {
-  return new THREE.MeshStandardMaterial({ color });
-};
-
-// Material options to use for all objects when not specified
-const defaultMaterialOptions: MaterialOptions = {
-  color: 0xdddddd,
-  type: "basic",
 };

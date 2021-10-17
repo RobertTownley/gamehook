@@ -44,107 +44,54 @@ export type GeometryOptions =
   | CylinderGeometryOptions
   | PlaneGeometryOptions
   | SphereGeometryOptions;
+
 export interface Shapeable {
   geometry?: GeometryOptions;
 }
 
-// Utility functions to build geometries
+const defaultGeometryOptions: BoxGeometryOptions = {
+  type: "box",
+};
 export const createGeometry = (
-  opt: GeometryOptions | THREE.BufferGeometry | undefined
+  opts?: GeometryOptions
 ): THREE.BufferGeometry => {
-  if (!opt) {
-    return createGeometry(defaultGeometryOptions);
-  } else if (isGeometryGuard(opt)) {
-    return opt;
+  const opt = opts ?? defaultGeometryOptions;
+  const token = JSON.stringify(opts);
+  const { geometries } = _GAME.resources;
+  if (geometries[token]) {
+    return geometries[token];
   }
-
-  // Cache geometry creation
-  const useCache = true; // TODO parameterize
-  const geometryToken = JSON.stringify(opt);
-  if (useCache && GAME.resources.geometries[geometryToken]) {
-    return GAME.resources.geometries[geometryToken];
-  }
-
   const newGeometry = (() => {
     switch (opt.type) {
       case "box":
-        return createBoxGeometry(opt);
+        return new THREE.BoxGeometry(
+          opt.width ?? 1,
+          opt.height ?? 1,
+          opt.depth ?? 1
+        );
       case "circle":
-        return createCircleGeometry(opt);
+        return new THREE.CircleGeometry(opt.radius ?? 1, opt.segments ?? 32);
       case "cylinder":
-        return createCylinderGeometry(opt);
+        return new THREE.CylinderGeometry(
+          opt.radiusTop ?? 1,
+          opt.radiusBottom ?? 1,
+          opt.height ?? 1,
+          opt.radialSegments ?? 8,
+          opt.heightSegments ?? 1,
+          opt.openEnded ?? false,
+          opt.thetaStart ?? 0,
+          opt.thetaLength ?? 2 * Math.PI
+        );
       case "plane":
-        return createPlaneGeometry(opt);
+        return new THREE.PlaneGeometry(opt.width ?? 1, opt.height ?? 1);
       case "sphere":
-        return createSphereGeometry(opt);
+        return new THREE.SphereGeometry(
+          opt.radius ?? 1,
+          opt.widthSegments ?? 32,
+          opt.heightSegments ?? 16
+        );
     }
   })();
-  if (useCache) {
-    GAME.resources.geometries[geometryToken] = newGeometry;
-    return newGeometry;
-  }
-
+  geometries[token] = newGeometry;
   return newGeometry;
-};
-
-function isGeometryGuard(
-  opt: THREE.BufferGeometry | GeometryOptions
-): opt is THREE.BufferGeometry {
-  return !opt.type;
-}
-
-const defaultGeometryOptions: GeometryOptions = {
-  type: "box",
-  width: 1,
-  height: 1,
-  depth: 1,
-};
-
-const createBoxGeometry = ({
-  width = 1,
-  height = 1,
-  depth = 1,
-}: BoxGeometryOptions): THREE.BoxGeometry => {
-  return new THREE.BoxGeometry(width, height, depth);
-};
-
-const createCircleGeometry = ({
-  radius,
-  segments,
-}: CircleGeometryOptions): THREE.CircleGeometry => {
-  return new THREE.CircleGeometry(radius, segments);
-};
-
-const createCylinderGeometry = ({
-  radiusTop = 1,
-  radiusBottom = 1,
-  height = 1,
-  radialSegments = 8,
-  heightSegments = 1,
-  openEnded = false,
-  thetaStart = 0,
-  thetaLength = 2 * Math.PI,
-}: CylinderGeometryOptions): THREE.CylinderGeometry => {
-  return new THREE.CylinderGeometry(
-    radiusTop,
-    radiusBottom,
-    height,
-    radialSegments,
-    heightSegments,
-    openEnded,
-    thetaStart,
-    thetaLength
-  );
-};
-
-const createPlaneGeometry = ({ width, height }: PlaneGeometryOptions) => {
-  return new THREE.PlaneGeometry(width, height);
-};
-
-const createSphereGeometry = ({
-  radius = 1,
-  heightSegments = 16,
-  widthSegments = 32,
-}: SphereGeometryOptions): THREE.SphereGeometry => {
-  return new THREE.SphereGeometry(radius, widthSegments, heightSegments);
 };

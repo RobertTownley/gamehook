@@ -1,81 +1,93 @@
-import {
-  ReactElement,
-  useLayoutEffect,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import * as THREE from "three";
+import { ReactNode, useLayoutEffect, useRef } from "react";
+import { generateUUID } from "three/src/math/MathUtils";
 
-import { initializeEventHandlers } from "./interactions/eventHandler";
-import { GameSceneProps } from "./scene";
-import { DEFAULT_INITIAL_SCENE_KEY, RouterContext } from "./router";
-import { getInitialGameData } from "./initial";
+import { initialScene, GameScene, SceneProps } from "./scene";
 
-type SceneNode = ReactElement<GameSceneProps>;
-interface GameProps {
-  children: SceneNode | Array<SceneNode>;
-  height?: number;
-  initialScene?: string;
+/* Game Component and Mounting */
+interface Props {
+  children?: ReactNode;
   width?: number;
+  height?: number;
 }
-export const Game = ({
-  children,
-  height,
-  initialScene = DEFAULT_INITIAL_SCENE_KEY,
-  width,
-}: GameProps) => {
+export const Game = ({ children, width, height }: Props) => {
+  const game = useGame({ width, height });
   const mountRef = useRef<HTMLDivElement>(null);
-  const [routerParams, setRouterParams] = useState(undefined);
-  const [sceneKey, setSceneKey] = useState(initialScene);
 
-  // Initialize Game Data
-  useLayoutEffect(() => {
-    initializeEventHandlers();
-    window.GAME.onWindowResize();
-  }, [height, width]);
-
-  // Game Loop
-  useEffect(() => {
-    const gameLoop = () => {
-      requestAnimationFrame(gameLoop);
-    };
-
-    gameLoop();
-  }, []);
-
-  // Mount scene
   useLayoutEffect(() => {
     let mounted = true;
     const existingRef = mountRef.current;
+    const { domElement } = game.renderer;
+
     if (mounted) {
-      mountRef.current?.appendChild(GAME.renderer.domElement);
+      mountRef.current?.appendChild(domElement);
     }
     return () => {
       mounted = false;
-      if (existingRef?.contains(GAME.renderer.domElement)) {
-        existingRef?.removeChild(GAME.renderer.domElement);
+      if (existingRef?.contains(domElement)) {
+        existingRef?.removeChild(domElement);
       }
     };
-  }, []);
+  }, [game.renderer]);
 
-  const scenes = Array.isArray(children) ? children : [children];
-
-  const scene = scenes.find((scene) => {
-    return scene.key === sceneKey;
-  });
-  if (!scene) return null;
-
+  const sceneTitle = "foo"; // TODO:
+  const scenes = (
+    Array.isArray(children) ? children : [children]
+  ) as SceneProps[];
+  const scene =
+    scenes.length === 1
+      ? scenes[0]
+      : scenes.find((s) => s.title === sceneTitle);
   return (
-    <RouterContext.Provider
-      value={{ routerParams, setRouterParams, sceneKey, setSceneKey }}
-    >
+    <>
       <div ref={mountRef} />
       {scene}
-    </RouterContext.Provider>
+    </>
   );
 };
 
-window.GAME = getInitialGameData({
-  width: window.innerWidth,
-  height: window.innerHeight,
-});
+/* Game Initialization */
+export interface GameProperties {
+  id: string;
+  renderer: THREE.WebGLRenderer;
+  resources: {
+    geometries: Record<string, THREE.BufferGeometry>;
+    materials: Record<string, THREE.Material>;
+  };
+  scene: GameScene;
+  width: number;
+  height: number;
+
+  onWindowResize: () => void;
+}
+
+export const useGame = (props?: Props): GameProperties => {
+  if (!window._GAME && props) {
+    const { width, height } = props;
+    // Initialize game
+    window._GAME = {
+      id: generateUUID(),
+      resources: {
+        geometries: {},
+        materials: {},
+      },
+      scene: initialScene,
+      renderer: new THREE.WebGLRenderer(),
+      width: width ?? window.innerWidth,
+      height: height ?? window.innerHeight,
+
+      // Listeners
+      onWindowResize: function () {
+        const _w = width ?? window.innerWidth;
+        const _h = height ?? window.innerHeight;
+        _GAME.scene.camera.aspect = _w / _h;
+        _GAME.scene.camera.updateProjectionMatrix();
+        _GAME.renderer.setSize(_w, _h);
+      },
+    };
+    window.addEventListener("resize", window._GAME.onWindowResize);
+  }
+  const game = useRef<GameProperties>(window._GAME);
+  game.current.onWindowResize();
+  return game.current;
+};

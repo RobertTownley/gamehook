@@ -1,10 +1,9 @@
-export { Game } from "./game";
-export { Scene } from "./scene";
-export { CameraControl } from "./camera";
-export { useAnimation, useCamera, useGameRouter, useTimeline } from "./hooks";
-export { AmbientLight } from "./lights/AmbientLight";
-export type { MaterialOptions } from "./objects/materials";
-export type { ObjectPosition, ObjectRotation } from "./objects/types";
+export { useAnimation } from "./animations";
+export { AmbientLight } from "./lights";
+export { Camera } from "./camera";
+export type { Collision, CollisionHandler } from "./physics/collisions";
 export { Mesh } from "./objects/mesh";
-export { Text } from "./objects/text";
-export type { BasicMeshType } from "./objects/types";
+export type { Acceleration, Position, Orientation } from "./objects/types";
+export { PhysicsEngine } from "./physics/engine";
+export { Scene } from "./scene";
+export { Game } from "./game";

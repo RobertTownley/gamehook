@@ -1,5 +1,5 @@
-import { GameData } from "./game";
+import { GameProperties } from "./game";
 
 declare global {
-  var GAME: GameData;
+  var _GAME: GameProperties;
 }

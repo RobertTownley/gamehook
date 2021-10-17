@@ -1,157 +1,107 @@
-import { Dispatch, FC, SetStateAction, useState } from "react";
+import { useState } from "react";
 
-import { Game, Scene } from "../../gamehook";
-import { Mesh } from "../../gamehook/objects/mesh";
-import { useAnimation } from "../../gamehook/hooks";
-import { ObjectPosition } from "../../gamehook/objects/types";
-import { CollisionResolver } from "../../gamehook/interactions/collisions";
-
-const BOUNDARY = 4; // How far the ball travels before the game ends
-
-const Brick: FC<{ position: ObjectPosition }> = ({ position }) => {
-  return (
-    <Mesh
-      geometry={{ type: "box", width: 0.5, height: 0.125, depth: 0.01 }}
-      material={{ color: 0x00ff00, type: "basic" }}
-      position={position}
-      name="brick"
-      triggersCollisions
-    />
-  );
-};
+import {
+  AmbientLight,
+  Camera,
+  Collision,
+  CollisionHandler,
+  Game,
+  Mesh,
+  Orientation,
+  Position,
+  PhysicsEngine,
+  Scene,
+} from "../../gamehook";
 
 interface BallProps {
-  onCollision: CollisionResolver;
-  setBallGone: Dispatch<SetStateAction<boolean>>;
-  vector: ObjectPosition;
+  orientation: Orientation;
+  onCollision: CollisionHandler;
 }
-const Ball: FC<BallProps> = ({ onCollision, setBallGone, vector }) => {
-  const [position, setPosition] = useState<ObjectPosition>([-1, 1, 0]);
-
-  useAnimation(() => {
-    // Determine if it's gone too far off the screen
-    const isGone = Math.abs(position[1]) > BOUNDARY;
-    setBallGone(isGone);
-
-    // Move the ball
-    setPosition([
-      position[0] + vector[0],
-      position[1] + vector[1],
-      position[2] + vector[2],
-    ]);
-  });
-
+const Ball = ({ orientation, onCollision }: BallProps) => {
   return (
     <Mesh
-      material={{ color: 0xffff00, type: "basic" }}
-      geometry={{ type: "sphere", radius: 0.125 }}
-      position={position}
+      acceleration={{ x: 0, y: 1, z: 0 }}
+      orientation={orientation}
+      geometry={{ type: "sphere", radius: 1 }}
       onCollision={onCollision}
-      triggersCollisions
       name="ball"
+      position={{ x: 0, y: 1, z: 0 }}
+      material={{ type: "basic", color: 0xff00ff }}
     />
   );
 };
 
-interface PaddleProps {
-  position: ObjectPosition;
-  setPaddlePosition: Dispatch<SetStateAction<ObjectPosition>>;
-  onCollision: CollisionResolver;
+interface BrickProps {
+  id: string;
+  position: Position;
 }
-
-// Game speed constants
-const STEP = 0.1;
-const BALL_SPEED = 0.01;
-
-const Paddle = ({ position, onCollision, setPaddlePosition }: PaddleProps) => {
-  const handleKeyPress = (event: KeyboardEvent) => {
-    if (event.key === "ArrowLeft") {
-      setPaddlePosition([position[0] - STEP, position[1], position[2]]);
-    } else if (event.key === "ArrowRight") {
-      setPaddlePosition([position[0] + STEP, position[1], position[2]]);
-    }
-  };
-
+const Brick = ({ position }: BrickProps) => {
   return (
     <Mesh
-      geometry={{ type: "box", width: 2, height: 0.125, depth: 0.01 }}
-      material={{ color: 0x00ffff, type: "basic" }}
+      geometry={{ type: "box", height: 1, width: 3, depth: 1 }}
+      material={{ type: "basic", color: 0x88ff00 }}
+      name="brick"
       position={position}
-      onKeyDown={handleKeyPress}
-      onCollision={onCollision}
-      triggersCollisions
+    />
+  );
+};
+
+const Paddle = () => {
+  return (
+    <Mesh
+      material={{ type: "basic", color: 0x00aaff }}
       name="paddle"
+      position={{ x: 0, y: 0, z: 0 }}
+      geometry={{ type: "box", height: 1, width: 5, depth: 1 }}
     />
   );
 };
 
 export const Pong = () => {
-  const initialBrickPositions = (() => {
-    const brickPositions: ObjectPosition[] = [];
-    for (let i = -3; i <= 3; i += 1) {
-      brickPositions.push([i, 2, 0]);
-      brickPositions.push([i + 0.5, 2.5, 0]);
-      brickPositions.push([i, 3, 0]);
+  const [ballOrientation, setBallOrientation] = useState<Orientation>({
+    x: 0,
+    y: 0,
+    z: 0,
+    w: 0,
+  });
+  const [bricks, setBricks] = useState<BrickProps[]>([]);
+
+  const handleCollision = (collision: Collision) => {
+    const { target } = collision;
+    if (target.name === "brick") {
+      const newBricks = bricks.filter((b) => b.id !== target.id);
+      setBricks(newBricks);
+
+      const newBallOrientation = determineBallOrientation(collision);
+      setBallOrientation(newBallOrientation);
+    } else if (target.name === "paddle") {
+      console.log("Paddle");
     }
-    return brickPositions;
-  })();
-
-  const [ballGone, setBallGone] = useState(false);
-  const [brickPositions, setBrickPositions] = useState(initialBrickPositions);
-  const [ballVector, setBallVector] = useState<ObjectPosition>([
-    BALL_SPEED,
-    BALL_SPEED,
-    0,
-  ]);
-  const [paddlePosition, setPaddlePosition] = useState<ObjectPosition>([
-    0, -2, 0,
-  ]);
-
-  const handleBrickCollision: CollisionResolver = ({ collided }) => {
-    if (collided.name !== "brick") return;
-
-    // Change ball's path
-    const newVector: ObjectPosition = [
-      ballVector[0],
-      0 - Math.abs(ballVector[0]),
-      ballVector[2],
-    ];
-    setBallVector(newVector);
-
-    // Remove the brick
-    const newBrickPositions = brickPositions.filter(
-      (position) => position !== collided.position
-    );
-    setBrickPositions(newBrickPositions);
-  };
-
-  const handlePaddleCollision: CollisionResolver = ({ collided }) => {
-    if (collided.name !== "ball") return;
-
-    // Determine new X vector for the ball based on paddle position
-    setBallVector((prev) => [-0.01, Math.abs(prev[1]), prev[2]]);
   };
 
   return (
-    <>
-      {ballGone && <h1>Game Over!</h1>}
-      <Game initialScene="Pong">
-        <Scene key="Pong">
-          {brickPositions.map((position, i) => (
-            <Brick position={position} key={i} />
-          ))}
-          <Paddle
-            position={paddlePosition}
-            setPaddlePosition={setPaddlePosition}
-            onCollision={handlePaddleCollision}
-          />
-          <Ball
-            onCollision={handleBrickCollision}
-            setBallGone={setBallGone}
-            vector={ballVector}
-          />
-        </Scene>
-      </Game>
-    </>
+    <Game>
+      <Scene title="Game">
+        <AmbientLight />
+        <Camera type="perspective" />
+        <PhysicsEngine />
+
+        <Paddle />
+        {bricks.map((brick, i) => (
+          <Brick key={i} {...brick} />
+        ))}
+        <Ball orientation={ballOrientation} onCollision={handleCollision} />
+      </Scene>
+    </Game>
   );
+};
+
+const determineBallOrientation = (collision: Collision): Orientation => {
+  // TODO
+  return {
+    x: 0,
+    y: 0,
+    z: 0,
+    w: 0,
+  };
 };

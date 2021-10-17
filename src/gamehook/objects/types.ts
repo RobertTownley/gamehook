@@ -1,42 +1,32 @@
-import * as THREE from "three";
-import { Text as TroikaText } from "troika-three-text";
-
-import { Collidable } from "../interactions/collisions";
-import { Interactable } from "../interactions/types";
-import { Designable } from "./materials";
 import { Shapeable } from "./geometries";
+import { Designable } from "./materials";
+import { Nameable } from "./labels";
+import { Physical } from "../physics/types";
+import { Positionable } from "./positions";
+import { Interactable } from "../interactions";
 
-export type ObjectRotation = [number, number, number];
-export type ObjectPosition = [number, number, number];
+/* Mesh Properties */
+type ThreespaceCoords = { x: number; y: number; z: number };
+export type Quaternion = { x: number; y: number; z: number; w: number };
+export type Acceleration = ThreespaceCoords;
+export type Position = ThreespaceCoords;
+export type Rotation = ThreespaceCoords;
+export type Orientation = Quaternion;
+export type Velocity = ThreespaceCoords;
 
-export interface Nameable {
-  name?: string;
-  labels?: string[];
-}
-export interface Positionable {
-  position?: ObjectPosition;
-  rotation?: ObjectRotation;
-}
-
-export type ThreeGameObject = THREE.Mesh | typeof TroikaText;
-
-export interface GameObject
-  extends Collidable,
+interface BasicGameObject
+  extends Designable,
     Interactable,
     Nameable,
-    Positionable {
-  id: string;
-  obj: ThreeGameObject;
-  position: ObjectPosition;
-  rotation: ObjectRotation;
-  name?: string;
-  labels?: string[];
-}
-
-export interface BasicMeshType
-  extends Collidable,
-    Designable,
-    Interactable,
-    Nameable,
+    Physical,
     Positionable,
     Shapeable {}
+
+export interface BasicMeshType extends BasicGameObject {}
+export interface GameObject extends BasicGameObject {
+  id: string;
+  three: THREE.Mesh;
+}
+
+/* Physical Properties */
+export type Angle = ThreespaceCoords;
