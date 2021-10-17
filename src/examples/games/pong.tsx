@@ -7,21 +7,18 @@ import {
   CollisionHandler,
   Game,
   Mesh,
-  Orientation,
   Position,
   PhysicsEngine,
   Scene,
 } from "../../gamehook";
 
 interface BallProps {
-  orientation: Orientation;
   onCollision: CollisionHandler;
 }
-const Ball = ({ orientation, onCollision }: BallProps) => {
+const Ball = ({ onCollision }: BallProps) => {
   return (
     <Mesh
       acceleration={{ x: 0, y: 1, z: 0 }}
-      orientation={orientation}
       geometry={{ type: "sphere", radius: 1 }}
       onCollision={onCollision}
       name="ball"
@@ -58,12 +55,6 @@ const Paddle = () => {
 };
 
 export const Pong = () => {
-  const [ballOrientation, setBallOrientation] = useState<Orientation>({
-    x: 0,
-    y: 0,
-    z: 0,
-    w: 0,
-  });
   const [bricks, setBricks] = useState<BrickProps[]>([]);
 
   const handleCollision = (collision: Collision) => {
@@ -71,9 +62,6 @@ export const Pong = () => {
     if (target.name === "brick") {
       const newBricks = bricks.filter((b) => b.id !== target.id);
       setBricks(newBricks);
-
-      const newBallOrientation = determineBallOrientation(collision);
-      setBallOrientation(newBallOrientation);
     } else if (target.name === "paddle") {
       console.log("Paddle");
     }
@@ -90,18 +78,8 @@ export const Pong = () => {
         {bricks.map((brick, i) => (
           <Brick key={i} {...brick} />
         ))}
-        <Ball orientation={ballOrientation} onCollision={handleCollision} />
+        <Ball onCollision={handleCollision} />
       </Scene>
     </Game>
   );
-};
-
-const determineBallOrientation = (collision: Collision): Orientation => {
-  // TODO
-  return {
-    x: 0,
-    y: 0,
-    z: 0,
-    w: 0,
-  };
 };

@@ -1,97 +1,110 @@
 import * as THREE from "three";
-import { Children, cloneElement, ReactElement, useEffect, useRef } from "react";
+import {
+  Children,
+  cloneElement,
+  isValidElement,
+  ReactNode,
+  useEffect,
+  useMemo,
+} from "react";
 import { generateUUID } from "three/src/math/MathUtils";
 
-import { useGame } from "../game";
 import { BasicMeshType, GameObject } from "./types";
 import { createGeometry } from "./geometries";
 import { createMaterial } from "./materials";
 
-interface Props extends BasicMeshType {
-  children?: ReactElement<Props> | ReactElement<Props>[];
+export interface MeshProps extends BasicMeshType {
+  children?: ReactNode;
   objParent?: GameObject;
 }
 
-export const Mesh = ({
-  children,
-  geometry,
-  material,
-  objParent,
-  orientation,
-  position,
-  rotation,
-}: Props) => {
-  const { scene } = useGame();
-  const gameObject = useRef<GameObject>({
-    id: generateUUID(),
-    three: new THREE.Mesh(),
-  });
-
-  // Observe physical properties
-  useEffect(() => {
-    gameObject.current.three.material = createMaterial(material);
-  }, [material]);
-  useEffect(() => {
-    gameObject.current.three.geometry = createGeometry(geometry);
-  }, [geometry]);
-  useEffect(() => {
-    if (!orientation) return;
-    const quaternion = new THREE.Quaternion(
-      orientation.x,
-      orientation.y,
-      orientation.z,
-      orientation.w
-    );
-    gameObject.current.three.applyQuaternion(quaternion);
-  }, [orientation]);
-
-  useEffect(() => {
-    if (!rotation) return;
-    gameObject.current.three.rotation.set(rotation.x, rotation.y, rotation.z);
+export const useGameObject = ({ rotation }: Partial<GameObject>) => {
+  return useMemo<GameObject>(() => {
+    return {
+      id: generateUUID(),
+      rotation,
+      three: new THREE.Mesh(),
+    };
   }, [rotation]);
+};
 
-  useEffect(() => {
-    const { x, y, z } = position ?? { x: 0, y: 0, z: 0 };
-    gameObject.current.three.position.set(x, y, z);
+interface UseMeshProps extends MeshProps {
+  gameObject: GameObject;
+}
+export const useMesh = (props: UseMeshProps) => {
+  const { gameObject, objParent, material, geometry, orientation, position } =
+    props;
+  const _material = useMemo(() => {
+    return createMaterial(material);
+  }, [material]);
+  const _geometry = useMemo(() => {
+    return createGeometry(geometry);
+  }, [geometry]);
+  const _orientation = useMemo(() => {
+    return orientation;
+  }, [orientation]);
+  const _position = useMemo(() => {
+    return position;
   }, [position]);
 
-  // TODO: Observe other things like collisions, position, and clicks
+  useEffect(() => {
+    gameObject.three.material = _material;
+  }, [gameObject, _material]);
+  useEffect(() => {
+    gameObject.three.geometry = _geometry;
+  }, [gameObject, _geometry]);
+  useEffect(() => {
+    if (!_orientation) return;
+    gameObject.three.rotation.set(
+      _orientation.x,
+      _orientation.y,
+      _orientation.z
+    );
+  }, [gameObject, _orientation]);
+  useEffect(() => {
+    const { x, y, z } = _position ?? { x: 0, y: 0, z: 0 };
+    gameObject.three.position.set(x, y, z);
+  }, [gameObject, _position]);
 
+  // Mount object to scene
   useEffect(() => {
     let mounted = true;
-    const current = gameObject.current;
     if (mounted) {
-      scene.addObjectToScene(current);
+      _GAME.scene.addObjectToScene(gameObject);
     }
     return () => {
       mounted = false;
-      scene.removeObjectFromScene(current);
+      _GAME.scene.removeObjectFromScene(gameObject);
     };
-  }, [scene]);
+  }, [gameObject]);
 
-  // If the element has a parent, set the threejs object's parent to
-  // that object
+  // Children
   useEffect(() => {
-    console.log("REMOVING");
-    const cur = gameObject.current;
-    if (objParent && objParent.three !== cur.three.parent) {
-      if (cur.three.parent) {
-        cur.three.removeFromParent();
+    if (objParent && objParent.three !== gameObject.three.parent) {
+      if (gameObject.three.parent) {
+        gameObject.three.removeFromParent();
       }
-      objParent.three.add(cur.three);
+      objParent.three.add(gameObject.three);
     }
     return () => {
-      cur.three.removeFromParent();
+      gameObject.three.removeFromParent();
     };
-  }, [objParent]);
+  }, [gameObject, objParent]);
+};
 
-  return (
-    <>
-      {Children.map(children, (child) => {
-        return child
-          ? cloneElement(child, { objParent: gameObject.current })
-          : null;
-      })}
-    </>
-  );
+export const Mesh = (props: MeshProps) => {
+  const { children } = props;
+  const gameObject = useGameObject(props);
+  useMesh({ gameObject, ...props });
+
+  // TODO: Observe other things like collisions, position, and clicks
+  return <>{buildChildren(gameObject, children)}</>;
+};
+
+export const buildChildren = (gameObject: GameObject, children?: ReactNode) => {
+  return Children.map(children, (child) => {
+    return isValidElement(child)
+      ? cloneElement(child, { objParent: gameObject })
+      : null;
+  });
 };

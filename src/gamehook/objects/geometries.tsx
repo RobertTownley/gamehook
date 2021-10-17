@@ -1,20 +1,23 @@
 import * as THREE from "three";
 
-interface BoxGeometryOptions {
-  type: "box";
+export interface BoxGeometryOptions {
   width?: number;
   height?: number;
   depth?: number;
 }
+export interface BoxGeometryOptionType extends BoxGeometryOptions {
+  type: "box";
+}
 
-interface CircleGeometryOptions {
-  type: "circle";
+export interface CircleGeometryOptions {
   radius: number;
   segments: number;
 }
+export interface CircleGeometryOptionType extends CircleGeometryOptions {
+  type: "circle";
+}
 
-interface CylinderGeometryOptions {
-  type: "cylinder";
+export interface CylinderGeometryOptions {
   radiusTop?: number;
   radiusBottom?: number;
   height?: number;
@@ -24,39 +27,46 @@ interface CylinderGeometryOptions {
   thetaStart?: number;
   thetaLength?: number;
 }
+export interface CylinderGeometryOptionType extends CylinderGeometryOptions {
+  type: "cylinder";
+}
 
-interface PlaneGeometryOptions {
-  type: "plane";
+export interface PlaneGeometryOptions {
   width: number;
   height: number;
 }
+export interface PlaneGeometryOptionType extends PlaneGeometryOptions {
+  type: "plane";
+}
 
-interface SphereGeometryOptions {
-  type: "sphere";
+export interface SphereGeometryOptions {
   radius?: number;
   widthSegments?: number;
   heightSegments?: number;
 }
+export interface SphereGeometryOptionType extends SphereGeometryOptions {
+  type: "sphere";
+}
 
 export type GeometryOptions =
-  | BoxGeometryOptions
-  | CircleGeometryOptions
-  | CylinderGeometryOptions
-  | PlaneGeometryOptions
-  | SphereGeometryOptions;
+  | BoxGeometryOptionType
+  | CircleGeometryOptionType
+  | CylinderGeometryOptionType
+  | PlaneGeometryOptionType
+  | SphereGeometryOptionType;
 
 export interface Shapeable {
   geometry?: GeometryOptions;
 }
 
-const defaultGeometryOptions: BoxGeometryOptions = {
+const defaultGeometryOptions: BoxGeometryOptionType = {
   type: "box",
 };
 export const createGeometry = (
   opts?: GeometryOptions
 ): THREE.BufferGeometry => {
   const opt = opts ?? defaultGeometryOptions;
-  const token = JSON.stringify(opts);
+  const token = JSON.stringify(opt);
   const { geometries } = _GAME.resources;
   if (geometries[token]) {
     return geometries[token];

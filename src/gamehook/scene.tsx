@@ -5,6 +5,7 @@ import { generateUUID } from "three/src/math/MathUtils";
 import { useGame } from "./game";
 import { Animation } from "./animations";
 import { GameObject } from "./objects/types";
+import { rotateObjects } from "./physics/animationHandlers";
 
 const DEFAULT_BACKGROUND_COLOR = 0x000000;
 export interface SceneProps {
@@ -48,6 +49,9 @@ export const Scene = (props: SceneProps) => {
             delete game.scene.animations[animation.current.id];
           }
         });
+
+      // Handle object physics
+      rotateObjects();
     };
     animate();
   }, [game.renderer, game.scene]);

@@ -1,31 +1,33 @@
-import { useState } from "react";
+import _ from "lodash";
+import { useRef } from "react";
 
-import { Game, Scene, Mesh, useAnimation } from "./gamehook";
+import { Box, Sphere, Game, Scene } from "./gamehook";
 
 const SpinningCube = () => {
-  const [q, setQ] = useState(0);
-  useAnimation(() => {
-    setQ(q + 0.01);
-    return false;
-  });
-
+  const count = 1000;
+  const orbits = _.range(0, count).map((_x, i) => (
+    <Sphere
+      key={i}
+      heightSegments={8}
+      widthSegments={8}
+      position={{
+        x: _.random(-10, 10, true),
+        y: _.random(-10, 10, true),
+        z: _.random(-10, 10, true),
+      }}
+      radius={_.random(0.01, 0.2, true)}
+    />
+  ));
+  const position = useRef({ x: 0, y: 0, z: 0 });
   return (
     <>
-      <Mesh
-        material={{ type: "normal" }}
-        geometry={{ type: "box" }}
-        position={{ x: 0, y: 0, z: -5 }}
-        rotation={{ x: 0, y: 0, z: q }}
+      <Box
+        key="parent"
+        position={position.current}
+        rotation={{ x: 0.002, y: 0.001, z: 0.001 }}
       >
-        <Mesh
-          geometry={{ type: "sphere", radius: 0.1 }}
-          position={{ x: 2, y: 2, z: 0 }}
-        />
-      </Mesh>
-      <Mesh
-        geometry={{ type: "sphere", radius: 0.1 }}
-        position={{ x: 2, y: 2, z: 0 }}
-      />
+        {orbits}
+      </Box>
     </>
   );
 };

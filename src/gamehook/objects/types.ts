@@ -11,7 +11,7 @@ export type Quaternion = { x: number; y: number; z: number; w: number };
 export type Acceleration = ThreespaceCoords;
 export type Position = ThreespaceCoords;
 export type Rotation = ThreespaceCoords;
-export type Orientation = Quaternion;
+export type Orientation = ThreespaceCoords;
 export type Velocity = ThreespaceCoords;
 
 interface BasicGameObject
