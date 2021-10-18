@@ -3,14 +3,15 @@ import * as THREE from "three";
 type MouseHandler = (event: MouseEvent) => void;
 type KeyboardHandler = (event: KeyboardEvent) => void;
 
+// Keyboard Events
 interface KeyboardInteractable {
   onKeyDown?: KeyboardHandler;
 }
+
+// Mouse Events
 interface MouseInteractable {
   onClick?: MouseHandler;
 }
-export interface Interactable extends KeyboardInteractable, MouseInteractable {}
-
 type IMouseEventTypeMap = Record<string, keyof MouseInteractable>;
 
 const MouseEventTypeMap: IMouseEventTypeMap = {
@@ -53,3 +54,6 @@ export const getMouseVectorForEvent = (event: MouseEvent): THREE.Vector2 => {
   mouse.y = -(event.clientY / renderer.domElement.height) * 2 + 1;
   return mouse;
 };
+
+// Mesh Object Type
+export interface Interactable extends KeyboardInteractable, MouseInteractable {}

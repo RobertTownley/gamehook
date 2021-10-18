@@ -91,7 +91,6 @@ export const useGame = (props?: Props): GameProperties => {
     // Resize
     window.addEventListener("resize", window._GAME.onWindowResize);
     // Mouse Events
-    console.log("Adding listeners");
     window.addEventListener("click", handleMouseEvent);
   }
   const game = useRef<GameProperties>(window._GAME);
