@@ -102,6 +102,8 @@ export const buildScene = (): GameScene => {
       delete this.gameObjects[gameObject.id];
     },
   };
+
+  // TODO: Replace with an actual camera API
   scene.camera.position.z = 5;
   return scene;
 };

@@ -3,6 +3,7 @@ import { ReactNode, useLayoutEffect, useRef } from "react";
 import { generateUUID } from "three/src/math/MathUtils";
 
 import { initialScene, GameScene, SceneProps } from "./scene";
+import { handleMouseEvent } from "./interactions";
 
 /* Game Component and Mounting */
 interface Props {
@@ -78,6 +79,7 @@ export const useGame = (props?: Props): GameProperties => {
 
       // Listeners
       onWindowResize: function () {
+        console.log("Resizing");
         const _w = width ?? window.innerWidth;
         const _h = height ?? window.innerHeight;
         _GAME.scene.camera.aspect = _w / _h;
@@ -85,7 +87,12 @@ export const useGame = (props?: Props): GameProperties => {
         _GAME.renderer.setSize(_w, _h);
       },
     };
+
+    // Resize
     window.addEventListener("resize", window._GAME.onWindowResize);
+    // Mouse Events
+    console.log("Adding listeners");
+    window.addEventListener("click", handleMouseEvent);
   }
   const game = useRef<GameProperties>(window._GAME);
   game.current.onWindowResize();

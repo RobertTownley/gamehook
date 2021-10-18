@@ -18,12 +18,19 @@ export interface MeshProps extends BasicMeshType {
   objParent?: GameObject;
 }
 
-export const useGameObject = ({
-  velocity,
-  acceleration,
-  rotation,
-}: Partial<GameObject>) => {
-  return useMemo<GameObject>(() => {
+export const useGameObject = (props: MeshProps) => {
+  const {
+    rotation,
+    velocity,
+    acceleration,
+    objParent,
+    material,
+    geometry,
+    onClick,
+    orientation,
+    position,
+  } = props;
+  const gameObject = useMemo<GameObject>(() => {
     return {
       id: generateUUID(),
       rotation,
@@ -31,15 +38,7 @@ export const useGameObject = ({
       acceleration,
       three: new THREE.Mesh(),
     };
-  }, [acceleration, velocity, rotation]);
-};
-
-interface UseMeshProps extends MeshProps {
-  gameObject: GameObject;
-}
-export const useMesh = (props: UseMeshProps) => {
-  const { gameObject, objParent, material, geometry, orientation, position } =
-    props;
+  }, [acceleration, rotation, velocity]);
   const _material = useMemo(() => {
     return createMaterial(material);
   }, [material]);
@@ -96,12 +95,19 @@ export const useMesh = (props: UseMeshProps) => {
       gameObject.three.removeFromParent();
     };
   }, [gameObject, objParent]);
+
+  // Event listeners
+  useEffect(() => {
+    gameObject.onClick = onClick;
+  }, [gameObject, onClick]);
+
+  // Return object for use in the component
+  return gameObject;
 };
 
 export const Mesh = (props: MeshProps) => {
   const { children } = props;
   const gameObject = useGameObject(props);
-  useMesh({ gameObject, ...props });
 
   // TODO: Observe other things like collisions, position, and clicks
   return <>{buildChildren(gameObject, children)}</>;
