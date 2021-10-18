@@ -18,14 +18,20 @@ export interface MeshProps extends BasicMeshType {
   objParent?: GameObject;
 }
 
-export const useGameObject = ({ rotation }: Partial<GameObject>) => {
+export const useGameObject = ({
+  velocity,
+  acceleration,
+  rotation,
+}: Partial<GameObject>) => {
   return useMemo<GameObject>(() => {
     return {
       id: generateUUID(),
       rotation,
+      velocity,
+      acceleration,
       three: new THREE.Mesh(),
     };
-  }, [rotation]);
+  }, [acceleration, velocity, rotation]);
 };
 
 interface UseMeshProps extends MeshProps {

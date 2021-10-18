@@ -5,7 +5,11 @@ import { generateUUID } from "three/src/math/MathUtils";
 import { useGame } from "./game";
 import { Animation } from "./animations";
 import { GameObject } from "./objects/types";
-import { rotateObjects } from "./physics/animationHandlers";
+import {
+  accelerateObjects,
+  moveObjects,
+  rotateObjects,
+} from "./physics/animationHandlers";
 
 const DEFAULT_BACKGROUND_COLOR = 0x000000;
 export interface SceneProps {
@@ -52,6 +56,8 @@ export const Scene = (props: SceneProps) => {
 
       // Handle object physics
       rotateObjects();
+      moveObjects();
+      accelerateObjects();
     };
     animate();
   }, [game.renderer, game.scene]);
@@ -96,9 +102,7 @@ export const buildScene = (): GameScene => {
       delete this.gameObjects[gameObject.id];
     },
   };
-  scene.camera.position.z = 2;
-  scene.camera.position.y = -5;
-  scene.camera.rotation.x = 0.7;
+  scene.camera.position.z = 5;
   return scene;
 };
 
