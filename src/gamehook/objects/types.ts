@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 import { Shapeable } from "./geometries";
 import { Designable } from "./materials";
 import { Nameable } from "./labels";
@@ -25,8 +27,13 @@ interface BasicGameObject
 export interface BasicMeshType extends BasicGameObject {}
 export interface GameObject extends BasicGameObject {
   id: string;
-  three: THREE.Mesh;
+  three: THREE.Mesh | THREE.Group | THREE.AmbientLight;
 }
 
 /* Physical Properties */
 export type Angle = ThreespaceCoords;
+
+export interface GameObjectProps extends BasicMeshType {
+  children?: ReactNode;
+  objParent?: GameObject;
+}

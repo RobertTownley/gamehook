@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 import {
-  AmbientLight,
   Camera,
   Collision,
   CollisionHandler,
@@ -70,7 +69,6 @@ export const Pong = () => {
   return (
     <Game>
       <Scene title="Game">
-        <AmbientLight />
         <Camera type="perspective" />
         <PhysicsEngine />
 
