@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { isBufferGeometry } from "./guards";
 
 export interface BoxGeometryOptions {
   width?: number;
@@ -53,7 +54,8 @@ export type GeometryOptions =
   | CircleGeometryOptionType
   | CylinderGeometryOptionType
   | PlaneGeometryOptionType
-  | SphereGeometryOptionType;
+  | SphereGeometryOptionType
+  | THREE.BufferGeometry;
 
 export interface Shapeable {
   geometry?: GeometryOptions;
@@ -62,10 +64,12 @@ export interface Shapeable {
 const defaultGeometryOptions: BoxGeometryOptionType = {
   type: "box",
 };
+
 export const createGeometry = (
   opts?: GeometryOptions
 ): THREE.BufferGeometry => {
   const opt = opts ?? defaultGeometryOptions;
+  if (isBufferGeometry(opt)) return opt;
   const token = JSON.stringify(opt);
   const { geometries } = _GAME.resources;
   if (geometries[token]) {

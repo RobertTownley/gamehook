@@ -2,10 +2,11 @@ import { Acceleration, Velocity } from "../objects/types";
 import { CollisionHandler } from "./collisions";
 
 export interface Physical {
-  // Attributes
+  // Movement
   acceleration?: Acceleration;
   velocity?: Velocity;
 
-  // Handlers
+  // Collision
+  collides?: boolean;
   onCollision?: CollisionHandler;
 }

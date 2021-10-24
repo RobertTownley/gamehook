@@ -1,21 +1,26 @@
-import _ from "lodash";
-
-import { Light, Box, Game, Scene } from "./gamehook";
+import { Light, Box, Game, Scene, Sphere, Collision, Model } from "./gamehook";
 
 function App() {
-  const handleClick = () => {
-    console.log("Clicking on the cube");
+  const handleCollision = (collision: Collision) => {
+    console.log("Collided");
   };
+
   return (
     <Game>
       <Scene title="Initial">
         <Light variant="ambient" />
-        <Box
-          position={{ x: 0, y: 0, z: 0 }}
-          material={{ type: "standard", color: 0x00aaff }}
-          onClick={handleClick}
-          rotation={{ x: 0.0, y: 0, z: 0.01 }}
-        />
+        <Model
+          filepath="/assets/GamehookCube.glb"
+          rotation={{ x: 0, y: 0, z: 0.01 }}
+        >
+          <Sphere
+            position={{ x: 3, y: 0, z: 0 }}
+            radius={0.2}
+            rotation={{ x: -0.01, y: 0.01, z: 0 }}
+          >
+            <Sphere position={{ x: 1, y: 0, z: 0 }} radius={0.2} />
+          </Sphere>
+        </Model>
       </Scene>
     </Game>
   );

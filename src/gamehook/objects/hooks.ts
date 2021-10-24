@@ -1,14 +1,14 @@
 import * as THREE from "three";
 import { useMemo, useEffect } from "react";
 
-import { GameObject, GameObjectProps } from "./types";
+import { GameMesh, GameMeshProps } from "./types";
 import { createGeometry } from "./geometries";
 import { createMaterial } from "./materials";
 import { generateUUID } from "three/src/math/MathUtils";
 
 export const useMaterial = (
-  gameObject: GameObject,
-  { material }: GameObjectProps
+  gameObject: GameMesh,
+  { material }: GameMeshProps
 ) => {
   const _material = useMemo(() => {
     return createMaterial(material);
@@ -20,8 +20,8 @@ export const useMaterial = (
 };
 
 export const useGeometry = (
-  gameObject: GameObject,
-  { geometry }: GameObjectProps
+  gameObject: GameMesh,
+  { geometry }: GameMeshProps
 ) => {
   const _geometry = useMemo(() => {
     return createGeometry(geometry);
@@ -33,8 +33,8 @@ export const useGeometry = (
 };
 
 export const useLocation = (
-  gameObject: GameObject,
-  { position, orientation }: GameObjectProps
+  gameObject: GameMesh,
+  { position, orientation }: GameMeshProps
 ) => {
   const _orientation = useMemo(() => {
     return orientation;
@@ -60,8 +60,8 @@ export const useLocation = (
 };
 
 export const useParent = (
-  gameObject: GameObject,
-  { objParent }: GameObjectProps
+  gameObject: GameMesh,
+  { objParent }: GameMeshProps
 ) => {
   useEffect(() => {
     if (objParent && objParent.three !== gameObject.three.parent) {
@@ -77,15 +77,15 @@ export const useParent = (
 };
 
 export const useEventListeners = (
-  gameObject: GameObject,
-  { onClick }: GameObjectProps
+  gameObject: GameMesh,
+  { onClick }: GameMeshProps
 ) => {
   useEffect(() => {
     gameObject.onClick = onClick;
   }, [gameObject, onClick]);
 };
 
-export const useMount = (gameObject: GameObject) => {
+export const useMount = (gameObject: GameMesh) => {
   // Mount object to scene
   useEffect(() => {
     let mounted = true;
@@ -99,10 +99,20 @@ export const useMount = (gameObject: GameObject) => {
   }, [gameObject]);
 };
 
-export const useGameObject = (
-  gameObject: GameObject,
-  props: GameObjectProps
+export const useCollision = (
+  gameObject: GameMesh,
+  { collides, onCollision }: GameMeshProps
 ) => {
+  useEffect(() => {
+    gameObject.onCollision = onCollision;
+  }, [gameObject, onCollision]);
+  useEffect(() => {
+    gameObject.collides = collides;
+  }, [gameObject, collides]);
+};
+
+export const useGameMesh = (gameObject: GameMesh, props: GameMeshProps) => {
+  useCollision(gameObject, props);
   useEventListeners(gameObject, props);
   useGeometry(gameObject, props);
   useLocation(gameObject, props);
@@ -114,10 +124,11 @@ export const useGameObject = (
   return gameObject;
 };
 
-export const useMesh = (props: GameObjectProps) => {
+export const useMesh = (props: GameMeshProps) => {
   const { rotation, velocity, acceleration } = props;
-  const gameObject = useMemo<GameObject>(() => {
+  const gameObject = useMemo<GameMesh>(() => {
     return {
+      type: "mesh",
       id: generateUUID(),
       rotation,
       velocity,
@@ -125,5 +136,5 @@ export const useMesh = (props: GameObjectProps) => {
       three: new THREE.Mesh(),
     };
   }, [acceleration, rotation, velocity]);
-  return useGameObject(gameObject, props);
+  return useGameMesh(gameObject, props);
 };

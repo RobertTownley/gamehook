@@ -1,7 +1,9 @@
-import { GameObject } from "../objects/types";
+import { GameMesh } from "../objects/types";
 
 export interface Collision {
-  self: GameObject;
-  target: GameObject;
+  self: GameMesh;
+  target: GameMesh;
 }
 export type CollisionHandler = (collision: Collision) => void;
+
+export const detectCollisions = () => {};

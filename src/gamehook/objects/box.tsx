@@ -9,6 +9,7 @@ interface Props extends MeshProps, BoxGeometryOptions {}
 
 export const Box = (props: Props) => {
   const { width, height, depth, children } = props;
+  console.log(props.collides);
   const gameObject = useMesh(props);
   useEffect(() => {
     (gameObject.three as THREE.Mesh).geometry = createGeometry({

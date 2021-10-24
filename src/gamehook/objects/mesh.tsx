@@ -1,12 +1,12 @@
 import { ReactNode } from "react";
 import { buildChildren } from "./children";
 
-import { BasicMeshType, GameObject } from "./types";
+import { BasicMeshType, GameMesh } from "./types";
 import { useMesh } from "./hooks";
 
 export interface MeshProps extends BasicMeshType {
   children?: ReactNode;
-  objParent?: GameObject;
+  objParent?: GameMesh;
 }
 
 export const Mesh = (props: MeshProps) => {

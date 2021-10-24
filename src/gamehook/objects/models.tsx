@@ -1,12 +1,11 @@
 import * as THREE from "three";
-import { ReactNode, useEffect, useRef } from "react";
+import { ReactNode, useEffect } from "react";
 
 import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { generateUUID } from "three/src/math/MathUtils";
-import { BasicMeshType, GameObject } from "./types";
-import { buildChildren } from "./children";
-import { useGameObject } from "./hooks";
+import { BasicMeshType } from "./types";
 import { useGame } from "../game";
+import { useMesh } from "./hooks";
+import { buildChildren } from "./children";
 
 interface ModelProps extends BasicMeshType {
   children?: ReactNode;
@@ -20,47 +19,30 @@ const defaultLoadingError = (_event: ErrorEvent, filepath: string) => {
 };
 
 export const Model = (props: ModelProps) => {
-  const {
-    children,
-    position,
-    rotation,
-    velocity,
-    acceleration,
-    filepath,
-    onError,
-  } = props;
+  const { children, filepath, onError } = props;
   const game = useGame();
-  const gameObject = useRef<GameObject>({
-    id: generateUUID(),
-    three: props.loadingModel ?? new THREE.Mesh(),
-    rotation,
-    velocity,
-    acceleration,
-    position,
+  const gameObject = useMesh({
+    ...props,
+    geometry: new THREE.BufferGeometry(),
   });
-  useGameObject(gameObject.current, props);
 
   useEffect(() => {
     let mounted = true;
-    const handleLoadingError = onError ?? defaultLoadingError;
-    const current = gameObject.current;
-    if (mounted) {
-      const addGLTFToScene = (gltf: GLTF) => {
-        // TODO: Tremendous weirdness when models are children
 
-        game.scene.removeObjectFromScene(gameObject.current);
-        gameObject.current.three = gltf.scene;
-        game.scene.addObjectToScene(gameObject.current);
-      };
-      const loader = new GLTFLoader();
-      loader.load(filepath, addGLTFToScene, undefined, (err) =>
-        handleLoadingError(err, filepath)
-      );
-    }
+    const addGLTFToScene = (gltf: GLTF) => {
+      if (mounted) {
+        gameObject.three.add(gltf.scene);
+      }
+    };
+    const handleLoadingError = onError ?? defaultLoadingError;
+    const loader = new GLTFLoader();
+    loader.load(filepath, addGLTFToScene, undefined, (e: ErrorEvent) =>
+      handleLoadingError(e, filepath)
+    );
     return () => {
       mounted = false;
-      game.scene.removeObjectFromScene(current);
     };
-  }, [filepath, game.scene, onError]);
-  return <>{buildChildren(gameObject.current, children)}</>;
+  }, [gameObject.three, game.scene, filepath, game.scene, onError]);
+
+  return <>{buildChildren(gameObject, children)}</>;
 };

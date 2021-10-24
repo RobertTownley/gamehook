@@ -4,12 +4,13 @@ import { generateUUID } from "three/src/math/MathUtils";
 
 import { useGame } from "./game";
 import { Animation } from "./animations";
-import { GameObject } from "./objects/types";
+import { GameMesh } from "./objects/types";
 import {
   accelerateObjects,
   moveObjects,
   rotateObjects,
 } from "./physics/animationHandlers";
+import { detectCollisions } from "./physics/collisions";
 
 const DEFAULT_BACKGROUND_COLOR = 0x000000;
 export interface SceneProps {
@@ -58,6 +59,7 @@ export const Scene = (props: SceneProps) => {
       rotateObjects();
       moveObjects();
       accelerateObjects();
+      detectCollisions();
     };
     animate();
   }, [game.renderer, game.scene]);
@@ -70,11 +72,11 @@ export const Scene = (props: SceneProps) => {
 
 export interface GameScene {
   id: string;
-  addObjectToScene: (gameObject: GameObject) => void;
+  addObjectToScene: (gameObject: GameMesh) => void;
   animations: { [key: string]: MutableRefObject<Animation> };
   camera: THREE.PerspectiveCamera;
-  removeObjectFromScene: (gameObject: GameObject) => void;
-  gameObjects: { [key: string]: GameObject };
+  removeObjectFromScene: (gameObject: GameMesh) => void;
+  gameObjects: { [key: string]: GameMesh };
   three: THREE.Scene;
 }
 
@@ -93,11 +95,11 @@ export const buildScene = (): GameScene => {
     id: generateUUID(),
     three: new THREE.Scene(),
     // Methods
-    addObjectToScene: function (gameObject: GameObject) {
+    addObjectToScene: function (gameObject: GameMesh) {
       this.three.add(gameObject.three);
       this.gameObjects[gameObject.id] = gameObject;
     },
-    removeObjectFromScene: function (gameObject: GameObject) {
+    removeObjectFromScene: function (gameObject: GameMesh) {
       this.three.remove(gameObject.three);
       delete this.gameObjects[gameObject.id];
     },

@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import * as THREE from "three";
 import { generateUUID } from "three/src/math/MathUtils";
 
-import { GameObject, GameObjectProps } from "./types";
+import { GameMesh, GameMeshProps } from "./types";
 import {
   useEventListeners,
   useGeometry,
@@ -12,8 +12,8 @@ import {
   useParent,
 } from "./hooks";
 
-interface LightProps extends GameObjectProps {}
-interface LightObject extends GameObject {}
+interface LightProps extends GameMeshProps {}
+interface LightObject extends GameMesh {}
 
 type LightVariant = "ambient";
 const useLight = (props: LightProps, variant: LightVariant) => {
@@ -27,6 +27,7 @@ const useLight = (props: LightProps, variant: LightVariant) => {
     })();
 
     const light: LightObject = {
+      type: "mesh",
       id: generateUUID(),
       three,
       rotation,

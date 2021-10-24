@@ -1,10 +1,10 @@
 import { Children, cloneElement, isValidElement, ReactNode } from "react";
 import { GameObject } from "./types";
 
-export const buildChildren = (gameObject: GameObject, children?: ReactNode) => {
+export const buildChildren = (gameMesh: GameObject, children?: ReactNode) => {
   return Children.map(children, (child) => {
     return isValidElement(child)
-      ? cloneElement(child, { objParent: gameObject })
+      ? cloneElement(child, { objParent: gameMesh })
       : null;
   });
 };

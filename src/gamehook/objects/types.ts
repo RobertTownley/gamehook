@@ -16,7 +16,7 @@ export type Rotation = ThreespaceCoords;
 export type Orientation = ThreespaceCoords;
 export type Velocity = ThreespaceCoords;
 
-interface BasicGameObject
+export interface BasicGameObject
   extends Designable,
     Interactable,
     Nameable,
@@ -25,15 +25,31 @@ interface BasicGameObject
     Shapeable {}
 
 export interface BasicMeshType extends BasicGameObject {}
-export interface GameObject extends BasicGameObject {
+export type ThreeTypes = THREE.Mesh | THREE.AmbientLight;
+export interface GameMesh extends BasicGameObject {
   id: string;
-  three: THREE.Mesh | THREE.Group | THREE.AmbientLight;
+  type: "mesh";
+  three: ThreeTypes;
 }
+
+export interface GameGroup extends BasicGameObject {
+  id: string;
+  type: "group";
+  three: THREE.Group;
+  children: (GameGroup | GameMesh)[];
+}
+
+export type GameObject = GameMesh | GameGroup;
 
 /* Physical Properties */
 export type Angle = ThreespaceCoords;
 
-export interface GameObjectProps extends BasicMeshType {
+export interface GameMeshProps extends BasicMeshType {
   children?: ReactNode;
-  objParent?: GameObject;
+  objParent?: GameMesh;
+}
+
+export interface GameGroupProps extends BasicMeshType {
+  children?: ReactNode;
+  objParent?: GameMesh | GameGroup;
 }
