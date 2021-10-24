@@ -4,7 +4,7 @@ import { generateUUID } from "three/src/math/MathUtils";
 
 import { useGame } from "./game";
 import { Animation } from "./animations";
-import { GameMesh } from "./objects/types";
+import { GameLight, GameObject } from "./objects/types";
 import {
   accelerateObjects,
   moveObjects,
@@ -72,11 +72,14 @@ export const Scene = (props: SceneProps) => {
 
 export interface GameScene {
   id: string;
-  addObjectToScene: (gameObject: GameMesh) => void;
+  addObjectToScene: (gameObject: GameObject) => void;
+  addLightToScene: (gameLight: GameLight) => void;
   animations: { [key: string]: MutableRefObject<Animation> };
   camera: THREE.PerspectiveCamera;
-  removeObjectFromScene: (gameObject: GameMesh) => void;
-  gameObjects: { [key: string]: GameMesh };
+  removeObjectFromScene: (gameObject: GameObject) => void;
+  removeLightFromScene: (gameLight: GameLight) => void;
+  gameLights: { [key: string]: GameLight };
+  gameObjects: { [key: string]: GameObject };
   three: THREE.Scene;
 }
 
@@ -92,14 +95,23 @@ export const buildScene = (): GameScene => {
       1000
     ),
     gameObjects: {},
+    gameLights: {},
     id: generateUUID(),
     three: new THREE.Scene(),
     // Methods
-    addObjectToScene: function (gameObject: GameMesh) {
+    addObjectToScene: function (gameObject: GameObject) {
       this.three.add(gameObject.three);
       this.gameObjects[gameObject.id] = gameObject;
     },
-    removeObjectFromScene: function (gameObject: GameMesh) {
+    addLightToScene: function (gameLight: GameLight) {
+      this.three.add(gameLight.three);
+      this.gameLights[gameLight.id] = gameLight;
+    },
+    removeLightFromScene: function (gameLight: GameLight) {
+      this.three.remove(gameLight.three);
+      delete this.gameLights[gameLight.id];
+    },
+    removeObjectFromScene: function (gameObject: GameObject) {
       this.three.remove(gameObject.three);
       delete this.gameObjects[gameObject.id];
     },

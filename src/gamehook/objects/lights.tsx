@@ -2,23 +2,13 @@ import { useMemo } from "react";
 import * as THREE from "three";
 import { generateUUID } from "three/src/math/MathUtils";
 
-import { GameMesh, GameMeshProps } from "./types";
-import {
-  useEventListeners,
-  useGeometry,
-  useLocation,
-  useMaterial,
-  useMount,
-  useParent,
-} from "./hooks";
-
-interface LightProps extends GameMeshProps {}
-interface LightObject extends GameMesh {}
+import { GameLight, GameLightProps } from "./types";
+import { useLocation, useLightMount, useLightParent } from "./hooks";
 
 type LightVariant = "ambient";
-const useLight = (props: LightProps, variant: LightVariant) => {
+const useLight = (props: GameLightProps, variant: LightVariant) => {
   const { acceleration, rotation, velocity } = props;
-  const light = useMemo<LightObject>(() => {
+  const light = useMemo<GameLight>(() => {
     const three = (() => {
       switch (variant) {
         case "ambient":
@@ -26,8 +16,8 @@ const useLight = (props: LightProps, variant: LightVariant) => {
       }
     })();
 
-    const light: LightObject = {
-      type: "mesh",
+    const light: GameLight = {
+      type: "light",
       id: generateUUID(),
       three,
       rotation,
@@ -37,16 +27,13 @@ const useLight = (props: LightProps, variant: LightVariant) => {
     return light;
   }, [acceleration, rotation, variant, velocity]);
 
-  useEventListeners(light, props);
-  useGeometry(light, props);
   useLocation(light, props);
-  useMaterial(light, props);
-  useMount(light);
-  useParent(light, props);
+  useLightMount(light);
+  useLightParent(light, props);
   return light;
 };
 
-interface AmbientLightProps extends LightProps {
+interface AmbientLightProps extends GameLightProps {
   variant: "ambient";
 }
 

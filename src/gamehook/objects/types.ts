@@ -25,11 +25,16 @@ export interface BasicGameObject
     Shapeable {}
 
 export interface BasicMeshType extends BasicGameObject {}
-export type ThreeTypes = THREE.Mesh | THREE.AmbientLight;
 export interface GameMesh extends BasicGameObject {
   id: string;
   type: "mesh";
-  three: ThreeTypes;
+  three: THREE.Mesh;
+}
+
+export interface GameLight extends BasicGameObject {
+  id: string;
+  type: "light";
+  three: THREE.Light;
 }
 
 export interface GameGroup extends BasicGameObject {
@@ -46,6 +51,10 @@ export type Angle = ThreespaceCoords;
 
 export interface GameMeshProps extends BasicMeshType {
   children?: ReactNode;
+  objParent?: GameMesh;
+}
+
+export interface GameLightProps extends BasicMeshType {
   objParent?: GameMesh;
 }
 

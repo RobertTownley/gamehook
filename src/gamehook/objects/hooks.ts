@@ -1,10 +1,13 @@
 import * as THREE from "three";
 import { useMemo, useEffect } from "react";
 
-import { GameMesh, GameMeshProps } from "./types";
+import { GameLight, GameLightProps, GameMesh, GameMeshProps } from "./types";
 import { createGeometry } from "./geometries";
 import { createMaterial } from "./materials";
 import { generateUUID } from "three/src/math/MathUtils";
+
+type PropertyAwareTypes = GameMesh | GameLight;
+type PropertyAwarePropTypes = GameMeshProps | GameLightProps;
 
 export const useMaterial = (
   gameObject: GameMesh,
@@ -33,8 +36,8 @@ export const useGeometry = (
 };
 
 export const useLocation = (
-  gameObject: GameMesh,
-  { position, orientation }: GameMeshProps
+  gameObject: PropertyAwareTypes,
+  { position, orientation }: PropertyAwarePropTypes
 ) => {
   const _orientation = useMemo(() => {
     return orientation;
@@ -76,6 +79,23 @@ export const useParent = (
   }, [gameObject, objParent]);
 };
 
+export const useLightParent = (
+  gameLight: GameLight,
+  { objParent }: GameLightProps
+) => {
+  useEffect(() => {
+    if (objParent && objParent.three !== gameLight.three.parent) {
+      if (gameLight.three.parent) {
+        gameLight.three.removeFromParent();
+      }
+      objParent.three.add(gameLight.three);
+    }
+    return () => {
+      gameLight.three.removeFromParent();
+    };
+  }, [gameLight, objParent]);
+};
+
 export const useEventListeners = (
   gameObject: GameMesh,
   { onClick }: GameMeshProps
@@ -97,6 +117,19 @@ export const useMount = (gameObject: GameMesh) => {
       _GAME.scene.removeObjectFromScene(gameObject);
     };
   }, [gameObject]);
+};
+
+export const useLightMount = (gameLight: GameLight) => {
+  useEffect(() => {
+    let mounted = true;
+    if (mounted) {
+      _GAME.scene.addLightToScene(gameLight);
+    }
+    return () => {
+      mounted = false;
+      _GAME.scene.removeLightFromScene(gameLight);
+    };
+  }, [gameLight]);
 };
 
 export const useCollision = (
@@ -126,15 +159,18 @@ export const useGameMesh = (gameObject: GameMesh, props: GameMeshProps) => {
 
 export const useMesh = (props: GameMeshProps) => {
   const { rotation, velocity, acceleration } = props;
+  const _velocity = useMemo(() => {
+    return velocity;
+  }, [velocity]);
   const gameObject = useMemo<GameMesh>(() => {
     return {
       type: "mesh",
       id: generateUUID(),
       rotation,
-      velocity,
+      velocity: _velocity,
       acceleration,
       three: new THREE.Mesh(),
     };
-  }, [acceleration, rotation, velocity]);
+  }, [acceleration, rotation, _velocity]);
   return useGameMesh(gameObject, props);
 };

@@ -1,26 +1,24 @@
+import { useMemo, useState } from "react";
 import { Light, Box, Game, Scene, Sphere, Collision, Model } from "./gamehook";
 
 function App() {
+  const [x, setX] = useState(0.01);
   const handleCollision = (collision: Collision) => {
-    console.log("Collided");
+    setX(0 - x);
   };
 
+  const position = useMemo(() => ({ x: -2, y: 0, z: 0 }), []);
   return (
     <Game>
       <Scene title="Initial">
         <Light variant="ambient" />
-        <Model
-          filepath="/assets/GamehookCube.glb"
-          rotation={{ x: 0, y: 0, z: 0.01 }}
-        >
-          <Sphere
-            position={{ x: 3, y: 0, z: 0 }}
-            radius={0.2}
-            rotation={{ x: -0.01, y: 0.01, z: 0 }}
-          >
-            <Sphere position={{ x: 1, y: 0, z: 0 }} radius={0.2} />
-          </Sphere>
-        </Model>
+        <Sphere
+          position={position}
+          radius={0.2}
+          velocity={{ x, y: 0, z: 0 }}
+          onCollision={handleCollision}
+        />
+        <Sphere position={{ x: 2, y: 0, z: 0 }} radius={0.3} collides />
       </Scene>
     </Game>
   );
