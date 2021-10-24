@@ -1,4 +1,3 @@
-import _ from "lodash";
 import * as THREE from "three";
 import { isMesh } from "../objects/guards";
 
@@ -7,9 +6,11 @@ import { GameMesh } from "../objects/types";
 export interface Collision {
   self: GameMesh;
   target: GameMesh;
+  intersections: THREE.Intersection[];
 }
 export type CollisionHandler = (collision: Collision) => void;
 
+const COLLISION_SENSITIVITY = 0.2;
 export const detectCollisions = () => {
   // Form a list of collidable objects and the objects they can collide with
   const gameObjects = Object.values(_GAME.scene.gameObjects);
@@ -28,33 +29,37 @@ export const detectCollisions = () => {
 
     const raycaster = new THREE.Raycaster(c1center);
     const dir = new THREE.Vector3();
-    let c1vertices: THREE.Vector3[];
+    let c1vertices: THREE.Vector3[] | undefined;
     const c1radius = c1.three.geometry.boundingSphere!.radius;
 
-    collidables.forEach((c2: GameMesh) => {
+    for (const c2 of collidables) {
       const c2center = getCenterPoint(c2);
-      if (!c2center) return;
+      if (!c2center) continue;
       const c2radius = c2.three.geometry.boundingSphere!.radius;
 
       // On first sweep, detect whether they're close enough to collide
       const centerDistance = c1radius + c2radius;
-      if (c1center.distanceTo(c2center) > centerDistance) return;
+      if (c1center.distanceTo(c2center) > centerDistance) continue;
 
       // Determine which object is smaller, and cast rays from that object.
       // This is because a smaller object is less likely to slip through
       // the cracks of intersection with a larger one
-      if (c1radius >= c2radius) {
+      if (c1radius <= c2radius) {
         // Lazily compute vertices for objects
         if (!c1vertices) {
           c1vertices = getVerticesForObject(c1);
         }
-        c1vertices.forEach((vertex) => {
+        for (const vertex of c1vertices) {
           raycaster.set(c1center, dir.subVectors(vertex, c1center).normalize());
           const intersections = raycaster.intersectObject(c2.three);
-          if (intersections.length) {
+          if (
+            intersections.length &&
+            intersections[0].distance < COLLISION_SENSITIVITY
+          ) {
             const collision: Collision = {
               self: c1,
               target: c2,
+              intersections,
             };
             if (c1.onCollision) {
               c1.onCollision(collision);
@@ -62,15 +67,19 @@ export const detectCollisions = () => {
             collided = true;
             return;
           }
-        });
+        }
       } else {
-        getVerticesForObject(c2).forEach((vertex) => {
+        for (const vertex of getVerticesForObject(c2)) {
           raycaster.set(c2center, dir.subVectors(vertex, c2center).normalize());
           const intersections = raycaster.intersectObject(c1.three);
-          if (intersections.length) {
+          if (
+            intersections.length &&
+            intersections[0].distance < COLLISION_SENSITIVITY
+          ) {
             const collision: Collision = {
               self: c1,
               target: c2,
+              intersections,
             };
             if (c1.onCollision) {
               c1.onCollision(collision);
@@ -78,9 +87,9 @@ export const detectCollisions = () => {
             collided = true;
             return;
           }
-        });
+        }
       }
-    });
+    }
     if (collided) {
       return;
     }

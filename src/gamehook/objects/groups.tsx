@@ -28,7 +28,6 @@ export const Group = ({ gameGroup, children }: Props) => {
 export const getGameGroupFromThreeGroup = (group: THREE.Group): GameGroup => {
   const children: GameObject[] = group.children.flatMap(
     (c: THREE.Object3D): GameObject[] => {
-      console.log(c);
       if (isGroup(c)) return [getGameGroupFromThreeGroup(c)];
       if (isMesh(c)) return [getGameMeshFromThreeMesh(c)];
       return [];
@@ -43,8 +42,6 @@ export const getGameGroupFromThreeGroup = (group: THREE.Group): GameGroup => {
 };
 
 export const getGameMeshFromThreeMesh = (mesh: THREE.Mesh): GameMesh => {
-  console.log("Finally a mesh");
-  console.log({ mesh });
   return {
     type: "mesh",
     id: generateUUID(),

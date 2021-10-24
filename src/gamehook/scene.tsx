@@ -56,10 +56,10 @@ export const Scene = (props: SceneProps) => {
         });
 
       // Handle object physics
+      detectCollisions();
       rotateObjects();
       moveObjects();
       accelerateObjects();
-      detectCollisions();
     };
     animate();
   }, [game.renderer, game.scene]);

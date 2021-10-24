@@ -17,7 +17,6 @@ export const Sphere = (props: Props) => {
       widthSegments,
       heightSegments,
     });
-    console.log(gameObject.id);
   }, [gameObject, heightSegments, widthSegments, radius]);
   return <>{buildChildren(gameObject, children)}</>;
 };
