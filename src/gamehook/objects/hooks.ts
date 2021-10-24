@@ -143,6 +143,20 @@ export const useCollision = (
     gameObject.collides = collides;
   }, [gameObject, collides]);
 };
+export const useMovement = (
+  gameObject: GameMesh,
+  { acceleration, rotation, velocity }: GameMeshProps
+) => {
+  useEffect(() => {
+    gameObject.acceleration = acceleration;
+  }, [gameObject, acceleration]);
+  useEffect(() => {
+    gameObject.rotation = rotation;
+  }, [gameObject, rotation]);
+  useEffect(() => {
+    gameObject.velocity = velocity;
+  }, [gameObject, velocity]);
+};
 
 export const useGameMesh = (gameObject: GameMesh, props: GameMeshProps) => {
   useCollision(gameObject, props);
@@ -152,25 +166,19 @@ export const useGameMesh = (gameObject: GameMesh, props: GameMeshProps) => {
   useMaterial(gameObject, props);
   useMount(gameObject);
   useParent(gameObject, props);
+  useMovement(gameObject, props);
 
   // Return object for use in the component
   return gameObject;
 };
 
 export const useMesh = (props: GameMeshProps) => {
-  const { rotation, velocity, acceleration } = props;
-  const _velocity = useMemo(() => {
-    return velocity;
-  }, [velocity]);
   const gameObject = useMemo<GameMesh>(() => {
     return {
       type: "mesh",
       id: generateUUID(),
-      rotation,
-      velocity: _velocity,
-      acceleration,
       three: new THREE.Mesh(),
     };
-  }, [acceleration, rotation, _velocity]);
+  }, []);
   return useGameMesh(gameObject, props);
 };

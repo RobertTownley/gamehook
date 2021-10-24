@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { ReactNode, useLayoutEffect, useRef } from "react";
+import { ReactNode, useEffect, useLayoutEffect, useRef } from "react";
 import { generateUUID } from "three/src/math/MathUtils";
 
 import { initialScene, GameScene, SceneProps } from "./scene";
@@ -79,7 +79,6 @@ export const useGame = (props?: Props): GameProperties => {
 
       // Listeners
       onWindowResize: function () {
-        console.log("Resizing");
         const _w = width ?? window.innerWidth;
         const _h = height ?? window.innerHeight;
         _GAME.scene.camera.aspect = _w / _h;
@@ -94,6 +93,8 @@ export const useGame = (props?: Props): GameProperties => {
     window.addEventListener("click", handleMouseEvent);
   }
   const game = useRef<GameProperties>(window._GAME);
-  game.current.onWindowResize();
+  useEffect(() => {
+    game.current.onWindowResize();
+  }, []);
   return game.current;
 };
