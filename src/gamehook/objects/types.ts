@@ -22,7 +22,9 @@ export interface BasicGameObject
     Nameable,
     Physical,
     Positionable,
-    Shapeable {}
+    Shapeable {
+  id?: string;
+}
 
 export interface BasicMeshType extends BasicGameObject {}
 export interface GameMesh extends BasicGameObject {

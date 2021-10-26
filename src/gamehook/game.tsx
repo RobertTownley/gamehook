@@ -3,7 +3,7 @@ import { ReactNode, useEffect, useLayoutEffect, useRef } from "react";
 import { generateUUID } from "three/src/math/MathUtils";
 
 import { initialScene, GameScene, SceneProps } from "./scene";
-import { handleMouseEvent } from "./interactions";
+import { handleKeyboardEvent, handleMouseEvent } from "./interactions";
 
 /* Game Component and Mounting */
 interface Props {
@@ -91,6 +91,11 @@ export const useGame = (props?: Props): GameProperties => {
     window.addEventListener("resize", window._GAME.onWindowResize);
     // Mouse Events
     window.addEventListener("click", handleMouseEvent);
+
+    // Keyboard Events
+    window.addEventListener("keyup", handleKeyboardEvent);
+    window.addEventListener("keydown", handleKeyboardEvent);
+    window.addEventListener("keypress", handleKeyboardEvent);
   }
   const game = useRef<GameProperties>(window._GAME);
   useEffect(() => {

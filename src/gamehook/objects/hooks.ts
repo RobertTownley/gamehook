@@ -98,11 +98,20 @@ export const useLightParent = (
 
 export const useEventListeners = (
   gameObject: GameMesh,
-  { onClick }: GameMeshProps
+  { onKeyUp, onKeyDown, onKeyPress, onClick }: GameMeshProps
 ) => {
   useEffect(() => {
     gameObject.onClick = onClick;
   }, [gameObject, onClick]);
+  useEffect(() => {
+    gameObject.onKeyPress = onKeyPress;
+  }, [gameObject, onKeyPress]);
+  useEffect(() => {
+    gameObject.onKeyDown = onKeyDown;
+  }, [gameObject, onKeyDown]);
+  useEffect(() => {
+    gameObject.onKeyUp = onKeyUp;
+  }, [gameObject, onKeyUp]);
 };
 
 export const useMount = (gameObject: GameMesh) => {
@@ -157,6 +166,17 @@ export const useMovement = (
     gameObject.velocity = velocity;
   }, [gameObject, velocity]);
 };
+export const useName = (
+  obj: PropertyAwareTypes,
+  { name, labels }: PropertyAwarePropTypes
+) => {
+  useEffect(() => {
+    obj.name = name;
+  }, [obj, name]);
+  useEffect(() => {
+    obj.labels = labels;
+  }, [obj, labels]);
+};
 
 export const useGameMesh = (gameObject: GameMesh, props: GameMeshProps) => {
   useCollision(gameObject, props);
@@ -165,6 +185,7 @@ export const useGameMesh = (gameObject: GameMesh, props: GameMeshProps) => {
   useLocation(gameObject, props);
   useMaterial(gameObject, props);
   useMount(gameObject);
+  useName(gameObject, props);
   useParent(gameObject, props);
   useMovement(gameObject, props);
 
@@ -176,9 +197,9 @@ export const useMesh = (props: GameMeshProps) => {
   const gameObject = useMemo<GameMesh>(() => {
     return {
       type: "mesh",
-      id: generateUUID(),
+      id: props.id ?? generateUUID(),
       three: new THREE.Mesh(),
     };
-  }, []);
+  }, [props.id]);
   return useGameMesh(gameObject, props);
 };

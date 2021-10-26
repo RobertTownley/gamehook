@@ -10,7 +10,7 @@ export interface Collision {
 }
 export type CollisionHandler = (collision: Collision) => void;
 
-const COLLISION_SENSITIVITY = 0.2;
+const COLLISION_SENSITIVITY = 0.1;
 export const detectCollisions = () => {
   // Form a list of collidable objects and the objects they can collide with
   const gameObjects = Object.values(_GAME.scene.gameObjects);
@@ -44,50 +44,47 @@ export const detectCollisions = () => {
       // Determine which object is smaller, and cast rays from that object.
       // This is because a smaller object is less likely to slip through
       // the cracks of intersection with a larger one
+      let collision: Collision | undefined = undefined;
+      let collisionDistance = COLLISION_SENSITIVITY;
       if (c1radius <= c2radius) {
         // Lazily compute vertices for objects
         if (!c1vertices) {
           c1vertices = getVerticesForObject(c1);
         }
         for (const vertex of c1vertices) {
-          raycaster.set(c1center, dir.subVectors(vertex, c1center).normalize());
+          const distance = dir.subVectors(vertex, c1center).normalize();
+          raycaster.set(c1center, distance);
           const intersections = raycaster.intersectObject(c2.three);
           if (
             intersections.length &&
-            intersections[0].distance < COLLISION_SENSITIVITY
+            intersections[0].distance < collisionDistance
           ) {
-            const collision: Collision = {
+            collision = {
               self: c1,
               target: c2,
               intersections,
             };
-            if (c1.onCollision) {
-              c1.onCollision(collision);
-            }
             collided = true;
-            return;
           }
         }
       } else {
         for (const vertex of getVerticesForObject(c2)) {
-          raycaster.set(c2center, dir.subVectors(vertex, c2center).normalize());
+          const distance = dir.subVectors(vertex, c2center).normalize();
+          raycaster.set(c2center, distance);
           const intersections = raycaster.intersectObject(c1.three);
-          if (
-            intersections.length &&
-            intersections[0].distance < COLLISION_SENSITIVITY
-          ) {
-            const collision: Collision = {
+          if (intersections.length) {
+            collision = {
               self: c1,
               target: c2,
               intersections,
             };
-            if (c1.onCollision) {
-              c1.onCollision(collision);
-            }
             collided = true;
-            return;
           }
         }
+      }
+      if (collision && c1.onCollision) {
+        c1.onCollision(collision);
+        return;
       }
     }
     if (collided) {

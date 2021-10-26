@@ -6,7 +6,26 @@ type KeyboardHandler = (event: KeyboardEvent) => void;
 // Keyboard Events
 interface KeyboardInteractable {
   onKeyDown?: KeyboardHandler;
+  onKeyPress?: KeyboardHandler;
+  onKeyUp?: KeyboardHandler;
 }
+type IKeyboardEventTypeMap = Record<string, keyof KeyboardInteractable>;
+const KeyboardEventTypeMap: IKeyboardEventTypeMap = {
+  keydown: "onKeyDown",
+  keyup: "onKeyUp",
+  keypress: "onKeyPress",
+};
+export const handleKeyboardEvent = (event: KeyboardEvent) => {
+  const eventType = KeyboardEventTypeMap[event.type];
+  Object.values(_GAME.scene.gameObjects)
+    .filter((o) => o[eventType] !== undefined)
+    .forEach((obj) => {
+      const handler = obj[eventType];
+      if (handler) {
+        handler(event);
+      }
+    });
+};
 
 // Mouse Events
 interface MouseInteractable {
