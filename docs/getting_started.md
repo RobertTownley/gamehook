@@ -43,7 +43,7 @@ const MyComponent = () => {
 
 Not okay
 
-```
+```typescript
 import { Game, Scene, Sphere } from 'gamehook';
 
 const MyComponent = () => {
@@ -78,7 +78,7 @@ but the following gives an idea for how a few key objects are manipulated:
 
 #### Position
 
-```
+```jsx
 import { Game, Scene, Box, Sphere } from "gamehook";
 
 function App() {
