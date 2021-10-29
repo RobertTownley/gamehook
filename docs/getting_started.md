@@ -71,4 +71,4 @@ At any given time, one and only one scene will be rendered. Components within th
 ### Objects
 
 Gamehook provides several components that allow you to add objects to your scenes. The simplest of these are the family of objects known as "Meshes". This includes basic shapes like Boxes, Spheres, Cylinders or Planes.
-![Box and sphere together](./assets/usage1.png')
+![Box and sphere together](./assets/usage1.png)
