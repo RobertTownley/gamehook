@@ -1,0 +1,21 @@
+name: Node.js Package
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - masterjobs:
+  publish-npm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2.1.5
+        with: 
+          node-version: 14.x
+      - run: yarn install
+      - run: yarn build
+      - run: npm --no-git-tag-version version $(npx semver $(npm info @bryht/auto-complete version) -i)
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}

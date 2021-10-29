@@ -1,0 +1,17 @@
+import { GameLight, GameLightProps, GameMesh, GameMeshProps } from "./types";
+declare type PropertyAwareTypes = GameMesh | GameLight;
+declare type PropertyAwarePropTypes = GameMeshProps | GameLightProps;
+export declare const useMaterial: (gameObject: GameMesh, { material }: GameMeshProps) => void;
+export declare const useGeometry: (gameObject: GameMesh, { geometry }: GameMeshProps) => void;
+export declare const useLocation: (gameObject: PropertyAwareTypes, { position, orientation }: PropertyAwarePropTypes) => void;
+export declare const useParent: (gameObject: GameMesh, { objParent }: GameMeshProps) => void;
+export declare const useLightParent: (gameLight: GameLight, { objParent }: GameLightProps) => void;
+export declare const useEventListeners: (gameObject: GameMesh, { onKeyUp, onKeyDown, onKeyPress, onClick }: GameMeshProps) => void;
+export declare const useMount: (gameObject: GameMesh) => void;
+export declare const useLightMount: (gameLight: GameLight) => void;
+export declare const useCollision: (gameObject: GameMesh, { collides, onCollision }: GameMeshProps) => void;
+export declare const useMovement: (gameObject: GameMesh, { acceleration, rotation, velocity }: GameMeshProps) => void;
+export declare const useName: (obj: PropertyAwareTypes, { name, labels }: PropertyAwarePropTypes) => void;
+export declare const useGameMesh: (gameObject: GameMesh, props: GameMeshProps) => GameMesh;
+export declare const useMesh: (props: GameMeshProps) => GameMesh;
+export {};
