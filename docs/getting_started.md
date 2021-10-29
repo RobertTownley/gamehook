@@ -24,7 +24,7 @@ The `Game` component is the top-level component of your project. It can be along
 
 Fine
 
-```
+```tsx
 import { Game, Scene, Sphere } from 'gamehook';
 
 const MyComponent = () => {
@@ -78,7 +78,7 @@ but the following gives an idea for how a few key objects are manipulated:
 
 #### Position
 
-```jsx
+```tsx
 import { Game, Scene, Box, Sphere } from "gamehook";
 
 function App() {
