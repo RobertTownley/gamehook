@@ -43,7 +43,7 @@ const MyComponent = () => {
 
 Not okay
 
-```typescript
+```tsx
 import { Game, Scene, Sphere } from 'gamehook';
 
 const MyComponent = () => {
