@@ -72,3 +72,28 @@ At any given time, one and only one scene will be rendered. Components within th
 
 Gamehook provides several components that allow you to add objects to your scenes. The simplest of these are the family of objects known as "Meshes". This includes basic shapes like Boxes, Spheres, Cylinders or Planes.
 ![Box and sphere together](./assets/usage1.png)
+
+The properties of mesh components can update their orientation, geometry, material composition, user interactions, or physics. We explore this more later on,
+but the following gives an idea for how a few key objects are manipulated:
+
+#### Position
+
+```
+import { Game, Scene, Box, Sphere } from "gamehook";
+
+function App() {
+  return (
+    <Game>
+      <Scene title="Initial">
+        <Sphere position={{ x: 0, y: 2, z: 0 }} />
+        <Box position={{ x: 4, y: 0, z: -5 }} />
+        <Box position={{ x: -1, y: -1, z: 3 }} />
+      </Scene>
+    </Game>
+  );
+}
+
+export default App;
+```
+
+![Demonstrating position property with three positioned objects](./assets/usage2.png)
