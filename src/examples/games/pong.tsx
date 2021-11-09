@@ -5,14 +5,16 @@ import {
   Collision,
   CollisionHandler,
   generateUUID,
+  Game,
   Position,
+  Scene,
   Sphere,
   Velocity,
 } from "../../gamehook";
 
 const STEP = 0.2;
 const BALL_RESPONSIVENESS = 0.01;
-const BALL_SPEED = 0.025;
+const BALL_SPEED = 0.0125;
 const Paddle = () => {
   const [position, setPosition] = useState<Position>({ x: 0, y: -2, z: 0 });
   const handleKeyPress = (event: KeyboardEvent) => {
@@ -26,7 +28,7 @@ const Paddle = () => {
     <Box
       name="Paddle"
       position={position}
-      width={4}
+      width={2}
       height={0.1}
       depth={0.5}
       onKeyDown={handleKeyPress}
@@ -146,13 +148,15 @@ export const Pong = () => {
   };
 
   return (
-    <>
-      <Paddle />
-      <Ball onCollision={handleCollision} velocity={ballVelocity} />
-      {bricks.map((brick) => (
-        <Brick key={brick.id} {...brick} />
-      ))}
-      <Edges />
-    </>
+    <Game>
+      <Scene title="Initial">
+        <Paddle />
+        <Ball onCollision={handleCollision} velocity={ballVelocity} />
+        {bricks.map((brick) => (
+          <Brick key={brick.id} {...brick} />
+        ))}
+        <Edges />
+      </Scene>
+    </Game>
   );
 };

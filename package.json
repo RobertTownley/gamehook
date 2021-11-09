@@ -1,7 +1,6 @@
 {
   "name": "gamehook",
   "version": "0.1.7",
-  "homepage": "https://github.com/RobertTownley/gamehook",
   "license": "MIT",
   "private": false,
   "author": {
@@ -55,7 +54,6 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.173",
-    "@types/three": "^0.131.1",
-    "webpack": "^5.60.0"
+    "@types/three": "^0.131.1"
   }
 }

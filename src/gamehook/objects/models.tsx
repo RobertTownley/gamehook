@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 
 import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { BasicMeshType } from "./types";
@@ -14,12 +14,14 @@ interface ModelProps extends BasicMeshType {
   loadingModel?: THREE.Mesh;
 }
 
-const defaultLoadingError = (_event: ErrorEvent, filepath: string) => {
+const defaultLoadingError = (error: ErrorEvent, filepath: string) => {
+  console.log(error);
   throw new Error(`Model ${filepath} could not be loaded`);
 };
 
 export const Model = (props: ModelProps) => {
   const { children, filepath, onError } = props;
+  const mountedModel = useRef<GLTF | undefined>(undefined);
   const game = useGame();
   const gameObject = useMesh({
     ...props,
@@ -32,8 +34,15 @@ export const Model = (props: ModelProps) => {
     const addGLTFToScene = (gltf: GLTF) => {
       if (mounted) {
         gameObject.three.add(gltf.scene);
+        mountedModel.current = gltf;
       }
     };
+    const removeGLTFFromScene = () => {
+      if (mountedModel.current) {
+        gameObject.three.remove(mountedModel.current.scene);
+      }
+    };
+
     const handleLoadingError = onError ?? defaultLoadingError;
     const loader = new GLTFLoader();
     loader.load(filepath, addGLTFToScene, undefined, (e: ErrorEvent) =>
@@ -41,6 +50,7 @@ export const Model = (props: ModelProps) => {
     );
     return () => {
       mounted = false;
+      removeGLTFFromScene();
     };
   }, [gameObject.three, game.scene, filepath, game.scene, onError]);
 
