@@ -48,8 +48,13 @@ export interface GameGroup extends BasicGameObject {
 
 export type GameObject = GameMesh | GameGroup;
 
-/* Physical Properties */
 export type Angle = ThreespaceCoords;
+
+type GameCameraType = "orthographic" | "perspective";
+export interface GameCameraProps extends BasicGameObject {
+  active: boolean;
+  type?: GameCameraType;
+}
 
 export interface GameMeshProps extends BasicMeshType {
   children?: ReactNode;
