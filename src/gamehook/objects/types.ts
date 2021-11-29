@@ -1,3 +1,4 @@
+import * as THREE from "three";
 import { ReactNode } from "react";
 
 import { Shapeable } from "./geometries";
@@ -52,8 +53,19 @@ export type Angle = ThreespaceCoords;
 
 type GameCameraType = "orthographic" | "perspective";
 export interface GameCameraProps extends BasicGameObject {
-  active: boolean;
+  active?: boolean;
+  aspectRatio?: number;
+  far?: number;
+  fov?: number;
+  id?: string;
+  near?: number;
+  three: THREE.Camera;
   type?: GameCameraType;
+}
+export interface GameCamera extends BasicGameObject {
+  id: string;
+  type: "camera";
+  three: THREE.Camera;
 }
 
 export interface GameMeshProps extends BasicMeshType {

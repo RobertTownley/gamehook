@@ -9,6 +9,14 @@ export const rotateObjects = () => {
       if (y) gameObject.three.rotateY(y);
       if (z) gameObject.three.rotateZ(z);
     });
+
+  const { camera } = _GAME.scene;
+  if (camera.rotation) {
+    const { x, y, z } = camera.rotation;
+    if (x) camera.three.rotateX(x);
+    if (y) camera.three.rotateY(y);
+    if (z) camera.three.rotateZ(z);
+  }
 };
 
 export const moveObjects = () => {
@@ -21,6 +29,14 @@ export const moveObjects = () => {
       if (y) gameObject.three.position.y += y;
       if (z) gameObject.three.position.z += z;
     });
+
+  const { camera } = _GAME.scene;
+  if (camera.velocity) {
+    const { x, y, z } = camera.velocity;
+    if (x) camera.three.position.x += x;
+    if (y) camera.three.position.y += y;
+    if (z) camera.three.position.z += z;
+  }
 };
 
 export const accelerateObjects = () => {
@@ -40,4 +56,19 @@ export const accelerateObjects = () => {
       if (y) gameObject.velocity.y += y;
       if (z) gameObject.velocity.z += z;
     });
+
+  const { camera } = _GAME.scene;
+  if (camera.acceleration) {
+    if (!camera.velocity) {
+      camera.velocity = {
+        x: 0,
+        y: 0,
+        z: 0,
+      };
+    }
+    const { x, y, z } = camera.acceleration;
+    if (x) camera.velocity.x += x;
+    if (y) camera.velocity.y += y;
+    if (z) camera.velocity.z += z;
+  }
 };

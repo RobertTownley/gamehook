@@ -4,7 +4,7 @@ import { generateUUID } from "three/src/math/MathUtils";
 
 import { useGame } from "./game";
 import { Animation } from "./animations";
-import { GameLight, GameObject } from "./objects/types";
+import { GameCamera, GameLight, GameObject } from "./objects/types";
 import {
   accelerateObjects,
   moveObjects,
@@ -42,7 +42,7 @@ export const Scene = (props: SceneProps) => {
   // Render the scene and perform required animations
   useEffect(() => {
     const animate = () => {
-      game.renderer.render(game.scene.three, game.scene.camera);
+      game.renderer.render(game.scene.three, game.scene.camera.three);
       requestAnimationFrame(animate);
 
       // Animate callbacks created within `useAnimation`
@@ -75,7 +75,7 @@ export interface GameScene {
   addObjectToScene: (gameObject: GameObject) => void;
   addLightToScene: (gameLight: GameLight) => void;
   animations: { [key: string]: MutableRefObject<Animation> };
-  camera: THREE.PerspectiveCamera;
+  camera: GameCamera;
   removeObjectFromScene: (gameObject: GameObject) => void;
   removeLightFromScene: (gameLight: GameLight) => void;
   gameLights: { [key: string]: GameLight };
@@ -88,12 +88,16 @@ export interface GameScene {
 export const buildScene = (): GameScene => {
   const scene: GameScene = {
     animations: {},
-    camera: new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
-    ),
+    camera: {
+      id: generateUUID(),
+      three: new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      ),
+      type: "camera",
+    },
     gameObjects: {},
     gameLights: {},
     id: generateUUID(),
@@ -117,8 +121,6 @@ export const buildScene = (): GameScene => {
     },
   };
 
-  // TODO: Replace with an actual camera API
-  scene.camera.position.z = 5;
   return scene;
 };
 

@@ -1,18 +1,26 @@
 import * as THREE from "three";
 import { useMemo, useEffect } from "react";
 
-import { GameLight, GameLightProps, GameMesh, GameMeshProps } from "./types";
+import {
+  GameCamera,
+  GameLight,
+  GameLightProps,
+  GameMesh,
+  GameMeshProps,
+} from "./types";
+import { GameCameraProps } from "../camera";
 import { createGeometry } from "./geometries";
 import { createMaterial } from "./materials";
 import { generateUUID } from "three/src/math/MathUtils";
 
-type PropertyAwareTypes = GameMesh | GameLight;
-type PropertyAwarePropTypes = GameMeshProps | GameLightProps;
+type PropertyAwareTypes = GameMesh | GameLight | GameCamera;
+type PropertyAwarePropTypes = GameMeshProps | GameLightProps | GameCameraProps;
+type GameHook = (
+  obj: PropertyAwareTypes,
+  props: PropertyAwarePropTypes
+) => void;
 
-export const useMaterial = (
-  gameObject: GameMesh,
-  { material }: GameMeshProps
-) => {
+export const useMaterial: GameHook = (gameObject, { material }) => {
   const _material = useMemo(() => {
     return createMaterial(material);
   }, [material]);
@@ -22,8 +30,8 @@ export const useMaterial = (
   }, [gameObject, _material, mesh]);
 };
 
-export const useGeometry = (
-  gameObject: GameMesh,
+export const useGeometry: GameHook = (
+  gameObject,
   { geometry }: GameMeshProps
 ) => {
   const _geometry = useMemo(() => {
@@ -35,9 +43,9 @@ export const useGeometry = (
   }, [gameObject, mesh, _geometry]);
 };
 
-export const useLocation = (
-  gameObject: PropertyAwareTypes,
-  { position, orientation }: PropertyAwarePropTypes
+export const useLocation: GameHook = (
+  gameObject,
+  { position, orientation }
 ) => {
   const _orientation = useMemo(() => {
     return orientation;
@@ -96,9 +104,9 @@ export const useLightParent = (
   }, [gameLight, objParent]);
 };
 
-export const useEventListeners = (
-  gameObject: GameMesh,
-  { onKeyUp, onKeyDown, onKeyPress, onClick }: GameMeshProps
+export const useEventListeners: GameHook = (
+  gameObject,
+  { onKeyUp, onKeyDown, onKeyPress, onClick }
 ) => {
   useEffect(() => {
     gameObject.onClick = onClick;
@@ -141,9 +149,9 @@ export const useLightMount = (gameLight: GameLight) => {
   }, [gameLight]);
 };
 
-export const useCollision = (
-  gameObject: GameMesh,
-  { collides, onCollision }: GameMeshProps
+export const useCollision: GameHook = (
+  gameObject,
+  { collides, onCollision }
 ) => {
   useEffect(() => {
     gameObject.onCollision = onCollision;
@@ -152,9 +160,9 @@ export const useCollision = (
     gameObject.collides = collides;
   }, [gameObject, collides]);
 };
-export const useMovement = (
-  gameObject: GameMesh,
-  { acceleration, rotation, velocity }: GameMeshProps
+export const useMovement: GameHook = (
+  gameObject,
+  { acceleration, rotation, velocity }
 ) => {
   useEffect(() => {
     gameObject.acceleration = acceleration;

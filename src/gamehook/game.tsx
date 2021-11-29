@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { ReactNode, useEffect, useLayoutEffect, useRef } from "react";
 import { generateUUID } from "three/src/math/MathUtils";
 
+import { isPerspectiveCamera } from "./camera";
 import { initialScene, GameScene, SceneProps } from "./scene";
 import { handleKeyboardEvent, handleMouseEvent } from "./interactions";
 
@@ -79,11 +80,14 @@ export const useGame = (props?: Props): GameProperties => {
 
       // Listeners
       onWindowResize: function () {
-        const _w = width ?? window.innerWidth;
-        const _h = height ?? window.innerHeight;
-        _GAME.scene.camera.aspect = _w / _h;
-        _GAME.scene.camera.updateProjectionMatrix();
-        _GAME.renderer.setSize(_w, _h);
+        const threeCamera = _GAME.scene.camera.three;
+        if (isPerspectiveCamera(threeCamera)) {
+          const _w = width ?? window.innerWidth;
+          const _h = height ?? window.innerHeight;
+          threeCamera.aspect = _w / _h;
+          threeCamera.updateProjectionMatrix();
+          _GAME.renderer.setSize(_w, _h);
+        }
       },
     };
 

@@ -46,7 +46,7 @@ export const handleMouseEvent = (event: MouseEvent) => {
   // Cast a ray to see which listening object the mouse click intersects with
   const mouse = getMouseVectorForEvent(event);
   const raycaster = new THREE.Raycaster();
-  raycaster.setFromCamera(mouse, _GAME.scene.camera);
+  raycaster.setFromCamera(mouse, _GAME.scene.camera.three);
   const intersects = raycaster.intersectObjects(
     objects.map((i) => {
       i.three.updateMatrixWorld();
