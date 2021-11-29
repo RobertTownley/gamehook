@@ -51,17 +51,6 @@ export type GameObject = GameMesh | GameGroup;
 
 export type Angle = ThreespaceCoords;
 
-type GameCameraType = "orthographic" | "perspective";
-export interface GameCameraProps extends BasicGameObject {
-  active?: boolean;
-  aspectRatio?: number;
-  far?: number;
-  fov?: number;
-  id?: string;
-  near?: number;
-  three: THREE.Camera;
-  type?: GameCameraType;
-}
 export interface GameCamera extends BasicGameObject {
   id: string;
   type: "camera";
