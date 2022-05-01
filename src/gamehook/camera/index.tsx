@@ -2,6 +2,8 @@ import * as THREE from "three";
 import { generateUUID } from "three/src/math/MathUtils";
 import { Camera } from "./types";
 
+export type { Camera } from "./types";
+
 interface CameraProps {
   aspect?: number;
   id?: string;

@@ -1,40 +1,59 @@
-import * as three from "three";
-import { ReactNode, useLayoutEffect, useRef, useState } from "react";
+import * as THREE from "three";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 
-import {
-  SceneContextValues,
-  SceneContext,
-  getInitialSceneContext,
-} from "./context";
+import { SceneContext, SceneContextValues } from "./context";
 import { GameObject } from "../objects";
 import { GameLight } from "../lights";
-import { generateUUID } from "three/src/math/MathUtils";
+import { buildCamera } from "../camera";
+import { useGameLoop, useMountRef, useResize } from "../mount";
 
 interface SceneProps {
+  background?: THREE.ColorRepresentation;
   children: ReactNode;
   width?: number;
   height?: number;
 }
 
-export function Scene({ children, width = 800, height = 600 }: SceneProps) {
-  const [objects, setObjects] = useState<GameObject[]>([]);
-  const [lights, setLights] = useState<GameLight[]>([]);
+export function Scene({
+  background = 0x000000,
+  children,
+  width,
+  height,
+}: SceneProps) {
+  const camera = useMemo(() => buildCamera({}), []);
+  const renderer = useMemo(() => new THREE.WebGLRenderer(), []);
 
-  useLayoutEffect(() => {
-    const scene = three.Scene;
-  }, []);
+  // Rendering
+  const mountRef = useMountRef(renderer);
+  useResize({ width, height, camera, renderer });
 
-  const context: SceneContextValues = getInitialSceneContext({
-    objects,
-    setObjects,
-    lights,
-    setLights,
-  });
+  // State
+  const [objects, setObjects] = useState<Record<string, GameObject>>({});
+  const [lights, setLights] = useState<Record<string, GameLight>>({});
 
-  const mountRef = useRef<HTMLDivElement>(null);
+  const value = useMemo<SceneContextValues>(
+    () => ({
+      camera,
+      objects,
+      setObjects,
+      lights,
+      setLights,
+      threeScene: new THREE.Scene(),
+    }),
+    [camera, objects, lights]
+  );
+
+  // Update Background color
+  useEffect(() => {
+    value.threeScene.background = new THREE.Color(background);
+  }, [background, value.threeScene]);
+
+  // Render initial and new frames
+  useGameLoop(value.camera.camera, renderer, value.threeScene);
+
   return (
     <div ref={mountRef}>
-      <SceneContext.Provider value={context}>{children}</SceneContext.Provider>
+      <SceneContext.Provider value={value}>{children}</SceneContext.Provider>
     </div>
   );
 }

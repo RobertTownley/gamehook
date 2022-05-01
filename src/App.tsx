@@ -15,9 +15,19 @@ function App() {
   return (
     <div>
       <p>This is the scene</p>
-      <Scene>
-        <Ball />
-      </Scene>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "100vw",
+          height: "calc(100vh - 127px)",
+        }}
+      >
+        <Scene width={800} height={600}>
+          <Ball />
+        </Scene>
+      </div>
     </div>
   );
 }
