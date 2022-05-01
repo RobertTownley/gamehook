@@ -1,10 +1,11 @@
 import * as THREE from "three";
-import { useContext, useEffect, useLayoutEffect, useMemo } from "react";
+import { useContext, useLayoutEffect, useMemo } from "react";
 
 import { MeshProps } from "./types";
 import { SceneContext } from "../scene/context";
 import { generateUUID } from "three/src/math/MathUtils";
 import { GameObject } from "../objects";
+import { normalizeXYZ } from "../physics/utils";
 
 interface Props extends MeshProps {
   radius?: number;
@@ -47,6 +48,15 @@ export function Sphere(props: Props) {
   useLayoutEffect(() => {
     gameObj.threeMesh.material = material;
   }, [gameObj.threeMesh, material]);
+
+  // Set mesh position
+  const [x, y, z] = useMemo(
+    () => normalizeXYZ(props.position),
+    [props.position]
+  );
+  useLayoutEffect(() => {
+    gameObj.threeMesh.position.set(x, y, z);
+  }, [gameObj, x, y, z]);
 
   return <>{children}</>;
 }
