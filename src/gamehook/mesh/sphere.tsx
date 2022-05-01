@@ -42,8 +42,7 @@ export function Sphere(props: Props) {
 
   // Give material to mesh object
   const material = useMemo(() => {
-    // return new THREE.MeshNormalMaterial({});
-    return new THREE.MeshBasicMaterial({ color: 0xaaaaaa });
+    return new THREE.MeshNormalMaterial();
   }, []);
   useLayoutEffect(() => {
     gameObj.threeMesh.material = material;
