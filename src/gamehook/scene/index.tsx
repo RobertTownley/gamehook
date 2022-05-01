@@ -31,17 +31,28 @@ export function Scene({
   const [objects, setObjects] = useState<Record<string, GameObject>>({});
   const [lights, setLights] = useState<Record<string, GameLight>>({});
 
-  const value = useMemo<SceneContextValues>(
-    () => ({
+  const value = useMemo<SceneContextValues>(() => {
+    const threeScene = new THREE.Scene();
+
+    const addToScene = (gameObject: GameObject) => {
+      threeScene.add(gameObject.threeMesh);
+    };
+    const removeFromScene = (gameObject: GameObject) => {
+      threeScene.remove(gameObject.threeMesh);
+    };
+
+    return {
       camera,
       objects,
       setObjects,
       lights,
       setLights,
-      threeScene: new THREE.Scene(),
-    }),
-    [camera, objects, lights]
-  );
+      threeScene,
+      // Actions
+      addToScene,
+      removeFromScene,
+    };
+  }, [camera, objects, lights]);
 
   // Update Background color
   useEffect(() => {

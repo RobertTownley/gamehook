@@ -12,8 +12,12 @@ export interface SceneContextValues {
   objects: Record<string, GameObject>;
   setObjects: Dispatch<SetStateAction<Record<string, GameObject>>>;
   lights: Record<string, GameLight>;
-  setLights: Dispatch<SetStateAction<Record<string, GameObject>>>;
+  setLights: Dispatch<SetStateAction<Record<string, GameLight>>>;
   threeScene: THREE.Scene;
+
+  // Actions
+  addToScene: (obj: GameObject) => void;
+  removeFromScene: (obj: GameObject) => void;
 }
 
 interface GetInitialSceneContext {
@@ -29,6 +33,8 @@ export function getInitialSceneContext({
   setLights,
 }: GetInitialSceneContext): SceneContextValues {
   return {
+    addToScene: (_obj) => {},
+    removeFromScene: (_obj) => {},
     camera: buildCamera({}),
     threeScene: new THREE.Scene(),
     objects,
