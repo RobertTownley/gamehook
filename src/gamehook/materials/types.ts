@@ -1,5 +1,3 @@
-import * as THREE from "three";
-
 interface BasicMaterialOptions {
   type: "basic";
   color: number;

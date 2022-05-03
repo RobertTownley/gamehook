@@ -1,2 +1,2 @@
 export { Scene } from "./scene";
-export { Sphere } from "./mesh";
+export { Box, Sphere } from "./mesh";

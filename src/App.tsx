@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-import { Scene, Sphere } from "./gamehook";
+import { Box, Scene, Sphere } from "./gamehook";
 import { XYZ } from "./gamehook/physics/types";
 
 interface Props {
@@ -28,8 +28,8 @@ function App() {
     }
   }
   return (
-    <>
-      <Scene width={400} height={400}>
+    <div style={{ display: "flex" }}>
+      <Scene width={window.innerWidth / 2} height={window.innerHeight}>
         {pairings.map((pairing) => (
           <Ball
             key={`${pairing[0]}.${pairing[1]}`}
@@ -37,10 +37,10 @@ function App() {
           />
         ))}
       </Scene>
-      <Scene width={400} height={400}>
-        <Sphere position={{ x: 0, y: 0, z: -5 }} />
+      <Scene width={window.innerWidth / 2} height={window.innerHeight}>
+        <Box position={{ x: 0, y: 0, z: -5 }} />
       </Scene>
-    </>
+    </div>
   );
 }
 
