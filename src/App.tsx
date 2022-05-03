@@ -11,6 +11,7 @@ function Ball({ position }: Props) {
   return (
     <Sphere
       position={position}
+      material={{ type: "normal" }}
       velocity={[0, 0, 0.1]}
       onClick={() => {
         console.log("Clicking!");
@@ -27,14 +28,19 @@ function App() {
     }
   }
   return (
-    <Scene>
-      {pairings.map((pairing) => (
-        <Ball
-          key={`${pairing[0]}.${pairing[1]}`}
-          position={{ x: pairing[0], y: pairing[1], z: -50 }}
-        />
-      ))}
-    </Scene>
+    <>
+      <Scene width={400} height={400}>
+        {pairings.map((pairing) => (
+          <Ball
+            key={`${pairing[0]}.${pairing[1]}`}
+            position={{ x: pairing[0], y: pairing[1], z: -50 }}
+          />
+        ))}
+      </Scene>
+      <Scene width={400} height={400}>
+        <Sphere position={{ x: 0, y: 0, z: -5 }} />
+      </Scene>
+    </>
   );
 }
 
