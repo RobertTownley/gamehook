@@ -6,6 +6,7 @@ import { SceneContext } from "../scene/context";
 import { generateUUID } from "three/src/math/MathUtils";
 import { GameObject } from "../objects";
 import { normalizeXYZ } from "../physics/utils";
+import { createMaterial } from "../materials";
 
 interface Props extends MeshProps {
   radius?: number;
@@ -42,8 +43,8 @@ export function Sphere(props: Props) {
 
   // Give material to mesh object
   const material = useMemo(() => {
-    return new THREE.MeshNormalMaterial();
-  }, []);
+    return createMaterial(props.material);
+  }, [props.material]);
   useLayoutEffect(() => {
     gameObj.threeMesh.material = material;
   }, [gameObj.threeMesh, material]);
