@@ -62,13 +62,24 @@ interface UseResize {
   height?: number;
   renderer: THREE.WebGLRenderer;
 }
+function resize({ camera, width, height, renderer }: UseResize) {
+  const w = width ?? window.innerWidth;
+  const h = height ?? window.innerHeight;
+  const ratio = w / h;
+  camera.camera.aspect = ratio;
+  camera.camera.updateProjectionMatrix();
+  renderer.setSize(w, h);
+}
 export function useResize({ camera, width, height, renderer }: UseResize) {
   useLayoutEffect(() => {
-    const w = width ?? window.innerWidth;
-    const h = height ?? window.innerHeight;
-    const ratio = w / h;
-    camera.camera.aspect = ratio;
-    camera.camera.updateProjectionMatrix();
-    renderer.setSize(w, h);
+    resize({ camera, width, height, renderer });
   }, [camera, width, height, renderer]);
+  window.addEventListener("resize", () => {
+    resize({
+      camera,
+      width,
+      height,
+      renderer,
+    });
+  });
 }
