@@ -2,7 +2,6 @@ import * as THREE from "three";
 import { ReactNode, useEffect, useMemo } from "react";
 
 import { SceneContext, SceneContextValues } from "./context";
-import { GameObject } from "../objects";
 import { buildCamera } from "../camera";
 import { useGameLoop, useMountRef, useResize } from "../mount";
 import { useInteraction } from "../interactions";
@@ -33,17 +32,8 @@ export function Scene({
 
     return {
       camera,
-      objects: {},
+      meshes: {},
       threeScene,
-      // Actions
-      addObjectToScene: function (gameObject: GameObject) {
-        threeScene.add(gameObject.threeMesh);
-        this.objects[gameObject.id] = gameObject;
-      },
-      removeObjectFromScene: function (gameObject: GameObject) {
-        threeScene.remove(gameObject.threeMesh);
-        delete this.objects[gameObject.id];
-      },
     };
   }, [camera]);
 

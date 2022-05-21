@@ -4,23 +4,17 @@ import { createContext } from "react";
 import { buildCamera } from "../camera";
 
 import { Camera } from "../camera/types";
-import { GameObject } from "../objects";
+import { MeshProps } from "../mesh";
 
 export interface SceneContextValues {
   camera: Camera;
-  objects: Record<string, GameObject>;
+  meshes: Record<string, MeshProps>;
   threeScene: THREE.Scene;
-
-  // Actions
-  addObjectToScene: (obj: GameObject) => void;
-  removeObjectFromScene: (obj: GameObject) => void;
 }
 
 export function getInitialSceneContext(): SceneContextValues {
   return {
-    addObjectToScene: (_obj) => {},
-    objects: {},
-    removeObjectFromScene: (_obj) => {},
+    meshes: {},
     camera: buildCamera({}),
     threeScene: new THREE.Scene(),
   };

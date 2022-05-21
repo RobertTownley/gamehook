@@ -1,40 +1,37 @@
 import * as THREE from "three";
 import { useContext, useLayoutEffect, useMemo } from "react";
-import { generateUUID } from "three/src/math/MathUtils";
-import { MeshProps } from "./types";
-import { GameObject } from "../objects";
+import { Mesh, MeshProps } from "./types";
 import { SceneContext } from "../scene/context";
-
-// Create the mesh to use in render classes
-export function useGameObject(props: MeshProps) {
-  return useMemo<GameObject>(() => {
-    return {
-      id: props.id ?? generateUUID(),
-      threeMesh: new THREE.Mesh(),
-    };
-  }, [props.id]);
-}
+import { generateUUID } from "three/src/math/MathUtils";
 
 // Add object to scene on mount, remove on dismount
-export function useMount(gameObj: GameObject) {
+export function useMesh(props: MeshProps): Mesh {
+  const { id, threeMesh } = props;
+  const mesh = useMemo<Mesh>(() => {
+    return {
+      id: id ?? generateUUID(),
+      threeMesh: threeMesh ?? new THREE.Mesh(),
+    };
+  }, [id, threeMesh]);
+
   const scene = useContext(SceneContext);
-  return useLayoutEffect(() => {
-    if (!scene.objects[gameObj.id]) {
-      scene.addObjectToScene(gameObj);
+  useLayoutEffect(() => {
+    if (!scene.meshes[mesh.id]) {
+      scene.meshes[mesh.id] = mesh;
+      scene.threeScene.add(mesh.threeMesh);
     }
     return () => {
-      scene.removeObjectFromScene(gameObj);
+      delete scene.meshes[mesh.id];
+      scene.threeScene.remove(mesh.threeMesh);
     };
-  }, [gameObj, scene]);
+  }, [mesh, scene]);
+  return mesh;
 }
 
 // Create geometry for object
 
-export function useGeometry(
-  gameObj: GameObject,
-  geometry: THREE.BufferGeometry
-) {
+export function useGeometry(mesh: Mesh, geometry: THREE.BufferGeometry) {
   useLayoutEffect(() => {
-    gameObj.threeMesh.geometry = geometry;
-  }, [gameObj.threeMesh, geometry]);
+    mesh.threeMesh.geometry = geometry;
+  }, [mesh.threeMesh, geometry]);
 }

@@ -1,13 +1,13 @@
 import { useMemo, useLayoutEffect } from "react";
-import { GameObject } from "../objects";
+import { Mesh } from "../mesh";
 
 import { normalizeXYZ } from "./utils";
 import { XYZ } from "./types";
 
-export function usePosition(gameObj: GameObject, position: XYZ | undefined) {
+export function usePosition(mesh: Mesh, position: XYZ | undefined) {
   // Set mesh position
   const [x, y, z] = useMemo(() => normalizeXYZ(position), [position]);
   useLayoutEffect(() => {
-    gameObj.threeMesh.position.set(x, y, z);
-  }, [gameObj, x, y, z]);
+    mesh.threeMesh.position.set(x, y, z);
+  }, [mesh, x, y, z]);
 }

@@ -1,11 +1,11 @@
 import { useLayoutEffect, useMemo } from "react";
 
-import { GameObject } from "../objects";
 import { createMaterial } from "./index";
+import { Mesh } from "../mesh/types";
 import { MaterialOptions } from "./types";
 
 export function useMaterial(
-  gameObj: GameObject,
+  mesh: Mesh,
   materialOptions: MaterialOptions | undefined
 ) {
   // Give material to mesh object
@@ -14,6 +14,6 @@ export function useMaterial(
   }, [materialOptions]);
 
   useLayoutEffect(() => {
-    gameObj.threeMesh.material = material;
-  }, [gameObj.threeMesh, material]);
+    mesh.threeMesh.material = material;
+  }, [mesh.threeMesh, material]);
 }
