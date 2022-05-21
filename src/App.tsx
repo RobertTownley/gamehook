@@ -9,6 +9,9 @@ function App() {
       pairings.push([x * 4, y * 4]);
     }
   }
+  function handleClick() {
+    console.log("Click event!");
+  }
 
   return (
     <div style={{ display: "flex" }}>
@@ -16,7 +19,7 @@ function App() {
         {pairings.map((pairing, i) => (
           <Sphere position={{ x: pairing[0], y: pairing[1], z: -50 }} key={i} />
         ))}
-        <Box position={{ x: 10, y: 0, z: -10 }} />
+        <Box onClick={handleClick} position={{ x: 10, y: 0, z: -10 }} />
       </Scene>
     </div>
   );

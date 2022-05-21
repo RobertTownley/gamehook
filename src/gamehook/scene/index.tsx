@@ -1,11 +1,11 @@
 import * as THREE from "three";
-import { ReactNode, useEffect, useMemo, useState } from "react";
+import { ReactNode, useEffect, useMemo } from "react";
 
 import { SceneContext, SceneContextValues } from "./context";
 import { GameObject } from "../objects";
-import { GameLight } from "../lights";
 import { buildCamera } from "../camera";
 import { useGameLoop, useMountRef, useResize } from "../mount";
+import { useInteraction } from "../interactions";
 
 interface SceneProps {
   background?: THREE.ColorRepresentation;
@@ -28,31 +28,24 @@ export function Scene({
   useResize({ width, height, camera, renderer });
 
   // State
-  const [objects, setObjects] = useState<Record<string, GameObject>>({});
-  const [lights, setLights] = useState<Record<string, GameLight>>({});
-
   const value = useMemo<SceneContextValues>(() => {
     const threeScene = new THREE.Scene();
 
-    const addToScene = (gameObject: GameObject) => {
-      threeScene.add(gameObject.threeMesh);
-    };
-    const removeFromScene = (gameObject: GameObject) => {
-      threeScene.remove(gameObject.threeMesh);
-    };
-
     return {
       camera,
-      objects,
-      setObjects,
-      lights,
-      setLights,
+      objects: {},
       threeScene,
       // Actions
-      addToScene,
-      removeFromScene,
+      addObjectToScene: function (gameObject: GameObject) {
+        threeScene.add(gameObject.threeMesh);
+        this.objects[gameObject.id] = gameObject;
+      },
+      removeObjectFromScene: function (gameObject: GameObject) {
+        threeScene.remove(gameObject.threeMesh);
+        delete this.objects[gameObject.id];
+      },
     };
-  }, [camera, objects, lights]);
+  }, [camera]);
 
   // Update Background color
   useEffect(() => {
@@ -61,6 +54,9 @@ export function Scene({
 
   // Render initial and new frames
   useGameLoop(value.camera.camera, renderer, value.threeScene);
+
+  // Interactions
+  useInteraction(value);
 
   return (
     <div ref={mountRef}>

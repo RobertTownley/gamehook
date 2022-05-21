@@ -1,9 +1,9 @@
 import * as THREE from "three";
-import { useLayoutEffect, useMemo } from "react";
+import { useContext, useLayoutEffect, useMemo } from "react";
 import { generateUUID } from "three/src/math/MathUtils";
 import { MeshProps } from "./types";
 import { GameObject } from "../objects";
-import { SceneContextValues } from "../scene/context";
+import { SceneContext } from "../scene/context";
 
 // Create the mesh to use in render classes
 export function useGameObject(props: MeshProps) {
@@ -16,13 +16,14 @@ export function useGameObject(props: MeshProps) {
 }
 
 // Add object to scene on mount, remove on dismount
-export function useMount(gameObj: GameObject, scene: SceneContextValues) {
+export function useMount(gameObj: GameObject) {
+  const scene = useContext(SceneContext);
   return useLayoutEffect(() => {
     if (!scene.objects[gameObj.id]) {
-      scene.addToScene(gameObj);
+      scene.addObjectToScene(gameObj);
     }
     return () => {
-      scene.removeFromScene(gameObj);
+      scene.removeObjectFromScene(gameObj);
     };
   }, [gameObj, scene]);
 }
