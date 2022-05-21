@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "declaration": true,
     "target": "es5",
     "lib": [
       "dom",
@@ -17,10 +18,15 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "sourceMap": true,
+    "outDir": "dist",
+    "noEmit": true
   },
   "include": [
-    "src"
+    "src/gamehook"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

@@ -1,39 +1,46 @@
-# Gamehook
+# Getting Started with Create React App
 
-Build games and have fun doing it.
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## What is Gamehook?
+## Available Scripts
 
-Gamehook is a library for building games and visualizations that run in your browser. Its goal is to make developing visual experiences simpler, quicker, and more enjoyable. To do this, Gamehook provides react components that add and remove objects to a ThreeJS-powered WebGL rendering.
+In the project directory, you can run:
 
-The end result is a greatly simplified API that will feel comfortable for react developers. Going further, Gamehook adds in some additional features provided by common game engines, such as animation, user interaction, physics, and scene routing.
+### `yarn start`
 
-Gamehook is built entirely in Typescript, and it's designed to work
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The end result of React and ThreeJS working together is a convenient and developer friendly way of managing visualizations.
+The page will reload if you make edits.\
+You will also see any lint errors in the console.
 
-![basic-cube-gif](./docs/assets/basicSpinningCube.gif)
+### `yarn test`
 
-## Why Gamehook?
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-- Games built with Typescript will run in most modern browsers, without installation. It's like being able to make Flash games again, but without horrible security issues.
-- It's a standard React library, so you have access to all of the nice-to-haves of the react ecosystem, including hot module reloading, state management, and all of your favorite NPM libraries.
-- It's built entirely with Typescript, so all components are type-safe with editor support.
-- It's fast...ish. It's not going to set any records, but most modern devices can handle rendering tens of thousands of moving objects without suffering frame rate loss.
-- You can build and animate models in Blender, and then import them directly as GLTF/GLB files.
+### `yarn build`
 
-## Why Not Gamehook?
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-- Performance is significantly worse than a fully-featured game engine like Unreal or Unity.
-- The library currently relies on client-side rendering, so it's not currently compatible with NextJS or other SSR frameworks.
-- While the library does its best to make the lower-level ThreeJS objects available to developers looking for advanced features, this isn't always possible. If you plan to significantly leverage ThreeJS, some components may be limiting.
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-## Pre-requisites
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-You should know the basics of React to get started. It also helps (but is not required) if you know Typescript, and also have a rough understanding of how 3D mdodeling and animation works.
+### `yarn eject`
 
-However, React is really all you need to get started with some examples that'll have you creating animations in your browser within 5 minutes of installing.
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-## Getting Started
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Check out our [getting started](./docs/getting_started.md) guide. Once you're set up, you can read through the [component documentation](./docs/component_documentation.md) to learn more about what you can do.
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+
+## Learn More
+
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+
+To learn React, check out the [React documentation](https://reactjs.org/).
