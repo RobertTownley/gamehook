@@ -1,24 +1,26 @@
 import * as THREE from "three";
-import { useContext, useLayoutEffect, useMemo } from "react";
+import { useContext, useEffect, useMemo } from "react";
 import { Mesh, MeshProps } from "./types";
 import { SceneContext } from "../scene/context";
 import { generateUUID } from "three/src/math/MathUtils";
 
 // Add object to scene on mount, remove on dismount
 export function useMesh(props: MeshProps): Mesh {
-  const { id, threeMesh } = props;
+  const { id, threeMesh, onClick } = props;
+
   const mesh = useMemo<Mesh>(() => {
     return {
       id: id ?? generateUUID(),
       threeMesh: threeMesh ?? new THREE.Mesh(),
+      onClick,
     };
-  }, [id, threeMesh]);
+  }, [id, onClick, threeMesh]);
 
   const scene = useContext(SceneContext);
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!scene.meshes[mesh.id]) {
-      scene.meshes[mesh.id] = mesh;
       scene.threeScene.add(mesh.threeMesh);
+      scene.meshes[mesh.id] = mesh;
     }
     return () => {
       delete scene.meshes[mesh.id];
@@ -31,7 +33,7 @@ export function useMesh(props: MeshProps): Mesh {
 // Create geometry for object
 
 export function useGeometry(mesh: Mesh, geometry: THREE.BufferGeometry) {
-  useLayoutEffect(() => {
+  useEffect(() => {
     mesh.threeMesh.geometry = geometry;
   }, [mesh.threeMesh, geometry]);
 }

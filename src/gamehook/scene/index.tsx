@@ -4,11 +4,13 @@ import { ReactNode, useEffect, useMemo } from "react";
 import { SceneContext, SceneContextValues } from "./context";
 import { buildCamera } from "../camera";
 import { useGameLoop, useMountRef, useResize } from "../mount";
+import { generateUUID } from "three/src/math/MathUtils";
 import { useInteraction } from "../interactions";
 
 interface SceneProps {
   background?: THREE.ColorRepresentation;
   children: ReactNode;
+  id?: string;
   width?: number;
   height?: number;
 }
@@ -16,6 +18,7 @@ interface SceneProps {
 export function Scene({
   background = 0x000000,
   children,
+  id,
   width,
   height,
 }: SceneProps) {
@@ -32,10 +35,11 @@ export function Scene({
 
     return {
       camera,
+      id: id ?? generateUUID(),
       meshes: {},
       threeScene,
     };
-  }, [camera]);
+  }, [camera, id]);
 
   // Update Background color
   useEffect(() => {
@@ -45,8 +49,8 @@ export function Scene({
   // Render initial and new frames
   useGameLoop(value.camera.camera, renderer, value.threeScene);
 
-  // Interactions
-  useInteraction(value);
+  // Listen for user interactions
+  useInteraction(value.meshes, renderer, camera.camera);
 
   return (
     <div ref={mountRef}>

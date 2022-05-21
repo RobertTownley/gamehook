@@ -4,16 +4,19 @@ import { createContext } from "react";
 import { buildCamera } from "../camera";
 
 import { Camera } from "../camera/types";
-import { MeshProps } from "../mesh";
+import { Mesh } from "../mesh";
+import { generateUUID } from "three/src/math/MathUtils";
 
 export interface SceneContextValues {
   camera: Camera;
-  meshes: Record<string, MeshProps>;
+  id: string;
+  meshes: Record<string, Mesh>;
   threeScene: THREE.Scene;
 }
 
 export function getInitialSceneContext(): SceneContextValues {
   return {
+    id: generateUUID(),
     meshes: {},
     camera: buildCamera({}),
     threeScene: new THREE.Scene(),
