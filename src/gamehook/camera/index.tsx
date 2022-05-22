@@ -22,7 +22,7 @@ export function buildCamera({
 }: CameraProps): Camera {
   const a = aspect ?? window.innerWidth / window.innerHeight;
   const camera = new THREE.PerspectiveCamera(fov, a, near, far);
-  camera.position.set(0, 0, 4);
+  camera.position.set(0, 0, 25);
   return {
     id: generateUUID(),
     camera,

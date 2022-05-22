@@ -2,12 +2,20 @@ import * as THREE from "three";
 import { useLayoutEffect, useRef } from "react";
 
 import { Camera } from "./camera";
+import { Mesh } from "./mesh";
+import { rotateObjects } from "./physics";
 
-export function useGameLoop(
-  camera: THREE.PerspectiveCamera,
-  renderer: THREE.WebGLRenderer,
-  scene: THREE.Scene
-) {
+export function useGameLoop({
+  camera,
+  renderer,
+  scene,
+  meshes,
+}: {
+  camera: THREE.PerspectiveCamera;
+  renderer: THREE.WebGLRenderer;
+  scene: THREE.Scene;
+  meshes: Record<string, Mesh>;
+}) {
   useLayoutEffect(() => {
     const animate = () => {
       renderer.render(scene, camera);
@@ -27,12 +35,12 @@ export function useGameLoop(
 
       // Handle object physics
       // detectCollisions();
-      // rotateObjects();
+      rotateObjects(meshes);
       // moveObjects();
       // accelerateObjects();
     };
     animate();
-  }, [camera, renderer, scene]);
+  }, [camera, meshes, renderer, scene]);
 }
 
 export function useMountRef(renderer: THREE.WebGLRenderer) {

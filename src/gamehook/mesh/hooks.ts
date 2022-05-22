@@ -3,18 +3,20 @@ import { useContext, useEffect, useMemo } from "react";
 import { Mesh, MeshProps } from "./types";
 import { SceneContext } from "../scene/context";
 import { generateUUID } from "three/src/math/MathUtils";
+import { normalizeXYZ } from "../physics/utils";
 
 // Add object to scene on mount, remove on dismount
 export function useMesh(props: MeshProps): Mesh {
-  const { id, threeMesh, onClick } = props;
+  const { id, rotation, threeMesh, onClick } = props;
 
   const mesh = useMemo<Mesh>(() => {
     return {
       id: id ?? generateUUID(),
       threeMesh: threeMesh ?? new THREE.Mesh(),
+      rotation: normalizeXYZ(rotation),
       onClick,
     };
-  }, [id, onClick, threeMesh]);
+  }, [id, onClick, rotation, threeMesh]);
 
   const scene = useContext(SceneContext);
   useEffect(() => {

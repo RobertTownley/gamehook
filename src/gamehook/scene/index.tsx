@@ -47,7 +47,12 @@ export function Scene({
   }, [background, value.threeScene]);
 
   // Render initial and new frames
-  useGameLoop(value.camera.camera, renderer, value.threeScene);
+  useGameLoop({
+    camera: value.camera.camera,
+    renderer,
+    scene: value.threeScene,
+    meshes: value.meshes,
+  });
 
   // Listen for user interactions
   useInteraction(value.meshes, renderer, camera.camera);

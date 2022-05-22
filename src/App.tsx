@@ -1,33 +1,25 @@
 import _ from "lodash";
-import { useState } from "react";
 
 import { Box, Scene, Sphere } from "./gamehook";
+import { XYZ } from "./gamehook/physics/types";
 
+function DemoBox({ position }: { position: XYZ }) {
+  return <Box position={position} rotation={{ x: 0, y: 0.01, z: 0.01 }} />;
+}
 function App() {
-  const color1 = 0x00aaff;
-  const color2 = 0x00ff00;
-  const [color, setColor] = useState(color2);
-  const pairings: Array<[number, number]> = [];
-  /*
+  const pairings = [];
   for (const x of _.range(-10, 10)) {
     for (const y of _.range(-10, 10)) {
       pairings.push([x * 4, y * 4]);
     }
-  }
-  */
-  function handleClick() {
-    console.log("Thing");
-    const newColor = color === color1 ? color2 : color1;
-    setColor(newColor);
   }
 
   return (
     <div style={{ display: "flex" }}>
       <Scene>
         {pairings.map((pairing, i) => (
-          <Sphere position={{ x: pairing[0], y: pairing[1], z: -50 }} key={i} />
+          <DemoBox key={i} position={[pairing[0], pairing[1], 0]} />
         ))}
-        <Box onClick={handleClick} material={{ type: "normal" }} />
       </Scene>
     </div>
   );
