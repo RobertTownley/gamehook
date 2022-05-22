@@ -4,7 +4,7 @@ import { Camera } from "./types";
 
 export type { Camera } from "./types";
 
-interface CameraProps {
+export interface CameraProps {
   aspect?: number;
   id?: string;
   fov?: number;
@@ -21,8 +21,10 @@ export function buildCamera({
   far,
 }: CameraProps): Camera {
   const a = aspect ?? window.innerWidth / window.innerHeight;
+  const camera = new THREE.PerspectiveCamera(fov, a, near, far);
+  camera.position.set(0, 0, 4);
   return {
     id: generateUUID(),
-    camera: new THREE.PerspectiveCamera(fov, a, near, far),
+    camera,
   };
 }
