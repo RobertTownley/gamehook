@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { useLayoutEffect, useRef } from "react";
 
-import { Camera } from "./camera";
+import { GameCamera, moveCamera } from "./camera";
 import { Mesh } from "./mesh";
 import { accelerateObjects, moveObjects, rotateObjects } from "./physics";
 
@@ -11,14 +11,14 @@ export function useGameLoop({
   scene,
   meshes,
 }: {
-  camera: THREE.PerspectiveCamera;
+  camera: GameCamera;
   renderer: THREE.WebGLRenderer;
   scene: THREE.Scene;
   meshes: Record<string, Mesh>;
 }) {
   useLayoutEffect(() => {
     const animate = () => {
-      renderer.render(scene, camera);
+      renderer.render(scene, camera.camera);
       requestAnimationFrame(animate);
 
       // Animate callbacks created within `useAnimation`
@@ -33,13 +33,14 @@ export function useGameLoop({
         });
       */
 
-      // Handle object physics
+      // Handle physics
       // detectCollisions();
+      // Meshes
       accelerateObjects(meshes);
       moveObjects(meshes);
       rotateObjects(meshes);
-      // moveObjects();
-      // accelerateObjects();
+      // Camera
+      moveCamera(meshes, camera);
     };
     animate();
   }, [camera, meshes, renderer, scene]);
@@ -67,7 +68,7 @@ export function useMountRef(renderer: THREE.WebGLRenderer) {
 }
 
 interface UseResize {
-  camera: Camera;
+  camera: GameCamera;
   width?: number;
   height?: number;
   renderer: THREE.WebGLRenderer;

@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { ReactNode, useEffect, useMemo } from "react";
 
 import { SceneContext, SceneContextValues } from "./context";
-import { buildCamera } from "../camera";
+import { buildGameCamera } from "../camera";
 import { useGameLoop, useMountRef, useResize } from "../mount";
 import { generateUUID } from "three/src/math/MathUtils";
 import { useInteraction } from "../interactions";
@@ -22,7 +22,7 @@ export function Scene({
   width,
   height,
 }: SceneProps) {
-  const camera = useMemo(() => buildCamera({}), []);
+  const camera = useMemo(() => buildGameCamera({}), []);
   const renderer = useMemo(() => new THREE.WebGLRenderer(), []);
 
   // Rendering
@@ -48,7 +48,7 @@ export function Scene({
 
   // Render initial and new frames
   useGameLoop({
-    camera: value.camera.camera,
+    camera: value.camera,
     renderer,
     scene: value.threeScene,
     meshes: value.meshes,
