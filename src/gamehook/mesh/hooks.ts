@@ -7,16 +7,31 @@ import { normalizeXYZ } from "../physics/utils";
 
 // Add object to scene on mount, remove on dismount
 export function useMesh(props: MeshProps): Mesh {
-  const { id, rotation, threeMesh, onClick } = props;
+  const { acceleration, id, rotation, threeMesh, onClick, velocity } = props;
 
   const mesh = useMemo<Mesh>(() => {
     return {
       id: id ?? generateUUID(),
       threeMesh: threeMesh ?? new THREE.Mesh(),
-      rotation: normalizeXYZ(rotation),
       onClick,
     };
-  }, [id, onClick, rotation, threeMesh]);
+  }, [id, onClick, threeMesh]);
+
+  // Physics
+  useEffect(() => {
+    mesh.acceleration = acceleration;
+  }, [mesh, acceleration]);
+  useEffect(() => {
+    mesh.rotation = normalizeXYZ(rotation);
+  }, [mesh, rotation]);
+  useEffect(() => {
+    mesh.velocity = velocity;
+  }, [mesh, velocity]);
+
+  // Interaction
+  useEffect(() => {
+    mesh.onClick = onClick;
+  }, [mesh, onClick]);
 
   const scene = useContext(SceneContext);
   useEffect(() => {
