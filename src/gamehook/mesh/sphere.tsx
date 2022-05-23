@@ -7,13 +7,38 @@ import { useMaterial } from "../materials/hooks";
 import { usePosition } from "../physics/hooks";
 
 export function Sphere(props: SphereProps) {
-  const { children, radius } = props;
+  const {
+    children,
+    radius,
+    widthSegments = 16,
+    heightSegments = 8,
+    phiStart,
+    phiLength,
+    thetaStart,
+    thetaLength,
+  } = props;
   const mesh = useMesh(props);
 
   // Give geometry to mesh object
   const geometry = useMemo(() => {
-    return new THREE.SphereGeometry(radius);
-  }, [radius]);
+    return new THREE.SphereGeometry(
+      radius,
+      widthSegments,
+      heightSegments,
+      phiStart,
+      phiLength,
+      thetaStart,
+      thetaLength
+    );
+  }, [
+    radius,
+    widthSegments,
+    heightSegments,
+    phiStart,
+    phiLength,
+    thetaStart,
+    thetaLength,
+  ]);
   useGeometry(mesh, geometry);
 
   // Give material to mesh object

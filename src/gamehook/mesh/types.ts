@@ -27,6 +27,12 @@ export interface Box extends BoxParams, AbstractMesh {}
 
 interface SphereParams {
   radius?: number;
+  widthSegments?: number;
+  heightSegments?: number;
+  phiStart?: number;
+  phiLength?: number;
+  thetaStart?: number;
+  thetaLength?: number;
 }
 export interface SphereProps extends SphereParams, AbstractMeshProps {}
 export interface Sphere extends SphereParams, AbstractMesh {}
