@@ -7,7 +7,18 @@ import { normalizeXYZ } from "../physics/utils";
 
 // Add object to scene on mount, remove on dismount
 export function useMesh(props: MeshProps): Mesh {
-  const { acceleration, id, rotation, threeMesh, onClick, velocity } = props;
+  const {
+    acceleration,
+    id,
+    rotation,
+    threeMesh,
+    onClick,
+    velocity,
+
+    collides,
+    collidesWith,
+    onCollision,
+  } = props;
 
   const mesh = useMemo<Mesh>(() => {
     return {
@@ -27,6 +38,13 @@ export function useMesh(props: MeshProps): Mesh {
   useEffect(() => {
     mesh.velocity = velocity;
   }, [mesh, velocity]);
+  useEffect(() => {
+    mesh.onCollision = onCollision;
+  }, [mesh, onCollision]);
+  useEffect(() => {
+    mesh.collides = collides;
+    mesh.collidesWith = collidesWith;
+  }, [mesh, collides, collidesWith]);
 
   // Interaction
   useEffect(() => {

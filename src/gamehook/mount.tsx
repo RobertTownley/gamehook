@@ -3,7 +3,12 @@ import { useLayoutEffect, useRef } from "react";
 
 import { GameCamera, moveCamera } from "./camera";
 import { Mesh } from "./mesh";
-import { accelerateObjects, moveObjects, rotateObjects } from "./physics";
+import {
+  accelerateObjects,
+  detectCollisions,
+  moveObjects,
+  rotateObjects,
+} from "./physics";
 
 export function useGameLoop({
   camera,
@@ -33,12 +38,12 @@ export function useGameLoop({
         });
       */
 
-      // Handle physics
-      // detectCollisions();
-      // Meshes
+      // Mesh Physics
       accelerateObjects(meshes);
       moveObjects(meshes);
       rotateObjects(meshes);
+      detectCollisions(meshes);
+
       // Camera
       moveCamera(meshes, camera);
     };
