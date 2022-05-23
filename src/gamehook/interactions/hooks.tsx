@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { useLayoutEffect } from "react";
 
 import { Mesh } from "../mesh";
-import { MouseEventTypeMap } from "./types";
+import { KeyboardEventTypeMap, MouseEventTypeMap } from "./types";
 
 export function useInteraction(
   meshes: Record<string, Mesh>,
@@ -39,10 +39,22 @@ export function useInteraction(
         handler(event);
       }
     }
+    function handleKeyboardEvent(event: KeyboardEvent) {
+      const eventType = KeyboardEventTypeMap[event.type];
+      Object.values(meshes).forEach((mesh) => {
+        if (!mesh[eventType]) return;
+        const handler = mesh[eventType];
+        if (handler) {
+          handler(event);
+        }
+      });
+    }
 
     window.addEventListener("click", handleMouseEvent);
+    window.addEventListener("keypress", handleKeyboardEvent);
     return () => {
       window.removeEventListener("click", handleMouseEvent);
+      window.removeEventListener("keypress", handleKeyboardEvent);
     };
   }, [camera, meshes, renderer]);
 }

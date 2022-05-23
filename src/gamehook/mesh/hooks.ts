@@ -12,12 +12,14 @@ export function useMesh(props: MeshProps): Mesh {
     id,
     rotation,
     threeMesh,
-    onClick,
     velocity,
 
     collides,
     collidesWith,
     onCollision,
+
+    onClick,
+    onKeypress,
   } = props;
 
   const mesh = useMemo<Mesh>(() => {
@@ -50,6 +52,9 @@ export function useMesh(props: MeshProps): Mesh {
   useEffect(() => {
     mesh.onClick = onClick;
   }, [mesh, onClick]);
+  useEffect(() => {
+    mesh.onKeypress = onKeypress;
+  }, [mesh, onKeypress]);
 
   const scene = useContext(SceneContext);
   useEffect(() => {

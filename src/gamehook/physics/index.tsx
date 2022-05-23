@@ -1,4 +1,4 @@
-export type { Physical, XYZ } from "./types";
+export type { Collision, CollisionHandler, Physical, XYZ } from "./types";
 export {
   accelerateObjects,
   detectCollisions,

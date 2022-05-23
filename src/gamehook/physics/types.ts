@@ -4,7 +4,12 @@ export type XYZArray = [number, number, number];
 export type XYZObject = { x: number; y: number; z: number };
 
 export type XYZ = XYZArray | XYZObject;
+export type Collision = {
+  collider: Mesh;
+  collidedWith: Mesh;
+};
 export type CollisionQualifier = (mesh: Mesh) => boolean;
+export type CollisionHandler = (collision: Collision) => void;
 
 export interface Physical {
   // Location
