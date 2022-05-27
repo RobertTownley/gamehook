@@ -1,15 +1,17 @@
 import * as THREE from "three";
-import { useContext, useEffect, useMemo } from "react";
+import { useContext, useEffect, useLayoutEffect, useMemo } from "react";
 import { Mesh, MeshProps } from "./types";
 import { SceneContext } from "../scene/context";
 import { generateUUID } from "three/src/math/MathUtils";
 import { normalizeXYZ } from "../physics/utils";
+import { XYZArray } from "../physics/types";
+import { usePosition } from "../physics/hooks";
 
 // Add object to scene on mount, remove on dismount
 export function useMesh(props: MeshProps): Mesh {
   const {
     acceleration,
-    id,
+    position,
     rotation,
     threeMesh,
     velocity,
@@ -20,6 +22,11 @@ export function useMesh(props: MeshProps): Mesh {
 
     onClick,
     onKeypress,
+
+    id,
+    attrs,
+    name,
+    tags,
   } = props;
 
   const mesh = useMemo<Mesh>(() => {
@@ -35,11 +42,11 @@ export function useMesh(props: MeshProps): Mesh {
     mesh.acceleration = acceleration;
   }, [mesh, acceleration]);
   useEffect(() => {
-    mesh.rotation = normalizeXYZ(rotation);
-  }, [mesh, rotation]);
-  useEffect(() => {
     mesh.velocity = velocity;
   }, [mesh, velocity]);
+  useEffect(() => {
+    mesh.rotation = normalizeXYZ(rotation);
+  }, [mesh, rotation]);
   useEffect(() => {
     mesh.onCollision = onCollision;
   }, [mesh, onCollision]);
@@ -47,6 +54,7 @@ export function useMesh(props: MeshProps): Mesh {
     mesh.collides = collides;
     mesh.collidesWith = collidesWith;
   }, [mesh, collides, collidesWith]);
+  usePosition(mesh, position);
 
   // Interaction
   useEffect(() => {
@@ -55,6 +63,13 @@ export function useMesh(props: MeshProps): Mesh {
   useEffect(() => {
     mesh.onKeypress = onKeypress;
   }, [mesh, onKeypress]);
+
+  // Notation
+  useEffect(() => {
+    mesh.attrs = attrs;
+    mesh.name = name;
+    mesh.tags = tags;
+  }, [mesh, attrs, name, tags]);
 
   const scene = useContext(SceneContext);
   useEffect(() => {

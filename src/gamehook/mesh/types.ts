@@ -4,7 +4,17 @@ import { Designable } from "../materials";
 import { Physical } from "../physics";
 import { Interactable } from "../interactions";
 
-export interface Meshable extends Physical, Interactable, Designable {}
+interface Nameable {
+  attrs?: object;
+  name?: string;
+  tags?: string[];
+}
+
+export interface Meshable
+  extends Physical,
+    Interactable,
+    Designable,
+    Nameable {}
 export interface AbstractMeshProps extends Meshable {
   children?: ReactNode;
   id?: string;
@@ -21,6 +31,9 @@ interface BoxParams {
   width?: number;
   depth?: number;
   height?: number;
+  widthSegments?: number;
+  heightSegments?: number;
+  depthSegments?: number;
 }
 export interface BoxProps extends BoxParams, AbstractMeshProps {}
 export interface Box extends BoxParams, AbstractMesh {}

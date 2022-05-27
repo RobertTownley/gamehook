@@ -7,6 +7,8 @@ export type XYZ = XYZArray | XYZObject;
 export type Collision = {
   collider: Mesh;
   collidedWith: Mesh;
+  colliderLocation: XYZObject;
+  collidedWithLocation: XYZObject;
 };
 export type CollisionQualifier = (mesh: Mesh) => boolean;
 export type CollisionHandler = (collision: Collision) => void;
@@ -24,11 +26,5 @@ export interface Physical {
   // Collision
   collides?: boolean; // If the object collides with everything
   collidesWith?: CollisionQualifier; // Callback to determine if two objects collide
-  onCollision?: ({
-    collider,
-    collidedWith,
-  }: {
-    collider: Mesh;
-    collidedWith: Mesh;
-  }) => void; // Callback that takes place on qualifying collision
+  onCollision?: (collision: Collision) => void;
 }

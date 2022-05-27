@@ -58,8 +58,6 @@ function getVertexesForObject({ threeMesh }: Mesh): THREE.Vector3[] {
   return vertices;
 }
 
-const directionVector = new THREE.Vector3();
-
 export function detectCollisions(meshes: Record<string, Mesh>) {
   const meshList = Object.values(meshes);
   const collisionTargets = meshList.filter((m) => m.collides || m.collidesWith);
@@ -100,6 +98,8 @@ export function detectCollisions(meshes: Record<string, Mesh>) {
           handler({
             collider: source,
             collidedWith: t,
+            colliderLocation: source.threeMesh.position,
+            collidedWithLocation: t.threeMesh.position,
           });
         }
       }
@@ -110,7 +110,7 @@ export function detectCollisions(meshes: Record<string, Mesh>) {
 function determineIfColliding(
   mesh1: Mesh,
   mesh2: Mesh,
-  threshold = 0.001
+  threshold = 0.01
 ): boolean {
   const mesh1Vertexes = getVertexesForObject(mesh1);
   const mesh2Vertexes = getVertexesForObject(mesh2);

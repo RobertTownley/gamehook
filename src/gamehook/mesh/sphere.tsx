@@ -4,7 +4,6 @@ import { useMemo } from "react";
 import { SphereProps } from "./types";
 import { useMesh, useGeometry } from "./hooks";
 import { useMaterial } from "../materials/hooks";
-import { usePosition } from "../physics/hooks";
 
 export function Sphere(props: SphereProps) {
   const {
@@ -43,9 +42,6 @@ export function Sphere(props: SphereProps) {
 
   // Give material to mesh object
   useMaterial(mesh, props.material);
-
-  // Physics
-  usePosition(mesh, props.position);
 
   return <>{children}</>;
 }
