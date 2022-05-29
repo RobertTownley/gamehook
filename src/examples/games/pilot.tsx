@@ -1,11 +1,11 @@
 import _ from "lodash";
-import { Camera, Light, Game, Model, Scene, Sphere } from "../../gamehook";
+import {Camera, Light, Game, Model, Scene, Sphere} from "../../gamehook";
 
 const Plane = () => {
   return (
     <Model
       filepath="./assets/LowPolyPlane.glb"
-      velocity={{ x: 0, y: 0, z: -0.01 }}
+      velocity={{x: 0, y: 0, z: -0.01}}
     />
   );
 };
@@ -36,9 +36,9 @@ export const Pilot = () => {
         <Plane />
         <Camera
           active
-          position={{ x: 0, y: 15, z: 5 }}
-          orientation={{ x: -1, y: 0, z: 0 }}
-          velocity={{ x: 0, y: 0, z: -0.01 }}
+          position={{x: 0, y: 15, z: 5}}
+          orientation={{x: -1, y: 0, z: 0}}
+          velocity={{x: 0, y: 0, z: -0.01}}
         />
         <StarField />
       </Scene>
