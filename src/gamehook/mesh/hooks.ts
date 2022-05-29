@@ -1,11 +1,10 @@
 import * as THREE from "three";
-import { useContext, useEffect, useLayoutEffect, useMemo } from "react";
-import { Mesh, MeshProps } from "./types";
-import { SceneContext } from "../scene/context";
-import { generateUUID } from "three/src/math/MathUtils";
-import { normalizeXYZ } from "../physics/utils";
-import { XYZArray } from "../physics/types";
-import { usePosition } from "../physics/hooks";
+import {useContext, useEffect, useMemo} from "react";
+import {Mesh, MeshProps} from "./types";
+import {SceneContext} from "../scene/context";
+import {generateUUID} from "three/src/math/MathUtils";
+import {normalizeXYZ} from "../physics/utils";
+import {usePosition} from "../physics/hooks";
 
 // Add object to scene on mount, remove on dismount
 export function useMesh(props: MeshProps): Mesh {
