@@ -1,7 +1,12 @@
-import { Pilot } from "./examples/games/pilot";
+import { Pong } from "./gamehook/examples/pong";
+import { Scene } from "./gamehook/scene";
 
 function App() {
-  return <Pilot />;
+  return (
+    <Scene>
+      <Pong />
+    </Scene>
+  );
 }
 
 export default App;
