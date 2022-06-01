@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { BoxProps } from "./types";
 import { useMesh, useGeometry } from "./hooks";
 import { useMaterial } from "../materials/hooks";
+import { HierarchyContext, useHierarchy } from "../hierarchy";
 
 export function Box(props: BoxProps) {
   const {
@@ -33,5 +34,14 @@ export function Box(props: BoxProps) {
   // Give material to mesh object
   useMaterial(mesh, props.material);
 
-  return <>{children}</>;
+  const hierarchyValue = useHierarchy(children, mesh);
+  if (hierarchyValue) {
+    return (
+      <HierarchyContext.Provider value={hierarchyValue}>
+        {children}
+      </HierarchyContext.Provider>
+    );
+  } else {
+    return <>{children}</>;
+  }
 }

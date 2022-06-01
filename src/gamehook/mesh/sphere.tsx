@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { SphereProps } from "./types";
 import { useMesh, useGeometry } from "./hooks";
 import { useMaterial } from "../materials/hooks";
+import { HierarchyContext, useHierarchy } from "../hierarchy";
 
 export function Sphere(props: SphereProps) {
   const {
@@ -43,5 +44,14 @@ export function Sphere(props: SphereProps) {
   // Give material to mesh object
   useMaterial(mesh, props.material);
 
-  return <>{children}</>;
+  const hierarchyValue = useHierarchy(children, mesh);
+  if (hierarchyValue) {
+    return (
+      <HierarchyContext.Provider value={hierarchyValue}>
+        {children}
+      </HierarchyContext.Provider>
+    );
+  } else {
+    return <>{children}</>;
+  }
 }
