@@ -1,7 +1,15 @@
-import {useState} from "react";
+import { useState } from "react";
 import _ from "lodash";
 
-import {Box, Sphere, Collision, XYZ, Camera, XYZObject, generateUUID} from "../../../gamehook";
+import {
+  Box,
+  Sphere,
+  Collision,
+  XYZ,
+  Camera,
+  XYZObject,
+  generateUUID,
+} from "../../../gamehook";
 
 function Paddle() {
   const [x, setX] = useState(0);
@@ -17,7 +25,7 @@ function Paddle() {
     <Box
       name="paddle"
       onKeypress={movePaddle}
-      position={{x, y: -8, z: 0}}
+      position={{ x, y: -8, z: 0 }}
       width={5}
       depth={0.5}
       collides
@@ -32,7 +40,7 @@ export function Pong() {
     y: rateOfMovement,
     z: 0,
   });
-  const [bricks, setBricks] = useState<{position: XYZ; id: string}[]>(
+  const [bricks, setBricks] = useState<{ position: XYZ; id: string }[]>(
     _.range(0, 50).map((_i) => ({
       position: [_.random(-15, 15), _.random(2, 9), 0],
       id: generateUUID(),
@@ -51,10 +59,9 @@ export function Pong() {
     const newVelocity = (() => {
       if (collidedWith.name === "paddle") {
         const newX = (colliderLocation.x - collidedWithLocation.x) / 100;
-        console.log(newX);
-        return {x: newX, y: rateOfMovement, z: 0};
+        return { x: newX, y: rateOfMovement, z: 0 };
       } else if (collidedWith.name === "brick") {
-        return {x: ballVelocity.x, y: 0 - rateOfMovement, z: 0};
+        return { x: ballVelocity.x, y: 0 - rateOfMovement, z: 0 };
       } else {
         throw new Error(`Unknown collision name: ${collidedWith.name}`);
       }
@@ -64,7 +71,7 @@ export function Pong() {
 
   return (
     <>
-      {bricks.map(({position, id}) => (
+      {bricks.map(({ position, id }) => (
         <Box
           key={id}
           name="brick"
@@ -77,13 +84,13 @@ export function Pong() {
         />
       ))}
       <Sphere
-        position={{x: 0, y: -5, z: 0}}
+        position={{ x: 0, y: -5, z: 0 }}
         velocity={ballVelocity}
         onCollision={onBallCollision}
         id="ball"
       />
       <Paddle />
-      <Camera position={{x: 0, y: 0, z: 10}} trackTo="ball" />
+      <Camera position={{ x: 0, y: 0, z: 10 }} trackTo="ball" />
     </>
   );
 }

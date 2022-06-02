@@ -10,7 +10,6 @@ export function useMesh(props: MeshProps): Mesh {
   const {
     position,
     threeMesh,
-    computeOffset,
 
     onClick,
     onKeypress,
@@ -29,7 +28,7 @@ export function useMesh(props: MeshProps): Mesh {
   }, [id, threeMesh]);
 
   usePhysics(mesh, props);
-  usePosition(mesh, position, computeOffset);
+  usePosition(mesh, position);
 
   // Interaction
   useEffect(() => {
