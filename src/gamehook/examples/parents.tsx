@@ -3,7 +3,7 @@ import { Box, Sphere, Scene } from "../../gamehook";
 import { XYZ } from "../physics";
 
 export function Parents() {
-  const numberOfSpheres = 500;
+  const numberOfSpheres = 1000;
   const positions: XYZ[] = _.range(0, numberOfSpheres).map((_i) => {
     return [
       _.random(-20, 20, true),
@@ -15,7 +15,7 @@ export function Parents() {
     <Scene>
       <Box name="parent-box" rotation={{ x: 0.001, y: 0.001, z: 0.001 }}>
         {positions.map((position, i) => (
-          <Sphere key={i} position={position} radius={0.05} />
+          <Sphere key={i} position={position} radius={0.1} />
         ))}
       </Box>
     </Scene>
