@@ -4,20 +4,17 @@ import { Designable } from "../materials";
 import { Physical } from "../physics";
 import { Interactable } from "../interactions";
 
-interface Nameable {
+export interface Nameable {
   attrs?: object;
   name?: string;
   tags?: string[];
 }
 
-export interface Meshable
-  extends Physical,
-    Interactable,
-    Designable,
-    Nameable {}
-export interface AbstractMeshProps extends Meshable {
+export interface Meshable extends Physical, Interactable, Designable, Nameable {
   children?: ReactNode;
   id?: string;
+}
+export interface AbstractMeshProps extends Meshable {
   threeMesh?: THREE.Mesh;
 }
 

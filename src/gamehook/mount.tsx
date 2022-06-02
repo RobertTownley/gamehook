@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { useLayoutEffect, useRef } from "react";
+import { useContext, useEffect, useLayoutEffect, useRef } from "react";
 
 import { GameCamera, moveCamera } from "./camera";
 import { Mesh } from "./mesh";
@@ -9,6 +9,8 @@ import {
   moveObjects,
   rotateObjects,
 } from "./physics";
+import { SceneContext } from "./scene/context";
+import { HierarchyContext } from "./hierarchy";
 
 export function useGameLoop({
   camera,
@@ -98,4 +100,23 @@ export function useResize({ camera, width, height, renderer }: UseResize) {
       renderer,
     });
   });
+}
+
+export function useAddToScene(mesh: Mesh) {
+  const hierarchy = useContext(HierarchyContext);
+  const scene = useContext(SceneContext);
+  useEffect(() => {
+    if (!scene.meshes[mesh.id]) {
+      scene.threeScene.add(mesh.threeMesh);
+      scene.meshes[mesh.id] = mesh;
+      if (hierarchy) {
+        hierarchy.parent.add(mesh.threeMesh);
+      }
+    }
+    return () => {
+      delete scene.meshes[mesh.id];
+      scene.threeScene.remove(mesh.threeMesh);
+      mesh.threeMesh.removeFromParent();
+    };
+  }, [hierarchy, mesh, scene]);
 }
