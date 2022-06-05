@@ -135,5 +135,10 @@ export function useAddLightToScene(light: GameLight) {
       scene.threeScene.add(light.threeLight);
       scene.lights[light.id] = light;
     }
+    return () => {
+      delete scene.lights[light.id];
+      scene.threeScene.remove(light.threeLight);
+      light.threeLight.removeFromParent();
+    };
   }, [light, scene.threeScene, scene.lights]);
 }

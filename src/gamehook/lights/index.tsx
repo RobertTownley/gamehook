@@ -1,6 +1,5 @@
 import * as THREE from "three";
-import { useContext, useEffect, useLayoutEffect, useMemo } from "react";
-import { SceneContext } from "../scene/context";
+import { useLayoutEffect, useMemo } from "react";
 import { generateUUID } from "three/src/math/MathUtils";
 import { GameLight, GameLightProps } from "./types";
 import { useLightPhysics } from "../physics/hooks";

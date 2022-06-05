@@ -42,7 +42,6 @@ export function moveLights(lights: Record<string, GameLight>) {
       }
     }
     if (light.velocity) {
-      console.log(light.velocity);
       const v = normalizeXYZ(light.velocity);
       light.threeLight.position.x += v[0];
       light.threeLight.position.y += v[1];

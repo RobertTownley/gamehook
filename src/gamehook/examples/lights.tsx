@@ -8,8 +8,9 @@ export function LightExample() {
         material={{ type: "standard", color: 0x99aa00 }}
       />
       <Box
-        position={{ x: 0, y: 0, z: 0 }}
+        position={{ x: 0, y: 0, z: 1 }}
         material={{ type: "standard", color: 0x00aa98 }}
+        id="floating-cube"
       />
       <Box position={{ x: 5, y: 0, z: 0 }} />
       <Plane
@@ -22,11 +23,12 @@ export function LightExample() {
       <Light
         type="point"
         position={{ x: 0, y: 0, z: 2 }}
-        velocity={{ x: 0, y: -0.01, z: 0 }}
+        velocity={{ x: 0, y: 0.01, z: 0 }}
       />
       <Camera
         orientation={{ x: deg(60), y: 0, z: 0 }}
         position={{ x: 0, y: -10, z: 5 }}
+        trackTo="floating-cube"
       />
     </Scene>
   );
