@@ -17,3 +17,7 @@ There should be lights
 ## Model Loading
 
 Explain how models are loaded from the public folder
+
+## Object Removal
+
+Objects need to be manually removed from the threejs scene on dismount, or their memory won't clear. I'm not currently doing this

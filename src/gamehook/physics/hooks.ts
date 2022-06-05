@@ -17,6 +17,7 @@ export function usePhysics(
   {
     acceleration,
     velocity,
+    orientation,
     rotation,
     onCollision,
     collides,
@@ -30,6 +31,14 @@ export function usePhysics(
   useEffect(() => {
     mesh.velocity = velocity;
   }, [mesh, velocity]);
+
+  const [xOrientation, yOrientation, zOrientation] = useMemo(
+    () => normalizeXYZ(orientation),
+    [orientation]
+  );
+  useEffect(() => {
+    mesh.threeMesh.rotation.set(xOrientation, yOrientation, zOrientation);
+  }, [mesh, xOrientation, yOrientation, zOrientation]);
   useEffect(() => {
     mesh.rotation = normalizeXYZ(rotation);
   }, [mesh, rotation]);

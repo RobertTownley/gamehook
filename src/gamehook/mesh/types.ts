@@ -35,6 +35,15 @@ interface BoxParams {
 export interface BoxProps extends BoxParams, AbstractMeshProps {}
 export interface Box extends BoxParams, AbstractMesh {}
 
+interface PlaneParams {
+  width?: number;
+  height?: number;
+  widthSegments?: number;
+  heightSegments?: number;
+}
+export interface PlaneProps extends PlaneParams, AbstractMeshProps {}
+export interface Plane extends PlaneParams, AbstractMesh {}
+
 interface SphereParams {
   radius?: number;
   widthSegments?: number;
@@ -47,5 +56,5 @@ interface SphereParams {
 export interface SphereProps extends SphereParams, AbstractMeshProps {}
 export interface Sphere extends SphereParams, AbstractMesh {}
 
-export type MeshProps = BoxProps | SphereProps;
-export type Mesh = Box | Sphere;
+export type MeshProps = BoxProps | PlaneProps | SphereProps;
+export type Mesh = Box | Plane | Sphere;

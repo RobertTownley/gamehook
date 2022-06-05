@@ -1,7 +1,7 @@
-import { ModelExample } from "./gamehook/examples";
+import { LightExample } from "./gamehook/examples";
 
 function App() {
-  return <ModelExample />;
+  return <LightExample />;
 }
 
 export default App;
