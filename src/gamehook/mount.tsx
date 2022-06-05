@@ -54,7 +54,7 @@ export function useGameLoop({
       moveCamera(meshes, camera);
 
       // Lights
-      moveLights(lights);
+      moveLights(lights, meshes);
     };
     animate();
   }, [camera, lights, meshes, renderer, scene]);

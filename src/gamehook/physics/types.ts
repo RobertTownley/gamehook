@@ -27,4 +27,8 @@ export interface Physical {
   collides?: boolean; // If the object collides with everything
   collidesWith?: CollisionQualifier; // Callback to determine if two objects collide
   onCollision?: (collision: Collision) => void;
+
+  // Lights
+  castShadow?: boolean;
+  receiveShadow?: boolean;
 }

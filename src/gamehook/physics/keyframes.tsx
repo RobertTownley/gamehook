@@ -4,6 +4,7 @@ import { Mesh } from "../mesh";
 import { normalizeXYZ } from "./utils";
 import { isXYZArray } from "./guards";
 import { GameLight } from "../lights";
+import { isSpotLight } from "../lights/guards";
 
 export function accelerateObjects(meshes: Record<string, Mesh>) {
   Object.values(meshes).forEach((mesh) => {
@@ -24,7 +25,10 @@ export function accelerateObjects(meshes: Record<string, Mesh>) {
   });
 }
 
-export function moveLights(lights: Record<string, GameLight>) {
+export function moveLights(
+  lights: Record<string, GameLight>,
+  meshes: Record<string, Mesh>
+) {
   Object.values(lights).forEach((light) => {
     if (light.acceleration) {
       const a = normalizeXYZ(light.acceleration);
@@ -52,6 +56,22 @@ export function moveLights(lights: Record<string, GameLight>) {
       light.threeLight.rotation.x += r[0];
       light.threeLight.rotation.y += r[1];
       light.threeLight.rotation.z += r[2];
+    }
+
+    if (isSpotLight(light) && light.target) {
+      const match = (() => {
+        if (meshes[light.target]) {
+          return meshes[light.target].threeMesh;
+        } else if (lights[light.target]) {
+          return lights[light.target].threeLight;
+        } else {
+          return null;
+        }
+      })();
+      if (match) {
+        console.log("Setting  match");
+        light.threeLight.target = match;
+      }
     }
   });
 }

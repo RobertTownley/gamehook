@@ -24,6 +24,9 @@ export function usePhysics(
     onCollision,
     collides,
     collidesWith,
+
+    castShadow,
+    receiveShadow,
   }: Physical
 ) {
   // Physics
@@ -51,6 +54,14 @@ export function usePhysics(
     mesh.collides = collides;
     mesh.collidesWith = collidesWith;
   }, [mesh, collides, collidesWith]);
+  useEffect(() => {
+    mesh.castShadow = castShadow;
+    mesh.threeMesh.castShadow = castShadow ?? false;
+  }, [mesh, castShadow]);
+  useEffect(() => {
+    mesh.receiveShadow = receiveShadow;
+    mesh.threeMesh.receiveShadow = receiveShadow ?? false;
+  }, [mesh, receiveShadow]);
 }
 
 export function useCameraPhysics(
@@ -77,7 +88,7 @@ export function useCameraPhysics(
 
 export function useLightPhysics(
   light: GameLight,
-  { acceleration, velocity, orientation, rotation }: Physical
+  { acceleration, castShadow, velocity, orientation, rotation }: Physical
 ) {
   useEffect(() => {
     light.acceleration = acceleration;
@@ -95,4 +106,8 @@ export function useLightPhysics(
   useEffect(() => {
     light.rotation = normalizeXYZ(rotation);
   }, [light, rotation]);
+  useEffect(() => {
+    light.castShadow = castShadow;
+    light.threeLight.castShadow = castShadow ?? false;
+  }, [light, castShadow]);
 }

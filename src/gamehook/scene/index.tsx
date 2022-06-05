@@ -9,6 +9,7 @@ import { useInteraction } from "../interactions";
 
 interface SceneProps {
   background?: THREE.ColorRepresentation;
+  castShadow?: boolean;
   children: ReactNode;
   id?: string;
   width?: number;
@@ -17,6 +18,7 @@ interface SceneProps {
 
 export function Scene({
   background = 0x000000,
+  castShadow = false,
   children,
   id,
   width,
@@ -24,6 +26,10 @@ export function Scene({
 }: SceneProps) {
   const camera = useMemo(() => buildGameCamera({}), []);
   const renderer = useMemo(() => new THREE.WebGLRenderer(), []);
+  if (castShadow) {
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  }
 
   // Rendering
   const mountRef = useMountRef(renderer);
