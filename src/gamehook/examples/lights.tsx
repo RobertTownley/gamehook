@@ -24,7 +24,6 @@ export function LightExample() {
         type="spot"
         position={{ x: 0, y: 0, z: 2 }}
         velocity={{ x: 0, y: 0.01, z: 0 }}
-        // velocity={{ x: 0, y: 0.01, z: 0 }}
       />
       <Box position={{ x: 0, y: 0, z: 2 }} velocity={{ x: 0, y: 0.01, z: 0 }} />
       <Camera
