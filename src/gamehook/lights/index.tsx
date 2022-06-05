@@ -1,63 +1,48 @@
 import * as THREE from "three";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useLayoutEffect, useMemo } from "react";
 import { SceneContext } from "../scene/context";
 import { generateUUID } from "three/src/math/MathUtils";
-import { GameLight } from "./types";
+import { GameLight, GameLightProps } from "./types";
+import { useLightPhysics } from "../physics/hooks";
+import { normalizeXYZ } from "../physics/utils";
+import { useAddLightToScene } from "../mount";
 
 export type { GameLight } from "./types";
 
-interface AbstractLight {
-  color?: number;
-}
-
-interface AmbiantLightProps extends AbstractLight {
-  type: "ambient";
-}
-interface DirectionalLightProps extends AbstractLight {
-  type: "directional";
-}
-interface HemisphereLightProps extends AbstractLight {
-  type: "hemisphere";
-}
-
-interface PointLightProps extends AbstractLight {
-  type: "point";
-}
-interface RectAreaLightProps extends AbstractLight {
-  type: "rectarea";
-}
-interface SpotLightProps extends AbstractLight {
-  type: "spot";
-}
-
-type Props =
-  | AmbiantLightProps
-  | DirectionalLightProps
-  | HemisphereLightProps
-  | PointLightProps
-  | RectAreaLightProps
-  | SpotLightProps;
-
 const DefaultColor = 0xffffff;
 
-function useLight(props: Props): GameLight {
+function useLight(props: GameLightProps): GameLight {
+  const id = props.id ?? generateUUID();
   switch (props.type) {
     case "ambient":
       return {
-        id: generateUUID(),
+        id,
         threeLight: new THREE.AmbientLight(props.color ?? DefaultColor),
+      };
+    case "point":
+      return {
+        id,
+        threeLight: new THREE.PointLight(
+          props.color ?? DefaultColor,
+          props.intensity,
+          props.distance,
+          props.decay
+        ),
       };
     default:
       throw new Error(`${props.type} not implemented`);
   }
 }
 
-export function Light(props: Props) {
+export function Light(props: GameLightProps) {
+  const { position } = props;
   const light = useLight(props);
-  const scene = useContext(SceneContext);
-  useEffect(() => {
-    light.threeLight.position.set(0, 0, 2);
-    scene.threeScene.add(light.threeLight);
-  }, [light, scene]);
+  useLightPhysics(light, props);
+
+  const [x, y, z] = useMemo(() => normalizeXYZ(position), [position]);
+  useLayoutEffect(() => {
+    light.threeLight.position.set(x, y, z);
+  }, [light, x, y, z]);
+  useAddLightToScene(light);
   return <></>;
 }

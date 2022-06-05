@@ -9,16 +9,20 @@ import {
   moveObjects,
   rotateObjects,
 } from "./physics";
+import { moveLights } from "./physics/keyframes";
 import { SceneContext } from "./scene/context";
 import { HierarchyContext } from "./hierarchy";
+import { GameLight } from "./lights";
 
 export function useGameLoop({
   camera,
+  lights,
   renderer,
   scene,
   meshes,
 }: {
   camera: GameCamera;
+  lights: Record<string, GameLight>;
   renderer: THREE.WebGLRenderer;
   scene: THREE.Scene;
   meshes: Record<string, Mesh>;
@@ -48,9 +52,12 @@ export function useGameLoop({
 
       // Camera
       moveCamera(meshes, camera);
+
+      // Lights
+      moveLights(lights);
     };
     animate();
-  }, [camera, meshes, renderer, scene]);
+  }, [camera, lights, meshes, renderer, scene]);
 }
 
 export function useMountRef(renderer: THREE.WebGLRenderer) {
@@ -119,4 +126,14 @@ export function useAddToScene(mesh: Mesh) {
       mesh.threeMesh.removeFromParent();
     };
   }, [hierarchy, mesh, scene]);
+}
+
+export function useAddLightToScene(light: GameLight) {
+  const scene = useContext(SceneContext);
+  useEffect(() => {
+    if (!scene.lights[light.id]) {
+      scene.threeScene.add(light.threeLight);
+      scene.lights[light.id] = light;
+    }
+  }, [light, scene.threeScene, scene.lights]);
 }

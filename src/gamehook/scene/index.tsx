@@ -36,6 +36,7 @@ export function Scene({
     return {
       camera,
       id: id ?? generateUUID(),
+      lights: {},
       meshes: {},
       threeScene,
     };
@@ -49,6 +50,7 @@ export function Scene({
   // Render initial and new frames
   useGameLoop({
     camera: value.camera,
+    lights: value.lights,
     renderer,
     scene: value.threeScene,
     meshes: value.meshes,

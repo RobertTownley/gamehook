@@ -3,6 +3,7 @@ import * as THREE from "three";
 import { Mesh } from "../mesh";
 import { normalizeXYZ } from "./utils";
 import { isXYZArray } from "./guards";
+import { GameLight } from "../lights";
 
 export function accelerateObjects(meshes: Record<string, Mesh>) {
   Object.values(meshes).forEach((mesh) => {
@@ -23,6 +24,39 @@ export function accelerateObjects(meshes: Record<string, Mesh>) {
   });
 }
 
+export function moveLights(lights: Record<string, GameLight>) {
+  Object.values(lights).forEach((light) => {
+    if (light.acceleration) {
+      const a = normalizeXYZ(light.acceleration);
+      if (!light.velocity) {
+        light.velocity = [0, 0, 0];
+      }
+      if (isXYZArray(light.velocity)) {
+        light.velocity[0] += a[0];
+        light.velocity[1] += a[1];
+        light.velocity[2] += a[2];
+      } else {
+        light.velocity.x += a[0];
+        light.velocity.y += a[1];
+        light.velocity.z += a[2];
+      }
+    }
+    if (light.velocity) {
+      console.log(light.velocity);
+      const v = normalizeXYZ(light.velocity);
+      light.threeLight.position.x += v[0];
+      light.threeLight.position.y += v[1];
+      light.threeLight.position.z += v[2];
+    }
+    if (light.rotation) {
+      const r = normalizeXYZ(light.rotation);
+      light.threeLight.rotation.x += r[0];
+      light.threeLight.rotation.y += r[1];
+      light.threeLight.rotation.z += r[2];
+    }
+  });
+}
+
 export function moveObjects(meshes: Record<string, Mesh>) {
   Object.values(meshes).forEach((mesh) => {
     if (!mesh.velocity) return;
@@ -32,6 +66,7 @@ export function moveObjects(meshes: Record<string, Mesh>) {
     mesh.threeMesh.position.z += v[2];
   });
 }
+
 export function rotateObjects(meshes: Record<string, Mesh>) {
   Object.values(meshes).forEach((mesh) => {
     if (!mesh.rotation) return;

@@ -1,8 +1,8 @@
 import * as THREE from "three";
 
-import { XYZ } from "../physics";
+import { Physical } from "../physics";
 
-export interface CameraProps {
+export interface CameraProps extends Physical {
   aspect?: number;
   id?: string;
   fov?: number;
@@ -10,7 +10,6 @@ export interface CameraProps {
   height?: number;
   near?: number;
   far?: number;
-  position?: XYZ;
 
   // Panning
   follow?: string;

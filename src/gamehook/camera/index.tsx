@@ -1,6 +1,7 @@
 import { useContext, useEffect } from "react";
 import * as THREE from "three";
 import { generateUUID } from "three/src/math/MathUtils";
+import { useCameraPhysics } from "../physics/hooks";
 
 import { XYZArray } from "../physics/types";
 import { normalizeXYZ } from "../physics/utils";
@@ -36,6 +37,8 @@ export function Camera(props: CameraProps) {
     const p = normalizeXYZ(position ?? DEFAULT_CAMERA_POSITION);
     scene.camera.camera.position.set(...p);
   }, [position, scene.camera.camera.position]);
+
+  useCameraPhysics(scene.camera, props);
 
   // Automated camera moving
   useEffect(() => {

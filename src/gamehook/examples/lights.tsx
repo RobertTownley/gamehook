@@ -5,22 +5,29 @@ export function LightExample() {
     <Scene>
       <Box
         position={{ x: -5, y: 0, z: 0 }}
-        material={{ type: "basic", color: 0x99aa00 }}
+        material={{ type: "standard", color: 0x99aa00 }}
       />
       <Box
         position={{ x: 0, y: 0, z: 0 }}
-        material={{ type: "basic", color: 0x00aa98 }}
+        material={{ type: "standard", color: 0x00aa98 }}
       />
       <Box position={{ x: 5, y: 0, z: 0 }} />
       <Plane
         position={{ x: -1, y: -2, z: -1 }}
         width={10}
         height={10}
-        material={{ type: "basic", color: 0x555555 }}
+        material={{ type: "standard", color: 0x555555 }}
         orientation={{ x: 0, y: 0, z: 0 }}
       />
-      <Light type="ambient" color={0xf000ff} />
-      <Camera />
+      <Light
+        type="point"
+        position={{ x: 0, y: 0, z: 2 }}
+        velocity={{ x: 0, y: -0.01, z: 0 }}
+      />
+      <Camera
+        orientation={{ x: deg(60), y: 0, z: 0 }}
+        position={{ x: 0, y: -10, z: 5 }}
+      />
     </Scene>
   );
 }
