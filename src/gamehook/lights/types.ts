@@ -30,6 +30,11 @@ interface RectAreaLightProps extends AbstractLightProps {
 }
 interface SpotLightProps extends AbstractLightProps {
   type: "spot";
+  intensity?: number;
+  distance?: number;
+  angle?: number;
+  penumbra?: number;
+  decay?: number;
 }
 
 export type GameLightProps =

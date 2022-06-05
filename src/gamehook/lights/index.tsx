@@ -8,23 +8,33 @@ import { useAddLightToScene } from "../mount";
 
 export type { GameLight } from "./types";
 
-const DefaultColor = 0xffffff;
-
 function useLight(props: GameLightProps): GameLight {
   const id = props.id ?? generateUUID();
   switch (props.type) {
     case "ambient":
       return {
         id,
-        threeLight: new THREE.AmbientLight(props.color ?? DefaultColor),
+        threeLight: new THREE.AmbientLight(props.color),
       };
     case "point":
       return {
         id,
         threeLight: new THREE.PointLight(
-          props.color ?? DefaultColor,
+          props.color,
           props.intensity,
           props.distance,
+          props.decay
+        ),
+      };
+    case "spot":
+      return {
+        id,
+        threeLight: new THREE.SpotLight(
+          props.color,
+          props.intensity,
+          props.distance,
+          props.angle,
+          props.penumbra,
           props.decay
         ),
       };
