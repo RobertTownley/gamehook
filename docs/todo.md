@@ -13,3 +13,7 @@ Currently only using procedural geometry, which might not be the right fit for a
 ## Lighting
 
 There should be lights
+
+## Model Loading
+
+Explain how models are loaded from the public folder

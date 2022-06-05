@@ -6,4 +6,5 @@ export { Text } from "./text";
 
 export { generateUUID } from "three/src/math/MathUtils";
 export type { Mesh } from "./mesh";
+export { Model, useModel } from "./models";
 export type { XYZ } from "./physics";
