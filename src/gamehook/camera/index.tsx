@@ -29,7 +29,8 @@ export function buildGameCamera({
   };
 }
 
-export function Camera({ follow, position, trackTo }: CameraProps) {
+export function Camera(props: CameraProps) {
+  const { follow, position, trackTo } = props;
   const scene = useContext(SceneContext);
   useEffect(() => {
     const p = normalizeXYZ(position ?? DEFAULT_CAMERA_POSITION);

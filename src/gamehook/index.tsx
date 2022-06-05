@@ -4,6 +4,7 @@ export { Camera } from "./camera";
 export { Light } from "./lights";
 export type { Collision, XYZObject } from "./physics";
 export { Scene } from "./scene";
+export { deg } from "./math/conversions";
 export { Box, Plane, Sphere } from "./mesh";
 export { Text } from "./text";
 
