@@ -11,12 +11,17 @@ interface AbstractLight extends Physical {
 
 interface AmbiantLightProps extends AbstractLightProps {
   type: "ambient";
+  intensity?: number;
 }
 interface DirectionalLightProps extends AbstractLightProps {
   type: "directional";
+  intensity?: number;
 }
 interface HemisphereLightProps extends AbstractLightProps {
   type: "hemisphere";
+  skyColor?: number;
+  groundColor?: number;
+  intensity?: number;
 }
 
 interface PointLightProps extends AbstractLightProps {
@@ -27,6 +32,9 @@ interface PointLightProps extends AbstractLightProps {
 }
 interface RectAreaLightProps extends AbstractLightProps {
   type: "rectarea";
+  intensity?: number;
+  width?: number;
+  height?: number;
 }
 interface SpotLightProps extends AbstractLightProps {
   type: "spot";
