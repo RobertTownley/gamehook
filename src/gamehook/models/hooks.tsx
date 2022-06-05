@@ -1,21 +1,41 @@
-import { useContext, useEffect, useState } from "react";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import * as THREE from "three";
+import { useLayoutEffect, useState } from "react";
+import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { GameModel, UseModelParams } from "./types";
 import { generateUUID } from "three/src/math/MathUtils";
-import { SceneContext } from "../scene/context";
-import { GLTFModel } from "./types";
 
 const loader = new GLTFLoader();
 
-export function useModel(filepath: string): GLTFModel | undefined {
-  const scene = useContext(SceneContext);
-  const [model, setModel] = useState<GLTFModel | undefined>(undefined);
-  useEffect(() => {
-    loader.load(filepath, (gltf) => {
-      setModel({
-        gltf,
-        id: generateUUID(),
+export function useModel(params: UseModelParams): GameModel {
+  const { filepath } = params;
+  const [loaded, setLoaded] = useState(false);
+  const [gltf, setGLTF] = useState<GLTF | undefined>(undefined);
+
+  useLayoutEffect(() => {
+    try {
+      loader.load(filepath, (gltf) => {
+        setGLTF(gltf);
+        setLoaded(true);
       });
-    });
-  }, [filepath, scene.threeScene]);
-  return model;
+    } catch (err) {
+    } finally {
+      setLoaded(true);
+    }
+  }, [filepath]);
+  if (!loaded) return { status: "pending" };
+  if (!gltf) return { status: "error" };
+
+  return {
+    status: "loaded",
+    gltf,
+    id: params.id ?? generateUUID(),
+    playAnimation: function (animationName) {
+      const animation = THREE.AnimationClip.findByName(
+        this.gltf.animations,
+        animationName
+      );
+      const mixer = new THREE.AnimationMixer(this.gltf.scene);
+      mixer.clipAction(animation).play();
+    },
+  };
 }

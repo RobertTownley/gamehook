@@ -44,6 +44,7 @@ export function Scene({
       id: id ?? generateUUID(),
       lights: {},
       meshes: {},
+      models: {},
       threeScene,
     };
   }, [camera, id]);

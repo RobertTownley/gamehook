@@ -1,19 +1,28 @@
-import { Box, Model, Scene, useModel } from "../../gamehook";
-import { Camera } from "../camera";
+import { Camera, Light, Model, Scene, useModel } from "../../gamehook";
 
-function Phoenix() {
-  const filepath = "/resources/phoenix/scene.gltf";
-  const model = useModel(filepath);
-  if (!model) return <></>;
-  return <Model value={model} />;
+function ClickableModel() {
+  const model = useModel({
+    filepath: "/resources/phoenix/scene.gltf",
+    id: "flapping-phoenix",
+  });
+  const handleClick = () => {
+    if (model.status === "loaded") {
+      console.log("About to click");
+      model.playAnimation("Take 001");
+    }
+  };
+
+  if (model.status === "pending" || model.status === "error") return <></>;
+
+  return <Model value={model} onClick={handleClick} />;
 }
 
 export function ModelExample() {
   return (
     <Scene>
-      <Phoenix />
-      <Box />
+      <ClickableModel />
       <Camera position={{ x: 0, y: 0, z: 1000 }} />
+      <Light type="ambient" />
     </Scene>
   );
 }

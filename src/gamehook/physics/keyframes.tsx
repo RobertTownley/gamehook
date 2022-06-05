@@ -69,7 +69,6 @@ export function moveLights(
         }
       })();
       if (match) {
-        console.log("Setting  match");
         light.threeLight.target = match;
       }
     }

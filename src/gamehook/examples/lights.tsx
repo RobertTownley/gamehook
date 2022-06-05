@@ -15,29 +15,24 @@ export function LightExample() {
       <Box
         position={{ x: -3, y: 0, z: 2 }}
         rotation={{ x: 0, y: 0, z: 0.01 }}
-        material={{ type: "standard", color: 0x99aa00 }}
+        material={{ type: "standard", color: 0xff0000 }}
         castShadow
-      />
-
-      <Box
-        position={{ x: 3, y: 0, z: 2 }}
-        rotation={{ x: 0, y: 0, z: 0.01 }}
-        material={{ type: "standard", color: 0x00ff00 }}
       />
 
       <Box
         position={{ x: 0, y: 0, z: 2 }}
         rotation={{ x: 0.01, y: 0.01, z: 0.01 }}
-        material={{ type: "standard", color: 0x00ff00 }}
+        material={{ type: "standard", color: 0x0000ff }}
         castShadow
       />
 
-      <Light
-        type="point"
-        position={{ x: 0, y: 0, z: 5 }}
-        castShadow
-        color={0xffff00}
+      <Box
+        position={{ x: 3, y: 0, z: 2 }}
+        rotation={{ x: 0, y: 0.0, z: 0.01 }}
+        material={{ type: "standard", color: 0x00ff00 }}
       />
+
+      <Light type="point" position={{ x: 0, y: 0, z: 5 }} castShadow />
 
       <Camera
         orientation={{ x: deg(60), y: 0, z: 0 }}
