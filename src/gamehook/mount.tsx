@@ -9,40 +9,31 @@ import {
   moveObjects,
   rotateObjects,
 } from "./physics";
+import { animateModels } from "./models/keyframes";
 import { moveLights } from "./physics/keyframes";
 import { SceneContext } from "./scene/context";
 import { HierarchyContext } from "./hierarchy";
 import { GameLight } from "./lights";
+import { GameModel } from "./models";
 
 export function useGameLoop({
   camera,
   lights,
+  models,
   renderer,
   scene,
   meshes,
 }: {
   camera: GameCamera;
   lights: Record<string, GameLight>;
+  models: Record<string, GameModel>;
   renderer: THREE.WebGLRenderer;
   scene: THREE.Scene;
   meshes: Record<string, Mesh>;
 }) {
   useLayoutEffect(() => {
-    const animate = () => {
+    renderer.setAnimationLoop(() => {
       renderer.render(scene, camera.camera);
-      requestAnimationFrame(animate);
-
-      // Animate callbacks created within `useAnimation`
-      /*
-      Object.values(game.scene.animations)
-        .filter((animation) => !animation.current.revoked)
-        .forEach((animation) => {
-          const result = animation.current.callback();
-          if (result) {
-            delete game.scene.animations[animation.current.id];
-          }
-        });
-      */
 
       // Mesh Physics
       accelerateObjects(meshes);
@@ -55,9 +46,11 @@ export function useGameLoop({
 
       // Lights
       moveLights(lights, meshes);
-    };
-    animate();
-  }, [camera, lights, meshes, renderer, scene]);
+
+      // Animation
+      animateModels(models);
+    });
+  }, [camera, lights, models, meshes, renderer, scene]);
 }
 
 export function useMountRef(renderer: THREE.WebGLRenderer) {

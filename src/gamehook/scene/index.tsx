@@ -58,6 +58,7 @@ export function Scene({
   useGameLoop({
     camera: value.camera,
     lights: value.lights,
+    models: value.models,
     renderer,
     scene: value.threeScene,
     meshes: value.meshes,

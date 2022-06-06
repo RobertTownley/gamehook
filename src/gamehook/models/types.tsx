@@ -9,11 +9,18 @@ export interface UseModelParams extends Physical, Interactable, Nameable {
   filepath: string;
 }
 
-export interface LoadedGameModel {
+export interface AnimationOptions {
+  loop?: boolean;
+  repetitions?: number;
+}
+
+export interface LoadedGameModel extends Physical, Interactable, Nameable {
   gltf: GLTF;
   id: string;
+  mixer: THREE.AnimationMixer;
+  playAnimation: (animationName: string, opts?: AnimationOptions) => void;
   status: "loaded";
-  playAnimation: (animationName: string) => void;
+  clock: THREE.Clock;
 }
 export type GameModel =
   | LoadedGameModel
@@ -21,7 +28,6 @@ export type GameModel =
   | { status: "error" };
 
 export interface ModelProps extends Physical, Interactable, Nameable {
-  id?: string;
   children?: ReactNode;
   value: LoadedGameModel;
 }

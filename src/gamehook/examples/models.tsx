@@ -1,20 +1,19 @@
+import { useEffect } from "react";
 import { Camera, Light, Model, Scene, useModel } from "../../gamehook";
 
 function ClickableModel() {
   const model = useModel({
     filepath: "/resources/phoenix/scene.gltf",
-    id: "flapping-phoenix",
   });
-  const handleClick = () => {
+  useEffect(() => {
     if (model.status === "loaded") {
-      console.log("About to click");
-      model.playAnimation("Take 001");
+      model.playAnimation("Take 001", { loop: true });
     }
-  };
+  }, [model]);
 
   if (model.status === "pending" || model.status === "error") return <></>;
 
-  return <Model value={model} onClick={handleClick} />;
+  return <Model value={model} position={{ x: -3, y: 0, z: 0 }} />;
 }
 
 export function ModelExample() {
