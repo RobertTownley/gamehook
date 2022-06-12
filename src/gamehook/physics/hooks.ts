@@ -5,7 +5,7 @@ import { normalizeXYZ } from "./utils";
 import { Physical, XYZ } from "./types";
 import { GameCamera } from "../camera";
 import { GameLight } from "../lights";
-import { GameModel } from "../models";
+import { LoadedGameModel } from "../models";
 
 export function usePosition(mesh: Mesh, position: XYZ | undefined) {
   // Set mesh position
@@ -114,8 +114,8 @@ export function useLightPhysics(
 }
 
 export function useModelPhysics(
-  model: GameModel,
-  { acceleration, velocity, orientation, rotation }: Physical
+  model: LoadedGameModel,
+  { acceleration, position, velocity, orientation, rotation }: Physical
 ) {
   useEffect(() => {
     if (model.status === "loaded") {
@@ -127,6 +127,13 @@ export function useModelPhysics(
       model.velocity = velocity;
     }
   }, [model, velocity]);
+  const [posX, posY, posZ] = useMemo(() => {
+    return normalizeXYZ(position);
+  }, [position]);
+  useEffect(() => {
+    model.position = [posX, posY, posZ];
+    model.gltf.scene.position.set(posX, posY, posZ);
+  }, [model, posX, posY, posZ]);
   useEffect(() => {
     if (model.status === "loaded") {
       model.rotation = rotation;

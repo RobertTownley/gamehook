@@ -3,10 +3,12 @@ import { useModelPhysics } from "../physics/hooks";
 
 import { SceneContext } from "../scene/context";
 import { ModelProps } from "./types";
-export type { GameModel } from "./types";
+export type { GameModel, LoadedGameModel } from "./types";
 export { useModel } from "./hooks";
 
-export function Model({ children, value }: ModelProps) {
+export function Model(props: ModelProps) {
+  const { children, value } = props;
+  useModelPhysics(value, props);
   const scene = useContext(SceneContext);
   useEffect(() => {
     scene.threeScene.add(value.gltf.scene);

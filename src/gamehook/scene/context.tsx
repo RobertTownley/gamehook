@@ -5,12 +5,12 @@ import { GameCamera } from "../camera";
 
 import { Mesh } from "../mesh";
 import { GameLight } from "../lights";
-import { GameModel } from "../models";
+import { LoadedGameModel } from "../models";
 
 export interface SceneContextValues {
   camera: GameCamera;
   id: string;
-  models: Record<string, GameModel>;
+  models: Record<string, LoadedGameModel>;
   lights: Record<string, GameLight>;
   meshes: Record<string, Mesh>;
   threeScene: THREE.Scene;

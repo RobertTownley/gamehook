@@ -9,6 +9,7 @@ import {
   Camera,
   XYZObject,
   generateUUID,
+  Scene,
 } from "../../../gamehook";
 
 function Paddle() {
@@ -34,7 +35,7 @@ function Paddle() {
 }
 
 export function Pong() {
-  const rateOfMovement = 0.02;
+  const rateOfMovement = 0.05;
   const [ballVelocity, setBallVelocity] = useState<XYZObject>({
     x: 0,
     y: rateOfMovement,
@@ -63,34 +64,33 @@ export function Pong() {
       } else if (collidedWith.name === "brick") {
         return { x: ballVelocity.x, y: 0 - rateOfMovement, z: 0 };
       } else {
-        throw new Error(`Unknown collision name: ${collidedWith.name}`);
+        throw new Error(`Unknown collision: ${collidedWith.name}`);
       }
     })();
     setBallVelocity(newVelocity);
   };
 
   return (
-    <>
+    <Scene>
       {bricks.map(({ position, id }) => (
         <Box
           key={id}
-          name="brick"
           position={position}
           width={1.5}
           height={0.5}
           depth={1}
           collides
-          id={id}
+          name="brick"
         />
       ))}
       <Sphere
         position={{ x: 0, y: -5, z: 0 }}
         velocity={ballVelocity}
         onCollision={onBallCollision}
-        id="ball"
+        name="ball"
       />
       <Paddle />
       <Camera position={{ x: 0, y: 0, z: 10 }} trackTo="ball" />
-    </>
+    </Scene>
   );
 }

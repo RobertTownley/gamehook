@@ -9,12 +9,12 @@ import {
   moveObjects,
   rotateObjects,
 } from "./physics";
-import { animateModels } from "./models/keyframes";
+import { animateAndMoveModels } from "./models/keyframes";
 import { moveLights } from "./physics/keyframes";
 import { SceneContext } from "./scene/context";
 import { HierarchyContext } from "./hierarchy";
 import { GameLight } from "./lights";
-import { GameModel } from "./models";
+import { LoadedGameModel } from "./models";
 
 export function useGameLoop({
   camera,
@@ -26,7 +26,7 @@ export function useGameLoop({
 }: {
   camera: GameCamera;
   lights: Record<string, GameLight>;
-  models: Record<string, GameModel>;
+  models: Record<string, LoadedGameModel>;
   renderer: THREE.WebGLRenderer;
   scene: THREE.Scene;
   meshes: Record<string, Mesh>;
@@ -48,7 +48,7 @@ export function useGameLoop({
       moveLights(lights, meshes);
 
       // Animation
-      animateModels(models);
+      animateAndMoveModels(models);
     });
   }, [camera, lights, models, meshes, renderer, scene]);
 }
