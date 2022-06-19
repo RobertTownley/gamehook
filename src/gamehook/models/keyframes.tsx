@@ -13,5 +13,13 @@ export function animateAndMoveModels(models: Record<string, LoadedGameModel>) {
       model.gltf.scene.position.y += v[1];
       model.gltf.scene.position.z += v[2];
     }
+
+    // Rotate models
+    if (model.rotation) {
+      const o = normalizeXYZ(model.rotation);
+      model.gltf.scene.rotation.x += o[0];
+      model.gltf.scene.rotation.y += o[1];
+      model.gltf.scene.rotation.z += o[2];
+    }
   });
 }

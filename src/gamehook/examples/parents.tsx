@@ -2,7 +2,7 @@ import _ from "lodash";
 import { Box, Sphere, Scene } from "../../gamehook";
 import { XYZ } from "../physics";
 
-export function Parents() {
+export function ParentsExample() {
   const numberOfSpheres = 50;
   const positions: XYZ[] = _.range(0, numberOfSpheres).map((_i) => {
     return [

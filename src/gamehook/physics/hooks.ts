@@ -139,6 +139,13 @@ export function useModelPhysics(
       model.rotation = rotation;
     }
   }, [model, rotation]);
+  const [xOrientation, yOrientation, zOrientation] = useMemo(
+    () => normalizeXYZ(orientation),
+    [orientation]
+  );
+  useEffect(() => {
+    model.gltf.scene.rotation.set(xOrientation, yOrientation, zOrientation);
+  }, [model.gltf.scene, xOrientation, yOrientation, zOrientation]);
   useEffect(() => {
     if (model.status === "loaded") {
       model.orientation = orientation;

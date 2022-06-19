@@ -75,6 +75,7 @@ export function Pong() {
       {bricks.map(({ position, id }) => (
         <Box
           key={id}
+          id={id}
           position={position}
           width={1.5}
           height={0.5}
