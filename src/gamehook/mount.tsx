@@ -42,7 +42,7 @@ export function useGameLoop({
       detectCollisions(meshes);
 
       // Camera
-      moveCamera(meshes, camera);
+      moveCamera(meshes, models, camera);
 
       // Lights
       moveLights(lights, meshes);

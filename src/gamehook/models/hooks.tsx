@@ -45,8 +45,9 @@ export function useModel(params: UseModelParams): GameModel {
       const action = this.mixer.clipAction(animation);
       if (opts.loop) {
         action.play();
-      } else if (opts.repetitions) {
-        action.setLoop(THREE.LoopOnce, opts.repetitions).play();
+      } else {
+        const repetitions = opts?.repetitions ?? 1;
+        action.setLoop(THREE.LoopOnce, repetitions).play();
       }
     },
     clock: new THREE.Clock(),

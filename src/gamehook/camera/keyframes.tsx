@@ -3,13 +3,27 @@ import * as THREE from "three";
 import { Mesh } from "../mesh";
 import { GameCamera } from "./types";
 import { normalizeXYZ } from "../physics";
+import { LoadedGameModel } from "../models";
 import { isXYZArray } from "../physics/guards";
 
-export function moveCamera(meshes: Record<string, Mesh>, camera: GameCamera) {
+export function moveCamera(
+  meshes: Record<string, Mesh>,
+  models: Record<string, LoadedGameModel>,
+  camera: GameCamera
+) {
   if (camera.trackTo) {
-    const objectToTrack = meshes[camera.trackTo];
+    const objectToTrack = (() => {
+      if (!camera.trackTo) return;
+      if (meshes[camera.trackTo]) {
+        return meshes[camera.trackTo].threeMesh;
+      } else if (models[camera.trackTo]) {
+        return models[camera.trackTo].gltf.scene;
+      } else {
+        return;
+      }
+    })();
     if (!objectToTrack) return;
-    camera.camera.lookAt(objectToTrack.threeMesh.position);
+    camera.camera.lookAt(objectToTrack.position);
   }
   if (camera.follow) {
     const objectToFollow = meshes[camera.follow];
