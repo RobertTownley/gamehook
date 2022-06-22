@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import {
+  EventsExample,
   LightExample,
   ModelExample,
   ParentsExample,
@@ -7,12 +8,20 @@ import {
   TextExample,
 } from "./gamehook/examples";
 
-type AvailableExamples = "lights" | "model" | "parents" | "pong" | "text";
-const exampleName = "pong" as unknown as AvailableExamples;
+type AvailableExamples =
+  | "events"
+  | "lights"
+  | "model"
+  | "parents"
+  | "pong"
+  | "text";
+const exampleName: AvailableExamples = "model";
 
 function App() {
   const component: ReactNode = (() => {
     switch (exampleName) {
+      case "events":
+        return <EventsExample />;
       case "lights":
         return <LightExample />;
       case "model":

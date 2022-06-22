@@ -1,3 +1,4 @@
+export { EventsExample } from "./events";
 export { Pong } from "./games/pong";
 export { LightExample } from "./lights";
 export { ModelExample } from "./models";

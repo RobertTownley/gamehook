@@ -89,6 +89,7 @@ export function Pong() {
         velocity={ballVelocity}
         onCollision={onBallCollision}
         name="ball"
+        id="ball"
       />
       <Paddle />
       <Camera position={{ x: 0, y: 0, z: 10 }} trackTo="ball" />

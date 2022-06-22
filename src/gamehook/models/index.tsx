@@ -12,13 +12,11 @@ export function Model(props: ModelProps) {
   const scene = useContext(SceneContext);
   useEffect(() => {
     scene.threeScene.add(value.gltf.scene);
-    if (!scene.models[value.id]) {
-      scene.models[value.id] = value;
-    }
+    scene.models[value.id] = value;
     return () => {
       scene.threeScene.remove(value.gltf.scene);
-      delete scene.models[value.id];
       scene.threeScene.removeFromParent();
+      delete scene.models[value.id];
     };
   }, [scene.threeScene, scene.models, value]);
 

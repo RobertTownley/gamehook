@@ -115,7 +115,15 @@ export function useLightPhysics(
 
 export function useModelPhysics(
   model: LoadedGameModel,
-  { acceleration, position, velocity, orientation, rotation }: Physical
+  {
+    acceleration,
+    growth,
+    position,
+    scale,
+    velocity,
+    orientation,
+    rotation,
+  }: Physical
 ) {
   useEffect(() => {
     if (model.status === "loaded") {
@@ -151,4 +159,15 @@ export function useModelPhysics(
       model.orientation = orientation;
     }
   }, [model, orientation]);
+
+  // Size
+  useEffect(() => {
+    model.growth = growth ? normalizeXYZ(growth) : [0, 0, 0];
+  }, [model, growth]);
+  const [xSize, ySize, zSize] = useMemo(() => {
+    return scale ? normalizeXYZ(scale) : [1, 1, 1];
+  }, [scale]);
+  useEffect(() => {
+    model.gltf.scene.scale.set(xSize, ySize, zSize);
+  }, [model.gltf.scene.scale, xSize, ySize, zSize]);
 }

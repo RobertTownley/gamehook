@@ -23,6 +23,10 @@ export interface Physical {
   orientation?: XYZ;
   rotation?: XYZ;
 
+  // Size
+  scale?: XYZ;
+  growth?: XYZ;
+
   // Collision
   collides?: boolean; // If the object collides with everything
   collidesWith?: CollisionQualifier; // Callback to determine if two objects collide

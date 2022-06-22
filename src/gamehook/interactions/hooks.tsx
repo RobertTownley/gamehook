@@ -13,8 +13,8 @@ export function useInteraction(
     function handleMouseEvent(event: MouseEvent) {
       // Get a list of all objects listening for this mouse event
       const eventType = MouseEventTypeMap[event.type];
-      const interactables = Object.values(meshes).filter((mesh) => {
-        return mesh[eventType] !== undefined;
+      const interactables = [...Object.values(meshes)].filter((obj) => {
+        return obj[eventType] !== undefined;
       });
       if (!interactables) return;
 
