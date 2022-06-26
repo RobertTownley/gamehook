@@ -23,7 +23,7 @@ export function AudioExample() {
         }}
         duration={campfireDuration}
       />
-      <Camera position={{ x: 0, y: 1, z: 2 }} trackTo="campfire" />
+      <Camera position={{ x: 0, y: 1, z: 3 }} trackTo="campfire" />
       <Light type="ambient" />
       <Model id="campfire" filepath="/resources/campfire/scene.gltf">
         <Animation name="fire armAction" loop />
@@ -31,7 +31,7 @@ export function AudioExample() {
       <Text
         value={`Status: ${audioState}`}
         size={0.5}
-        position={{ x: 0, y: 1, z: -2 }}
+        position={{ x: 0, y: 1.5, z: -2 }}
         height={0.001}
       />
     </Scene>
