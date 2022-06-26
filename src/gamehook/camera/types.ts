@@ -19,4 +19,5 @@ export interface CameraProps extends Physical {
 export interface GameCamera extends CameraProps {
   id: string;
   camera: THREE.PerspectiveCamera;
+  listener: THREE.AudioListener;
 }

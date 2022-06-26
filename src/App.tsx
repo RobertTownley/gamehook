@@ -1,4 +1,5 @@
 import {
+  AudioExample,
   EventsExample,
   LightExample,
   ModelExample,
@@ -8,6 +9,7 @@ import {
 } from "./gamehook/examples";
 
 type AvailableExamples =
+  | "audio"
   | "events"
   | "lights"
   | "model"
@@ -15,10 +17,12 @@ type AvailableExamples =
   | "pong"
   | "text";
 
-const exampleName: AvailableExamples = "model";
+const exampleName: AvailableExamples = "audio";
 
 function App() {
   switch (exampleName) {
+    case "audio":
+      return <AudioExample />;
     case "events":
       return <EventsExample />;
     case "lights":

@@ -23,9 +23,14 @@ export function buildGameCamera({
   const a = aspect ?? window.innerWidth / window.innerHeight;
   const camera = new THREE.PerspectiveCamera(fov, a, near, far);
   camera.position.set(...DEFAULT_CAMERA_POSITION);
+
+  const listener = new THREE.AudioListener();
+  camera.add(listener);
+
   return {
     id: generateUUID(),
     camera,
+    listener,
     trackTo,
   };
 }

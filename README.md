@@ -42,8 +42,9 @@ Check out our [getting started](./docs/getting_started.md) guide. Once you're se
 
 This project has received help in many forms, and we'd like to take a moment to recognize some people who have directly or indirectly helped
 
-### Included models
+### Included Resources
 
 Several models used as examples in the project belong to a creative commons license, including:
 
 - "phoenix bird" (https://skfb.ly/6vLBp) by NORBERTO-3D is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+- "Fire_Burning_03.flac" by Foleyhaven (https://freesound.org/people/Foleyhaven/sounds/624425/)
