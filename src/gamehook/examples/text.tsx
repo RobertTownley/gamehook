@@ -16,7 +16,7 @@ export function TextExample() {
           width={1}
           height={1}
           depth={15}
-        ></Box>
+        />
       </Text>
     </Scene>
   );

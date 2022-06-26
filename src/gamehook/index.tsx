@@ -1,6 +1,7 @@
 export { generateUUID } from "three/src/math/MathUtils";
 
 export { Camera } from "./camera";
+export { createEvent, useEventListener } from "./events";
 export { Light } from "./lights";
 export type { Collision, XYZObject } from "./physics";
 export { Scene } from "./scene";

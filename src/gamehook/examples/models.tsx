@@ -46,6 +46,7 @@ function Phoenix({ growth }: { growth: XYZ }) {
 
   return (
     <Model
+      scale={{ x: 0.2, y: 0.2, z: 0.2 }}
       growth={growth}
       rotation={{ x: 0, y: 0.01, z: 0 }}
       position={{ x: -250, y: 0, z: 0 }}
@@ -63,7 +64,7 @@ export function ModelExample() {
     <Scene>
       <Phoenix growth={growth} />
       <Dragon />
-      <Camera position={{ x: 0, y: 0, z: 900 }} />
+      <Camera position={{ x: 0, y: 0, z: 1200 }} />
       <Light type="ambient" />
       <Text
         value="Click to make the bird grow"

@@ -1,4 +1,3 @@
-import { ReactNode } from "react";
 import {
   EventsExample,
   LightExample,
@@ -15,26 +14,24 @@ type AvailableExamples =
   | "parents"
   | "pong"
   | "text";
+
 const exampleName: AvailableExamples = "model";
 
 function App() {
-  const component: ReactNode = (() => {
-    switch (exampleName) {
-      case "events":
-        return <EventsExample />;
-      case "lights":
-        return <LightExample />;
-      case "model":
-        return <ModelExample />;
-      case "parents":
-        return <ParentsExample />;
-      case "pong":
-        return <Pong />;
-      case "text":
-        return <TextExample />;
-    }
-  })();
-  return component;
+  switch (exampleName) {
+    case "events":
+      return <EventsExample />;
+    case "lights":
+      return <LightExample />;
+    case "model":
+      return <ModelExample />;
+    case "parents":
+      return <ParentsExample />;
+    case "pong":
+      return <Pong />;
+    case "text":
+      return <TextExample />;
+  }
 }
 
 export default App;
