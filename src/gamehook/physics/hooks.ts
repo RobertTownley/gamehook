@@ -114,7 +114,7 @@ export function useLightPhysics(
 }
 
 export function useModelPhysics(
-  model: LoadedGameModel,
+  model: LoadedGameModel | undefined,
   {
     acceleration,
     growth,
@@ -126,12 +126,12 @@ export function useModelPhysics(
   }: Physical
 ) {
   useEffect(() => {
-    if (model.status === "loaded") {
+    if (model) {
       model.acceleration = acceleration;
     }
   }, [model, acceleration]);
   useEffect(() => {
-    if (model.status === "loaded") {
+    if (model) {
       model.velocity = velocity;
     }
   }, [model, velocity]);
@@ -139,11 +139,13 @@ export function useModelPhysics(
     return normalizeXYZ(position);
   }, [position]);
   useEffect(() => {
-    model.position = [posX, posY, posZ];
-    model.gltf.scene.position.set(posX, posY, posZ);
+    if (model) {
+      model.position = [posX, posY, posZ];
+      model.gltf.scene.position.set(posX, posY, posZ);
+    }
   }, [model, posX, posY, posZ]);
   useEffect(() => {
-    if (model.status === "loaded") {
+    if (model) {
       model.rotation = rotation;
     }
   }, [model, rotation]);
@@ -152,22 +154,28 @@ export function useModelPhysics(
     [orientation]
   );
   useEffect(() => {
-    model.gltf.scene.rotation.set(xOrientation, yOrientation, zOrientation);
-  }, [model.gltf.scene, xOrientation, yOrientation, zOrientation]);
+    if (model) {
+      model.gltf.scene.rotation.set(xOrientation, yOrientation, zOrientation);
+    }
+  }, [model, xOrientation, yOrientation, zOrientation]);
   useEffect(() => {
-    if (model.status === "loaded") {
+    if (model) {
       model.orientation = orientation;
     }
   }, [model, orientation]);
 
   // Size
   useEffect(() => {
-    model.growth = growth ? normalizeXYZ(growth) : [0, 0, 0];
+    if (model) {
+      model.growth = growth ? normalizeXYZ(growth) : [0, 0, 0];
+    }
   }, [model, growth]);
   const [xSize, ySize, zSize] = useMemo(() => {
     return scale ? normalizeXYZ(scale) : [1, 1, 1];
   }, [scale]);
   useEffect(() => {
-    model.gltf.scene.scale.set(xSize, ySize, zSize);
-  }, [model.gltf.scene.scale, xSize, ySize, zSize]);
+    if (model) {
+      model.gltf.scene.scale.set(xSize, ySize, zSize);
+    }
+  }, [model, xSize, ySize, zSize]);
 }

@@ -18,8 +18,6 @@ export interface LoadedGameModel extends Physical, Interactable, Nameable {
   gltf: GLTF;
   id: string;
   mixer: THREE.AnimationMixer;
-  playAnimation: (animationName: string, opts?: AnimationOptions) => void;
-  status: "loaded";
   clock: THREE.Clock;
 }
 export type GameModel =
@@ -29,5 +27,6 @@ export type GameModel =
 
 export interface ModelProps extends Physical, Interactable, Nameable {
   children?: ReactNode;
-  value: LoadedGameModel;
+  filepath: string;
+  id?: string;
 }

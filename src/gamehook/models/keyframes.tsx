@@ -3,7 +3,6 @@ import { LoadedGameModel } from "./types";
 
 export function animateAndMoveModels(models: Record<string, LoadedGameModel>) {
   Object.values(models).forEach((model) => {
-    if (model.status !== "loaded") return;
     model.mixer.update(model.clock.getDelta());
 
     // Move models

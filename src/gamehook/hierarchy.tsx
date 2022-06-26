@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { createContext, ReactNode } from "react";
 import { Mesh } from "./mesh";
+import { LoadedGameModel } from "./models";
 
 interface HierarchyContextValues {
   parent: THREE.Mesh;
@@ -22,3 +23,7 @@ export function useHierarchy(
       }
     : undefined;
 }
+
+export const ModelHierarchyContext = createContext<LoadedGameModel | undefined>(
+  undefined
+);
