@@ -14,3 +14,9 @@ export { Text } from "./text";
 export type { Mesh } from "./mesh";
 export { Model } from "./models";
 export type { XYZ } from "./physics";
+
+// Networking
+export { Communications } from "./network/communications";
+export type { Lobby } from "./network/types";
+export { useSharedState } from "./network/state";
+export { useConnection } from "./network/connections";

@@ -3,6 +3,7 @@ import {
   EventsExample,
   LightExample,
   ModelExample,
+  MultiplayerExample,
   ParentsExample,
   Pong,
   TextExample,
@@ -13,11 +14,12 @@ type AvailableExamples =
   | "events"
   | "lights"
   | "model"
+  | "multiplayer"
   | "parents"
   | "pong"
   | "text";
 
-const exampleName: AvailableExamples = "audio";
+const exampleName: AvailableExamples = "multiplayer";
 
 function App() {
   switch (exampleName) {
@@ -29,6 +31,8 @@ function App() {
       return <LightExample />;
     case "model":
       return <ModelExample />;
+    case "multiplayer":
+      return <MultiplayerExample />;
     case "parents":
       return <ParentsExample />;
     case "pong":

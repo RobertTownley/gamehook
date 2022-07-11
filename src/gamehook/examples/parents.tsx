@@ -22,7 +22,12 @@ export function ParentsExample() {
     <Scene>
       <Box rotation={{ x: 0.002, y: 0.002, z: 0.002 }} onClick={handleClick}>
         {positions.map((position, i) => (
-          <Sphere key={i} position={position} radius={0.1} />
+          <Sphere
+            key={i}
+            material={{ type: "basic", color }}
+            position={position}
+            radius={0.1}
+          />
         ))}
       </Box>
     </Scene>
