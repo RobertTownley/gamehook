@@ -7,6 +7,7 @@ import {
   ParentsExample,
   Pong,
   TextExample,
+  TextureExample,
 } from "./gamehook/examples";
 
 type AvailableExamples =
@@ -17,9 +18,10 @@ type AvailableExamples =
   | "multiplayer"
   | "parents"
   | "pong"
-  | "text";
+  | "text"
+  | "texture";
 
-const exampleName: AvailableExamples = "multiplayer";
+const exampleName: AvailableExamples = "texture";
 
 function App() {
   switch (exampleName) {
@@ -39,6 +41,8 @@ function App() {
       return <Pong />;
     case "text":
       return <TextExample />;
+    case "texture":
+      return <TextureExample />;
   }
 }
 

@@ -1,16 +1,24 @@
-interface BasicMaterialOptions {
+import * as THREE from "three";
+
+export interface TexturedMaterial {
+  textures?: {
+    colorMap: THREE.Texture | string;
+  };
+}
+
+interface BasicMaterialOptions extends TexturedMaterial {
   type: "basic";
-  color: number;
+  color?: number;
   wireframe?: boolean;
 }
 
-interface NormalMaterialOptions {
+interface NormalMaterialOptions extends TexturedMaterial {
   type: "normal";
   wireframe?: boolean;
 }
 
-interface StandardMaterialOptions {
-  color?: number;
+interface StandardMaterialOptions extends TexturedMaterial {
+  color: number;
   metalness?: number;
   type: "standard";
 }

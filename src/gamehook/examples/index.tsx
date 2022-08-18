@@ -6,3 +6,4 @@ export { MultiplayerExample } from "./multiplayer";
 export { ModelExample } from "./models";
 export { ParentsExample } from "./parents";
 export { TextExample } from "./text";
+export { TextureExample } from "./texture";

@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-import { MaterialOptions } from "./types";
+import { MaterialOptions, TexturedMaterial } from "./types";
 
 export type { Designable } from "./types";
 
@@ -10,6 +10,20 @@ const defaultMaterialOptions: MaterialOptions = {
   type: "normal",
   wireframe: false,
 };
+
+const loader = new THREE.TextureLoader();
+
+function createColorMap(options: TexturedMaterial): THREE.Texture | undefined {
+  const colorMap = options.textures?.colorMap;
+  if (!colorMap) {
+    return;
+  }
+  if (typeof colorMap === "string") {
+    return loader.load(colorMap);
+  } else {
+    return colorMap;
+  }
+}
 
 export function createMaterial(
   options?: MaterialOptions,
@@ -22,15 +36,22 @@ export function createMaterial(
   }
 
   const newMaterial = (() => {
+    const colorMap = createColorMap(opts);
     switch (opts?.type) {
       case "basic":
-        return new THREE.MeshBasicMaterial({ color: opts.color });
+        return new THREE.MeshBasicMaterial({
+          color: opts?.color ?? 0xffffff,
+          map: colorMap,
+        });
       case "normal":
         return new THREE.MeshNormalMaterial({
           wireframe: opts.wireframe ?? false,
         });
       case "standard":
-        return new THREE.MeshStandardMaterial({ color: opts.color });
+        return new THREE.MeshStandardMaterial({
+          color: opts?.color ?? 0xffffff,
+          map: colorMap,
+        });
     }
   })();
   cache.set(key, newMaterial);
