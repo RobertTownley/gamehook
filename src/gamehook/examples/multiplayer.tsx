@@ -1,47 +1,30 @@
-import { useEffect } from "react";
-import { Box, Scene, XYZObject } from "../../gamehook";
+import { useMemo } from "react";
 
+import { Box, Scene } from "../../gamehook";
+import { XYZObject } from "../physics";
 import { useConnection, useSharedState } from "./lib";
 
 export function MultiplayerExample() {
-  const lobby = "04b3499c-5161-47be-a218-a748fe73d85f";
-  const params = new URLSearchParams(window.location.search);
-  const token = params.get("token") ?? "";
-  const username = params.get("username") ?? "";
-  const connection = useConnection({
-    lobby,
-    token,
-    username,
-  });
-  const otherPlayer =
-    token === "566fa708-23c2-4eb3-9a81-84097a83a975"
-      ? `${lobby}_player2`
-      : `${lobby}_player1`;
+  const { clientId, lobbyId } = useMemo(() => {
+    const params = new URLSearchParams(window.location.search);
+    const clientId = params.get("clientId") ?? "unknown";
+    const lobbyId = params.get("lobbyId") ?? "unknown";
+    return { clientId, lobbyId };
+  }, []);
 
-  useEffect(() => {
-    connection.connect(otherPlayer);
-    return () => {
-      connection.disconnect(otherPlayer);
-    };
-  }, [connection, otherPlayer, username]);
+  const connection = useConnection({
+    clientId,
+    lobbyId,
+  });
 
   const [exampleState, setExampleState] = useSharedState<XYZObject>(
+    "example-state",
     connection,
-    "exampleSharedState",
-    {
-      x: 0,
-      y: 0,
-      z: 0,
-    }
+    { x: 0, y: 0, z: 0 }
   );
 
   const handleClick = () => {
-    const newX = Math.random() > 0.5 ? exampleState.x + 1 : exampleState.x - 1;
-    setExampleState({
-      x: newX,
-      y: exampleState.y,
-      z: exampleState.z,
-    });
+    setExampleState({ ...exampleState, x: exampleState.x + 1 });
   };
 
   return (

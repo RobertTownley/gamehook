@@ -19,7 +19,7 @@ type AvailableExamples =
   | "pong"
   | "text";
 
-const exampleName: AvailableExamples = "model";
+const exampleName: AvailableExamples = "multiplayer";
 
 function App() {
   switch (exampleName) {
