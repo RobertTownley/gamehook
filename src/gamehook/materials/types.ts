@@ -10,7 +10,7 @@ export interface TexturedMaterial {
 }
 
 export interface EmissiveMaterial {
-  emissive?: number;
+  emissiveColor?: number;
   emissiveIntensity?: number;
 }
 

@@ -1,5 +1,6 @@
 export { AudioExample } from "./audio";
 export { EventsExample } from "./events";
+export { FogExample } from "./fog";
 export { Pong } from "./games/pong";
 export { LightExample } from "./lights";
 export { MultiplayerExample } from "./multiplayer";

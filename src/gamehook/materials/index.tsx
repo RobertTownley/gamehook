@@ -33,7 +33,11 @@ function createMapParams(options: TexturedMaterial) {
 }
 
 function createEmissiveParams(options: EmissiveMaterial) {
-  return _.pick(options, ["emissive", "emissiveIntensity"]);
+  const { emissiveColor, emissiveIntensity } = options;
+  return {
+    ...(emissiveColor && { emissive: emissiveColor }),
+    ...(emissiveIntensity && { emissiveIntensity }),
+  };
 }
 
 export function createMaterial(

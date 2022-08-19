@@ -1,6 +1,7 @@
 import {
   AudioExample,
   EventsExample,
+  FogExample,
   LightExample,
   ModelExample,
   MultiplayerExample,
@@ -13,6 +14,7 @@ import {
 type AvailableExamples =
   | "audio"
   | "events"
+  | "fog"
   | "lights"
   | "model"
   | "multiplayer"
@@ -21,7 +23,7 @@ type AvailableExamples =
   | "text"
   | "texture";
 
-const exampleName: AvailableExamples = "texture";
+const exampleName: AvailableExamples = "fog";
 
 function App() {
   switch (exampleName) {
@@ -29,6 +31,8 @@ function App() {
       return <AudioExample />;
     case "events":
       return <EventsExample />;
+    case "fog":
+      return <FogExample />;
     case "lights":
       return <LightExample />;
     case "model":

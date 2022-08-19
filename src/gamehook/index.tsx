@@ -6,6 +6,7 @@ export { Camera } from "./camera";
 export { createEvent, useEventListener } from "./events";
 export { Light } from "./lights";
 export type { Collision, XYZObject } from "./physics";
+export { Fog } from "./fog";
 export { Scene } from "./scene";
 export { deg } from "./math/conversions";
 export { Box, Plane, Sphere } from "./mesh";
