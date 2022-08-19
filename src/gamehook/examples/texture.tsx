@@ -10,7 +10,6 @@ export function TextureExample() {
         rotation={{ x: 0.01, y: 0.01, z: 0.01 }}
         material={{
           type: "standard",
-          color: 0xffffff,
           textures: {
             colorMap:
               "https://r105.threejsfundamentals.org/threejs/resources/images/wall.jpg",

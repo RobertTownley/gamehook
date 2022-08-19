@@ -2,23 +2,33 @@ import * as THREE from "three";
 
 export interface TexturedMaterial {
   textures?: {
-    colorMap: THREE.Texture | string;
+    alphaMap?: THREE.Texture | string;
+    bumpMap?: THREE.Texture | string;
+    colorMap?: THREE.Texture | string;
+    normalMap?: THREE.Texture | string;
   };
 }
 
-interface BasicMaterialOptions extends TexturedMaterial {
+export interface EmissiveMaterial {
+  emissive?: number;
+  emissiveIntensity?: number;
+}
+
+interface BaseMaterial extends EmissiveMaterial, TexturedMaterial {}
+
+interface BasicMaterialOptions extends BaseMaterial {
   type: "basic";
   color?: number;
   wireframe?: boolean;
 }
 
-interface NormalMaterialOptions extends TexturedMaterial {
+interface NormalMaterialOptions extends BaseMaterial {
   type: "normal";
   wireframe?: boolean;
 }
 
-interface StandardMaterialOptions extends TexturedMaterial {
-  color: number;
+interface StandardMaterialOptions extends BaseMaterial {
+  color?: number;
   metalness?: number;
   type: "standard";
 }

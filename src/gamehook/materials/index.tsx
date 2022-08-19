@@ -1,6 +1,7 @@
+import _ from "lodash";
 import * as THREE from "three";
 
-import { MaterialOptions, TexturedMaterial } from "./types";
+import { EmissiveMaterial, MaterialOptions, TexturedMaterial } from "./types";
 
 export type { Designable } from "./types";
 
@@ -13,16 +14,26 @@ const defaultMaterialOptions: MaterialOptions = {
 
 const loader = new THREE.TextureLoader();
 
-function createColorMap(options: TexturedMaterial): THREE.Texture | undefined {
-  const colorMap = options.textures?.colorMap;
-  if (!colorMap) {
-    return;
-  }
-  if (typeof colorMap === "string") {
-    return loader.load(colorMap);
+function createMap(value: THREE.Texture | string | undefined) {
+  if (!value) return null;
+  if (typeof value === "string") {
+    return loader.load(value);
   } else {
-    return colorMap;
+    return value;
   }
+}
+
+function createMapParams(options: TexturedMaterial) {
+  return {
+    alphaMap: createMap(options.textures?.alphaMap),
+    bumpMap: createMap(options.textures?.bumpMap),
+    normalMap: createMap(options.textures?.normalMap),
+    map: createMap(options.textures?.colorMap),
+  };
+}
+
+function createEmissiveParams(options: EmissiveMaterial) {
+  return _.pick(options, ["emissive", "emissiveIntensity"]);
 }
 
 export function createMaterial(
@@ -36,12 +47,13 @@ export function createMaterial(
   }
 
   const newMaterial = (() => {
-    const colorMap = createColorMap(opts);
+    const emissiveParams = createEmissiveParams(opts);
+    const maps = createMapParams(opts);
     switch (opts?.type) {
       case "basic":
         return new THREE.MeshBasicMaterial({
           color: opts?.color ?? 0xffffff,
-          map: colorMap,
+          ...maps,
         });
       case "normal":
         return new THREE.MeshNormalMaterial({
@@ -49,8 +61,9 @@ export function createMaterial(
         });
       case "standard":
         return new THREE.MeshStandardMaterial({
+          ...maps,
+          ...emissiveParams,
           color: opts?.color ?? 0xffffff,
-          map: colorMap,
         });
     }
   })();
