@@ -13,6 +13,8 @@ export function useMesh(props: MeshProps): Mesh {
 
     onClick,
     onKeypress,
+    onHoverEnter,
+    onHoverLeave,
 
     id,
     attrs,
@@ -37,6 +39,12 @@ export function useMesh(props: MeshProps): Mesh {
   useEffect(() => {
     mesh.onKeypress = onKeypress;
   }, [mesh, onKeypress]);
+  useEffect(() => {
+    mesh.onHoverEnter = onHoverEnter;
+  }, [mesh, onHoverEnter]);
+  useEffect(() => {
+    mesh.onHoverLeave = onHoverLeave;
+  }, [mesh, onHoverLeave]);
 
   // Notation
   useEffect(() => {

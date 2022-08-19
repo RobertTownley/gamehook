@@ -10,6 +10,58 @@ export function useInteraction(
   camera: THREE.PerspectiveCamera
 ) {
   useLayoutEffect(() => {
+    function handleMouseMoveEvent(event: MouseEvent) {
+      const interactables = [...Object.values(meshes)].filter((obj) => {
+        return (
+          obj["onHoverLeave"] !== undefined || obj["onHoverEnter"] !== undefined
+        );
+      });
+
+      const mouse = getMouseVectorForEvent(event, renderer);
+      const raycaster = new THREE.Raycaster();
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObjects(
+        interactables.map((i) => {
+          i.threeMesh.updateMatrixWorld();
+          return i.threeMesh;
+        })
+      );
+
+      // Determine if any objects with current active hover states aren't being hovered over
+      const activeObjects = [
+        ...Object.values(meshes).filter((o) => o.hoverState === "active"),
+      ];
+      const intersectIds = intersects.map((i) => i.object.uuid);
+      activeObjects.forEach((activeObject) => {
+        if (!intersectIds.includes(activeObject.threeMesh.uuid)) {
+          activeObject.hoverState = "inactive";
+          const handler = activeObject["onHoverLeave"];
+          if (handler) {
+            handler(event);
+          }
+        }
+      });
+
+      if (intersects.length < 1) return;
+      const mesh = interactables.find((m) => {
+        return m.threeMesh.uuid === intersects[0].object.uuid;
+      });
+      if (!mesh) {
+        return;
+      }
+      const handler = (() => {
+        if (!mesh) return;
+        if (mesh["onHoverEnter"] && mesh.hoverState !== "active") {
+          mesh.hoverState = "active";
+          return mesh["onHoverEnter"];
+        } else {
+          return undefined;
+        }
+      })();
+      if (handler) {
+        handler(event);
+      }
+    }
     function handleMouseEvent(event: MouseEvent) {
       // Get a list of all objects listening for this mouse event
       const eventType = MouseEventTypeMap[event.type];
@@ -51,6 +103,7 @@ export function useInteraction(
     }
 
     window.addEventListener("click", handleMouseEvent);
+    window.addEventListener("mousemove", handleMouseMoveEvent);
     window.addEventListener("keypress", handleKeyboardEvent);
     return () => {
       window.removeEventListener("click", handleMouseEvent);
