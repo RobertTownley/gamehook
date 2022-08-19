@@ -1,27 +1,34 @@
+import _ from "lodash";
 import { useState } from "react";
 import { Box, Light, Scene } from "../../gamehook";
+
+const NUMBER_OF_BOXES = 50;
+const positions = _.range(0, NUMBER_OF_BOXES).map((_i) => ({
+  x: _.random(-10, 10),
+  y: _.random(-15, 10),
+  z: _.random(-10, 10),
+}));
 
 export function HoverExample() {
   const blue = 0x0000ff;
   const red = 0xff0000;
-  const [size, setSize] = useState(1);
   const [color, setColor] = useState(red);
 
   return (
     <Scene>
-      <Box
-        rotation={{ x: 0.01, y: 0.01, z: 0.01 }}
-        onHoverLeave={() => setColor(red)}
-        onHoverEnter={() => setColor(blue)}
-        onClick={() => setSize(size + 1)}
-        material={{
-          type: "standard",
-          color,
-        }}
-        width={size}
-        height={size}
-        depth={size}
-      />
+      {positions.map((p, i) => (
+        <Box
+          rotation={{ x: 0.01, y: 0.01, z: 0.01 }}
+          position={p}
+          key={i}
+          onHoverLeave={() => setColor(red)}
+          onHoverEnter={() => setColor(blue)}
+          material={{
+            type: "standard",
+            color,
+          }}
+        />
+      ))}
       <Light type="ambient" />
     </Scene>
   );
