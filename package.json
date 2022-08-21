@@ -1,6 +1,14 @@
 {
   "name": "gamehook",
   "version": "0.3.1",
+  "license": "MIT",
+  "author": {
+    "name": "Robert Townley",
+    "url": "https://roberttownley.com"
+  },
+  "files": [
+    "dist/*"
+  ],
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
@@ -21,7 +29,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "tsc --build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
