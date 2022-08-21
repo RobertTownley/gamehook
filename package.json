@@ -6,8 +6,22 @@
     "name": "Robert Townley",
     "url": "https://roberttownley.com"
   },
+  "description": "A react and typescript based game engine, built on top of ThreeJS",
+  "keywords": [
+    "react",
+    "typescript",
+    "game",
+    "engine",
+    "threejs"
+  ],
+  "homepage": "https://roberttownley.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RobertTownley/gamehook"
+  },
+  "main": "dist/index.js",
   "files": [
-    "dist/*"
+    "dist/"
   ],
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",

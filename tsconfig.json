@@ -18,6 +18,5 @@
     "sourceMap": true,
     "outDir": "dist"
   },
-  "include": ["src/gamehook"],
-  "exclude": ["node_modules"]
+  "include": ["src/gamehook"]
 }
