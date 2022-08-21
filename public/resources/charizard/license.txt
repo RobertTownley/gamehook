@@ -1,0 +1,11 @@
+Model Information:
+* title:	charizard waiting his host
+* source:	https://sketchfab.com/3d-models/charizard-waiting-his-host-63fab464bac0473eb104d4afac92a26d
+* author:	mozyapene (https://sketchfab.com/mozyapene)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "charizard waiting his host" (https://sketchfab.com/3d-models/charizard-waiting-his-host-63fab464bac0473eb104d4afac92a26d) by mozyapene (https://sketchfab.com/mozyapene) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
