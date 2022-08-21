@@ -1,4 +1,3 @@
-import _ from "lodash";
 import * as THREE from "three";
 
 import { EmissiveMaterial, MaterialOptions, TexturedMaterial } from "./types";
