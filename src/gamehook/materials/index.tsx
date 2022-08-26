@@ -39,11 +39,19 @@ function createEmissiveParams(options: EmissiveMaterial) {
   };
 }
 
+function createBaseMaterialParams(options: MaterialOptions) {
+  return {
+    opacity: options?.opacity ?? 1,
+    transparent: options?.transparent ?? false,
+  };
+}
+
 export function createMaterial(
   options?: MaterialOptions,
   useCache = true
 ): THREE.Material {
   const opts = options ?? defaultMaterialOptions;
+  const baseParams = createBaseMaterialParams(opts);
   const key = JSON.stringify(opts);
   if (cache.has(key) && useCache) {
     return cache.get(key) as unknown as THREE.Material;
@@ -55,16 +63,19 @@ export function createMaterial(
     switch (opts?.type) {
       case "basic":
         return new THREE.MeshBasicMaterial({
-          color: opts?.color ?? 0xffffff,
+          ...baseParams,
           ...maps,
+          color: opts?.color ?? 0xffffff,
         });
       case "normal":
         return new THREE.MeshNormalMaterial({
           wireframe: opts.wireframe ?? false,
+          ...baseParams,
         });
       case "standard":
         return new THREE.MeshStandardMaterial({
           ...maps,
+          ...baseParams,
           ...emissiveParams,
           color: opts?.color ?? 0xffffff,
         });

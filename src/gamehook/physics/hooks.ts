@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useLayoutEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Mesh } from "../mesh";
 
 import { normalizeXYZ } from "./utils";
@@ -9,10 +9,11 @@ import { LoadedGameModel } from "../models";
 
 export function usePosition(mesh: Mesh, position: XYZ | undefined) {
   // Set mesh position
-  const [x, y, z] = useMemo(() => normalizeXYZ(position), [position]);
-  useLayoutEffect(() => {
+  useEffect(() => {
+    const [x, y, z] = normalizeXYZ(position);
+    mesh.position = position;
     mesh.threeMesh.position.set(x, y, z);
-  }, [mesh, x, y, z]);
+  }, [mesh, position]);
 }
 
 export function usePhysics(

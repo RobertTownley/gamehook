@@ -4,6 +4,7 @@ import { Mesh, MeshProps } from "./types";
 import { generateUUID } from "three/src/math/MathUtils";
 import { usePosition, usePhysics } from "../physics/hooks";
 import { useAddToScene } from "../mount";
+import { useContainer } from "../container";
 
 // Add object to scene on mount, remove on dismount
 export function useMesh(props: MeshProps): Mesh {
@@ -52,6 +53,7 @@ export function useMesh(props: MeshProps): Mesh {
     mesh.name = name;
     mesh.tags = tags;
   }, [mesh, attrs, name, tags]);
+  useContainer(mesh.id, mesh.threeMesh, position);
   useAddToScene(mesh);
   return mesh;
 }
