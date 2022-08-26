@@ -17,8 +17,8 @@ export const KeyboardEventTypeMap: Record<string, keyof KeyboardInteractable> =
 export interface Interactable {
   onClick?: (event: MouseEvent) => void;
   onKeypress?: (event: KeyboardEvent) => void;
-  onHoverEnter?: (event: MouseEvent) => void;
-  onHoverLeave?: (event: MouseEvent) => void;
+  onHoverEnter?: (event?: MouseEvent) => void;
+  onHoverLeave?: (event?: MouseEvent) => void;
 
   hoverState?: "active" | "inactive" | undefined;
 }

@@ -10,6 +10,7 @@ import {
   rotateObjects,
 } from "./physics";
 import { animateAndMoveModels } from "./models/keyframes";
+import { detectHoverEntries } from "./interactions/loops";
 import { moveLights } from "./physics/keyframes";
 import { SceneContext } from "./scene/context";
 import { HierarchyContext } from "./hierarchy";
@@ -49,6 +50,9 @@ export function useGameLoop({
 
       // Animation
       animateAndMoveModels(models);
+
+      // Interaction
+      detectHoverEntries(meshes, camera, renderer);
     });
   }, [camera, lights, models, meshes, renderer, scene]);
 }

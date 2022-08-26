@@ -6,7 +6,7 @@ const NUMBER_OF_BOXES = 50;
 const positions = _.range(0, NUMBER_OF_BOXES).map((_i) => ({
   x: _.random(-10, 10),
   y: _.random(-15, 10),
-  z: _.random(-10, 10),
+  z: _.random(-5, 10),
 }));
 
 export function HoverExample() {
@@ -18,7 +18,7 @@ export function HoverExample() {
     <Scene>
       {positions.map((p, i) => (
         <Box
-          rotation={{ x: 0.01, y: 0.01, z: 0.01 }}
+          rotation={{ x: 0.0, y: 0.0, z: 0.01 }}
           position={p}
           key={i}
           onHoverLeave={() => setColor(red)}
