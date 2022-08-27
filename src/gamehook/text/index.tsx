@@ -29,7 +29,7 @@ function ProceduralText(props: Props) {
     computeOffset = true,
     value,
     size = 2,
-    height = 0.5,
+    height = 0,
     bevelOffset = 0,
     bevelSegments = 0,
     material,

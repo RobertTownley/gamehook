@@ -17,7 +17,7 @@ import { normalizeXYZ } from "./physics/utils";
 
 interface Props {
   children: ReactNode;
-  onClick: (event: MouseEvent) => void;
+  onClick?: (event: MouseEvent) => void;
   id?: string;
 }
 

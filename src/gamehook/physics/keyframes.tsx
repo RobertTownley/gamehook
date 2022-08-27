@@ -126,6 +126,8 @@ export function detectCollisions(meshes: Record<string, Mesh>) {
 
     // Get a smaller list of all objects close enough to collide with
     if (!source.threeMesh.geometry.boundingSphere) {
+      const position = normalizeXYZ(source.position);
+      source.threeMesh.position.set(position[0], position[1], position[2]);
       source.threeMesh.geometry.computeBoundingSphere();
     }
     const sRadius = source.threeMesh.geometry.boundingSphere!.radius;
