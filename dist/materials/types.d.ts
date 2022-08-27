@@ -12,6 +12,8 @@ export interface EmissiveMaterial {
     emissiveIntensity?: number;
 }
 interface BaseMaterial extends EmissiveMaterial, TexturedMaterial {
+    opacity?: number;
+    transparent?: boolean;
 }
 interface BasicMaterialOptions extends BaseMaterial {
     type: "basic";
@@ -23,9 +25,9 @@ interface NormalMaterialOptions extends BaseMaterial {
     wireframe?: boolean;
 }
 interface StandardMaterialOptions extends BaseMaterial {
+    type: "standard";
     color?: number;
     metalness?: number;
-    type: "standard";
 }
 export declare type MaterialOptions = BasicMaterialOptions | NormalMaterialOptions | StandardMaterialOptions;
 export interface Designable {

@@ -1,11 +1,12 @@
-import { useEffect, useMemo, useLayoutEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { normalizeXYZ } from "./utils";
 export function usePosition(mesh, position) {
     // Set mesh position
-    var _a = useMemo(function () { return normalizeXYZ(position); }, [position]), x = _a[0], y = _a[1], z = _a[2];
-    useLayoutEffect(function () {
+    useEffect(function () {
+        var _a = normalizeXYZ(position), x = _a[0], y = _a[1], z = _a[2];
+        mesh.position = position;
         mesh.threeMesh.position.set(x, y, z);
-    }, [mesh, x, y, z]);
+    }, [mesh, position]);
 }
 export function usePhysics(mesh, _a) {
     var acceleration = _a.acceleration, velocity = _a.velocity, orientation = _a.orientation, rotation = _a.rotation, onCollision = _a.onCollision, collides = _a.collides, collidesWith = _a.collidesWith, castShadow = _a.castShadow, receiveShadow = _a.receiveShadow;

@@ -3,6 +3,7 @@ import { useEffect, useMemo } from "react";
 import { generateUUID } from "three/src/math/MathUtils";
 import { usePosition, usePhysics } from "../physics/hooks";
 import { useAddToScene } from "../mount";
+import { useContainer } from "../container";
 // Add object to scene on mount, remove on dismount
 export function useMesh(props) {
     var position = props.position, threeMesh = props.threeMesh, onClick = props.onClick, onKeypress = props.onKeypress, onHoverEnter = props.onHoverEnter, onHoverLeave = props.onHoverLeave, id = props.id, attrs = props.attrs, name = props.name, tags = props.tags;
@@ -33,6 +34,7 @@ export function useMesh(props) {
         mesh.name = name;
         mesh.tags = tags;
     }, [mesh, attrs, name, tags]);
+    useContainer(mesh.id, mesh.threeMesh, position);
     useAddToScene(mesh);
     return mesh;
 }

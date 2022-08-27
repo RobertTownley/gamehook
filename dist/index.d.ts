@@ -2,6 +2,7 @@ export { generateUUID } from "three/src/math/MathUtils";
 export { Animation } from "./animation";
 export { Audio } from "./audio";
 export { Camera } from "./camera";
+export { Container } from "./container";
 export { createEvent, useEventListener } from "./events";
 export { Light } from "./lights";
 export type { Collision, XYZObject } from "./physics";

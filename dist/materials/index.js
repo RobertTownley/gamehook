@@ -39,9 +39,17 @@ function createEmissiveParams(options) {
     var emissiveColor = options.emissiveColor, emissiveIntensity = options.emissiveIntensity;
     return __assign(__assign({}, (emissiveColor && { emissive: emissiveColor })), (emissiveIntensity && { emissiveIntensity: emissiveIntensity }));
 }
+function createBaseMaterialParams(options) {
+    var _a, _b;
+    return {
+        opacity: (_a = options === null || options === void 0 ? void 0 : options.opacity) !== null && _a !== void 0 ? _a : 1,
+        transparent: (_b = options === null || options === void 0 ? void 0 : options.transparent) !== null && _b !== void 0 ? _b : false,
+    };
+}
 export function createMaterial(options, useCache) {
     if (useCache === void 0) { useCache = true; }
     var opts = options !== null && options !== void 0 ? options : defaultMaterialOptions;
+    var baseParams = createBaseMaterialParams(opts);
     var key = JSON.stringify(opts);
     if (cache.has(key) && useCache) {
         return cache.get(key);
@@ -52,13 +60,11 @@ export function createMaterial(options, useCache) {
         var maps = createMapParams(opts);
         switch (opts === null || opts === void 0 ? void 0 : opts.type) {
             case "basic":
-                return new THREE.MeshBasicMaterial(__assign({ color: (_a = opts === null || opts === void 0 ? void 0 : opts.color) !== null && _a !== void 0 ? _a : 0xffffff }, maps));
+                return new THREE.MeshBasicMaterial(__assign(__assign(__assign({}, baseParams), maps), { color: (_a = opts === null || opts === void 0 ? void 0 : opts.color) !== null && _a !== void 0 ? _a : 0xffffff }));
             case "normal":
-                return new THREE.MeshNormalMaterial({
-                    wireframe: (_b = opts.wireframe) !== null && _b !== void 0 ? _b : false,
-                });
+                return new THREE.MeshNormalMaterial(__assign({ wireframe: (_b = opts.wireframe) !== null && _b !== void 0 ? _b : false }, baseParams));
             case "standard":
-                return new THREE.MeshStandardMaterial(__assign(__assign(__assign({}, maps), emissiveParams), { color: (_c = opts === null || opts === void 0 ? void 0 : opts.color) !== null && _c !== void 0 ? _c : 0xffffff }));
+                return new THREE.MeshStandardMaterial(__assign(__assign(__assign(__assign({}, maps), baseParams), emissiveParams), { color: (_c = opts === null || opts === void 0 ? void 0 : opts.color) !== null && _c !== void 0 ? _c : 0xffffff }));
         }
     })();
     cache.set(key, newMaterial);
