@@ -17,8 +17,9 @@ import { buildGameCamera } from "../camera";
 import { useGameLoop, useMountRef, useResize } from "../mount";
 import { generateUUID } from "three/src/math/MathUtils";
 import { useInteraction } from "../interactions";
+import { DefaultTheme, ThemeContext } from "../theme";
 export function Scene(_a) {
-    var _b = _a.background, background = _b === void 0 ? 0x000000 : _b, _c = _a.castShadow, castShadow = _c === void 0 ? false : _c, children = _a.children, id = _a.id, width = _a.width, height = _a.height;
+    var _b = _a.background, background = _b === void 0 ? 0x000000 : _b, _c = _a.castShadow, castShadow = _c === void 0 ? false : _c, children = _a.children, id = _a.id, width = _a.width, height = _a.height, theme = _a.theme;
     var camera = useMemo(function () { return buildGameCamera({}); }, []);
     var renderer = useMemo(function () { return new THREE.WebGLRenderer(); }, []);
     if (castShadow) {
@@ -55,6 +56,6 @@ export function Scene(_a) {
     });
     // Listen for user interactions
     useInteraction(value.meshes, renderer, camera.camera);
-    return (_jsx("div", __assign({ ref: mountRef }, { children: _jsx(SceneContext.Provider, __assign({ value: value }, { children: children })) })));
+    return (_jsx("div", __assign({ ref: mountRef }, { children: _jsx(SceneContext.Provider, __assign({ value: value }, { children: _jsx(ThemeContext.Provider, __assign({ value: theme !== null && theme !== void 0 ? theme : DefaultTheme }, { children: children })) })) })));
 }
 //# sourceMappingURL=index.js.map
