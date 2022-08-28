@@ -1,5 +1,6 @@
 import {
   AudioExample,
+  ButtonExample,
   ContainerExample,
   EventsExample,
   FogExample,
@@ -15,6 +16,7 @@ import {
 
 type AvailableExamples =
   | "audio"
+  | "button"
   | "container"
   | "events"
   | "fog"
@@ -27,12 +29,14 @@ type AvailableExamples =
   | "text"
   | "texture";
 
-const exampleName: AvailableExamples = "hover";
+const exampleName: AvailableExamples = "button";
 
 function App() {
   switch (exampleName) {
     case "audio":
       return <AudioExample />;
+    case "button":
+      return <ButtonExample />;
     case "container":
       return <ContainerExample />;
     case "events":

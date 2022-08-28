@@ -8,6 +8,7 @@ import { createMaterial } from "../materials";
 import { Meshable } from "../mesh/types";
 import { useMesh } from "../mesh/hooks";
 import { HierarchyContext, useHierarchy } from "../hierarchy";
+import { useTheme } from "../theme";
 
 interface Props extends Meshable {
   font?: object;
@@ -23,6 +24,7 @@ interface Props extends Meshable {
 const loader = new FontLoader();
 
 function ProceduralText(props: Props) {
+  const theme = useTheme();
   const {
     children,
     font = DefaultFont,
@@ -50,9 +52,12 @@ function ProceduralText(props: Props) {
     return geometry;
   }, [bevelOffset, bevelSegments, height, loadedFont, size, value]);
 
+  // Material
   const threeMaterial = useMemo(() => {
-    return createMaterial(material ?? { type: "normal" });
-  }, [material]);
+    return createMaterial(
+      material ?? { type: "basic", color: theme.colors.text.base }
+    );
+  }, [material, theme.colors.text.base]);
 
   const threeMesh = useMemo<THREE.Mesh>(() => {
     const threeMesh = new THREE.Mesh(geometry, threeMaterial);

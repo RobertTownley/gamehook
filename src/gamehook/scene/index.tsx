@@ -6,6 +6,7 @@ import { buildGameCamera } from "../camera";
 import { useGameLoop, useMountRef, useResize } from "../mount";
 import { generateUUID } from "three/src/math/MathUtils";
 import { useInteraction } from "../interactions";
+import { Theme, DefaultTheme, ThemeContext } from "../theme";
 
 interface SceneProps {
   background?: THREE.ColorRepresentation;
@@ -14,6 +15,7 @@ interface SceneProps {
   id?: string;
   width?: number;
   height?: number;
+  theme?: Theme;
 }
 
 export function Scene({
@@ -23,6 +25,7 @@ export function Scene({
   id,
   width,
   height,
+  theme,
 }: SceneProps) {
   const camera = useMemo(() => buildGameCamera({}), []);
   const renderer = useMemo(() => new THREE.WebGLRenderer(), []);
@@ -69,7 +72,11 @@ export function Scene({
 
   return (
     <div ref={mountRef}>
-      <SceneContext.Provider value={value}>{children}</SceneContext.Provider>
+      <SceneContext.Provider value={value}>
+        <ThemeContext.Provider value={theme ?? DefaultTheme}>
+          {children}
+        </ThemeContext.Provider>
+      </SceneContext.Provider>
     </div>
   );
 }
