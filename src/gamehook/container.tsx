@@ -11,13 +11,12 @@ import {
 } from "react";
 import { generateUUID } from "three/src/math/MathUtils";
 import { Box } from "./mesh/box";
-import { Mesh } from "./mesh/types";
 import { XYZ } from "./physics/types";
 import { normalizeXYZ } from "./physics/utils";
+import { Interactable } from "./interactions";
 
-interface Props {
+interface Props extends Interactable {
   children: ReactNode;
-  onClick?: (event: MouseEvent) => void;
   id?: string;
 }
 
@@ -56,7 +55,8 @@ interface BoundDetails {
   threeMesh: THREE.Mesh;
   position: XYZ;
 }
-export function Container({ children, id, onClick }: Props) {
+export function Container(props: Props) {
+  const { children, id } = props;
   const [meshes, setMeshes] = useState<Record<string, BoundDetails>>({});
   const boundingBox = useMemo(() => {
     const box = new THREE.Box3();
@@ -110,15 +110,17 @@ export function Container({ children, id, onClick }: Props) {
 
   const value = { addChild, removeChild, containerId };
 
+  const passThroughProps = ["onClick", "onHoverEnter", "onHoverLeave"];
+
   return (
     <ContainerContext.Provider value={value}>
       <Box
+        {..._.pick(props, passThroughProps)}
         material={{
           opacity: 0,
           transparent: true,
           type: "basic",
         }}
-        onClick={onClick}
         width={width}
         height={height}
         depth={depth}

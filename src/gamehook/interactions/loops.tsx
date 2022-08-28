@@ -13,11 +13,16 @@ document.addEventListener("mousemove", (event: MouseEvent) => {
 
 const raycaster = new THREE.Raycaster();
 
-export function detectHoverEntries(
-  meshes: Record<string, Mesh>,
-  camera: GameCamera,
-  renderer: THREE.Renderer
-) {
+interface DetectHoverEntries {
+  meshes: Record<string, Mesh>;
+  camera: GameCamera;
+  renderer: THREE.Renderer;
+}
+export function detectHoverEntries({
+  meshes,
+  camera,
+  renderer,
+}: DetectHoverEntries) {
   const hoverables = Object.values(meshes).filter((m) => {
     return (
       (m.onHoverLeave && m.hoverState === "active") ||

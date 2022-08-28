@@ -27,7 +27,7 @@ type AvailableExamples =
   | "text"
   | "texture";
 
-const exampleName: AvailableExamples = "multiplayer";
+const exampleName: AvailableExamples = "hover";
 
 function App() {
   switch (exampleName) {
