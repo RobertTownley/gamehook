@@ -6,7 +6,8 @@ document.addEventListener("mousemove", function (event) {
     mouseY = event.clientY;
 });
 var raycaster = new THREE.Raycaster();
-export function detectHoverEntries(meshes, camera, renderer) {
+export function detectHoverEntries(_a) {
+    var meshes = _a.meshes, camera = _a.camera, renderer = _a.renderer;
     var hoverables = Object.values(meshes).filter(function (m) {
         return ((m.onHoverLeave && m.hoverState === "active") ||
             (m.onHoverEnter && m.hoverState !== "active"));

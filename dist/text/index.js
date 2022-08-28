@@ -20,7 +20,7 @@ import { useMesh } from "../mesh/hooks";
 import { HierarchyContext, useHierarchy } from "../hierarchy";
 var loader = new FontLoader();
 function ProceduralText(props) {
-    var children = props.children, _a = props.font, font = _a === void 0 ? DefaultFont : _a, _b = props.computeOffset, computeOffset = _b === void 0 ? true : _b, value = props.value, _c = props.size, size = _c === void 0 ? 2 : _c, _d = props.height, height = _d === void 0 ? 0.5 : _d, _e = props.bevelOffset, bevelOffset = _e === void 0 ? 0 : _e, _f = props.bevelSegments, bevelSegments = _f === void 0 ? 0 : _f, material = props.material;
+    var children = props.children, _a = props.font, font = _a === void 0 ? DefaultFont : _a, _b = props.computeOffset, computeOffset = _b === void 0 ? true : _b, value = props.value, _c = props.size, size = _c === void 0 ? 2 : _c, _d = props.height, height = _d === void 0 ? 0 : _d, _e = props.bevelOffset, bevelOffset = _e === void 0 ? 0 : _e, _f = props.bevelSegments, bevelSegments = _f === void 0 ? 0 : _f, material = props.material;
     var loadedFont = useMemo(function () {
         return loader.parse(font);
     }, [font]);

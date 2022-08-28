@@ -32,9 +32,9 @@ export function useContainer(id, threeMesh, position) {
         }
     }, [addChild, containerId, removeChild, id, threeMesh, position]);
 }
-export function Container(_a) {
-    var children = _a.children, id = _a.id, onClick = _a.onClick;
-    var _b = useState({}), meshes = _b[0], setMeshes = _b[1];
+export function Container(props) {
+    var children = props.children, id = props.id;
+    var _a = useState({}), meshes = _a[0], setMeshes = _a[1];
     var boundingBox = useMemo(function () {
         var box = new THREE.Box3();
         Object.values(meshes).forEach(function (mesh) {
@@ -70,19 +70,20 @@ export function Container(_a) {
             _.mean(positions.map(function (p) { return p[2]; })),
         ];
     }, [meshes]);
-    var _c = (function () {
+    var _b = (function () {
         var max = boundingBox.max, min = boundingBox.min;
         return {
             width: max.x - min.x,
             height: max.y - min.y,
             depth: max.z - min.z,
         };
-    })(), width = _c.width, height = _c.height, depth = _c.depth;
+    })(), width = _b.width, height = _b.height, depth = _b.depth;
     var value = { addChild: addChild, removeChild: removeChild, containerId: containerId };
-    return (_jsxs(ContainerContext.Provider, __assign({ value: value }, { children: [_jsx(Box, { material: {
+    var passThroughProps = ["onClick", "onHoverEnter", "onHoverLeave"];
+    return (_jsxs(ContainerContext.Provider, __assign({ value: value }, { children: [_jsx(Box, __assign({}, _.pick(props, passThroughProps), { material: {
                     opacity: 0,
                     transparent: true,
                     type: "basic",
-                }, onClick: onClick, width: width, height: height, depth: depth, position: position, id: containerId }), children] })));
+                }, width: width, height: height, depth: depth, position: position, id: containerId })), children] })));
 }
 //# sourceMappingURL=container.js.map

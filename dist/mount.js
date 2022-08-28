@@ -23,7 +23,7 @@ export function useGameLoop(_a) {
             // Animation
             animateAndMoveModels(models);
             // Interaction
-            detectHoverEntries(meshes, camera, renderer);
+            detectHoverEntries({ meshes: meshes, camera: camera, renderer: renderer });
         });
     }, [camera, lights, models, meshes, renderer, scene]);
 }

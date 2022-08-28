@@ -26,15 +26,6 @@ function createMap(value) {
         return value;
     }
 }
-function createMapParams(options) {
-    var _a, _b, _c, _d;
-    return {
-        alphaMap: createMap((_a = options.textures) === null || _a === void 0 ? void 0 : _a.alphaMap),
-        bumpMap: createMap((_b = options.textures) === null || _b === void 0 ? void 0 : _b.bumpMap),
-        normalMap: createMap((_c = options.textures) === null || _c === void 0 ? void 0 : _c.normalMap),
-        map: createMap((_d = options.textures) === null || _d === void 0 ? void 0 : _d.colorMap),
-    };
-}
 function createEmissiveParams(options) {
     var emissiveColor = options.emissiveColor, emissiveIntensity = options.emissiveIntensity;
     return __assign(__assign({}, (emissiveColor && { emissive: emissiveColor })), (emissiveIntensity && { emissiveIntensity: emissiveIntensity }));
@@ -46,25 +37,34 @@ function createBaseMaterialParams(options) {
         transparent: (_b = options === null || options === void 0 ? void 0 : options.transparent) !== null && _b !== void 0 ? _b : false,
     };
 }
+export function createStandardMaterial(options) {
+    var _a, _b, _c, _d, _e;
+    return new THREE.MeshStandardMaterial(__assign(__assign({ alphaMap: createMap((_a = options === null || options === void 0 ? void 0 : options.textures) === null || _a === void 0 ? void 0 : _a.alphaMap), bumpMap: createMap((_b = options.textures) === null || _b === void 0 ? void 0 : _b.bumpMap), normalMap: createMap((_c = options.textures) === null || _c === void 0 ? void 0 : _c.normalMap), map: createMap((_d = options.textures) === null || _d === void 0 ? void 0 : _d.colorMap), color: (_e = options === null || options === void 0 ? void 0 : options.color) !== null && _e !== void 0 ? _e : 0xffffff }, createEmissiveParams(options)), createBaseMaterialParams(options)));
+}
+function createBasicMaterial(options) {
+    var _a, _b, _c;
+    return new THREE.MeshBasicMaterial(__assign(__assign({ alphaMap: createMap((_a = options === null || options === void 0 ? void 0 : options.textures) === null || _a === void 0 ? void 0 : _a.alphaMap), map: createMap((_b = options.textures) === null || _b === void 0 ? void 0 : _b.colorMap) }, createBaseMaterialParams(options)), { color: (_c = options === null || options === void 0 ? void 0 : options.color) !== null && _c !== void 0 ? _c : 0xffffff }));
+}
+function createNormalMaterial(options) {
+    var _a;
+    return new THREE.MeshNormalMaterial(__assign({ wireframe: (_a = options.wireframe) !== null && _a !== void 0 ? _a : false }, createBaseMaterialParams(options)));
+}
 export function createMaterial(options, useCache) {
     if (useCache === void 0) { useCache = true; }
-    var opts = options !== null && options !== void 0 ? options : defaultMaterialOptions;
-    var baseParams = createBaseMaterialParams(opts);
-    var key = JSON.stringify(opts);
+    var key = JSON.stringify(options);
     if (cache.has(key) && useCache) {
         return cache.get(key);
     }
     var newMaterial = (function () {
-        var _a, _b, _c;
-        var emissiveParams = createEmissiveParams(opts);
-        var maps = createMapParams(opts);
-        switch (opts === null || opts === void 0 ? void 0 : opts.type) {
+        switch (options === null || options === void 0 ? void 0 : options.type) {
             case "basic":
-                return new THREE.MeshBasicMaterial(__assign(__assign(__assign({}, baseParams), maps), { color: (_a = opts === null || opts === void 0 ? void 0 : opts.color) !== null && _a !== void 0 ? _a : 0xffffff }));
+                return createBasicMaterial(options);
             case "normal":
-                return new THREE.MeshNormalMaterial(__assign({ wireframe: (_b = opts.wireframe) !== null && _b !== void 0 ? _b : false }, baseParams));
+                return createNormalMaterial(options);
             case "standard":
-                return new THREE.MeshStandardMaterial(__assign(__assign(__assign(__assign({}, maps), baseParams), emissiveParams), { color: (_c = opts === null || opts === void 0 ? void 0 : opts.color) !== null && _c !== void 0 ? _c : 0xffffff }));
+                return createStandardMaterial(options);
+            default:
+                return createNormalMaterial(defaultMaterialOptions);
         }
     })();
     cache.set(key, newMaterial);

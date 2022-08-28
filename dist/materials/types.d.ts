@@ -1,4 +1,5 @@
 import * as THREE from "three";
+export declare type MaterialType = "basic" | "normal" | "standard";
 export interface TexturedMaterial {
     textures?: {
         alphaMap?: THREE.Texture | string;
@@ -15,16 +16,16 @@ interface BaseMaterial extends EmissiveMaterial, TexturedMaterial {
     opacity?: number;
     transparent?: boolean;
 }
-interface BasicMaterialOptions extends BaseMaterial {
+export interface BasicMaterialOptions extends BaseMaterial {
     type: "basic";
     color?: number;
     wireframe?: boolean;
 }
-interface NormalMaterialOptions extends BaseMaterial {
+export interface NormalMaterialOptions extends BaseMaterial {
     type: "normal";
     wireframe?: boolean;
 }
-interface StandardMaterialOptions extends BaseMaterial {
+export interface StandardMaterialOptions extends BaseMaterial {
     type: "standard";
     color?: number;
     metalness?: number;
