@@ -1,5 +1,5 @@
 /// <reference types="react" />
-import { XYZ } from "../gamehook";
+import { XYZ } from "./physics/types";
 interface Props {
     onClick: () => void;
     position?: XYZ;

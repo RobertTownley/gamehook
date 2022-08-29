@@ -11,7 +11,9 @@ var __assign = (this && this.__assign) || function () {
 };
 import { jsx as _jsx } from "react/jsx-runtime";
 import { useState } from "react";
-import { Container, Text, useTheme } from "../gamehook";
+import { Container } from "./container";
+import { Text } from "./text";
+import { useTheme } from "./theme";
 export function Button(_a) {
     var onClick = _a.onClick, position = _a.position, value = _a.value;
     var theme = useTheme();
