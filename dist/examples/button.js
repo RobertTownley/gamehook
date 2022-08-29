@@ -9,8 +9,8 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { Button, createTheme, Scene, Text } from "../../gamehook";
+import { jsx as _jsx } from "react/jsx-runtime";
+import { Button, createTheme, Scene } from "../../gamehook";
 var theme = createTheme({
     colors: {
         primary: {
@@ -26,6 +26,6 @@ var theme = createTheme({
     },
 });
 export function ButtonExample() {
-    return (_jsxs(Scene, __assign({ theme: theme }, { children: [_jsx(Button, { position: { x: 0, y: 2, z: 0 }, onClick: function () { return console.log("WHEE"); }, value: "Click me!" }), _jsx(Text, { value: "Don't click me", position: { x: 0, y: -2, z: 0 } })] })));
+    return (_jsx(Scene, __assign({ theme: theme }, { children: _jsx(Button, { position: { x: 0, y: 2, z: 0 }, onClick: function () { return console.log("WHEE"); }, value: "Click me!" }) })));
 }
 //# sourceMappingURL=button.js.map

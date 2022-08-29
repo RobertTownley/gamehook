@@ -1,7 +1,8 @@
 /// <reference types="react" />
 import { XYZ } from "./physics/types";
+import { MouseHandler } from "./interactions/types";
 interface Props {
-    onClick: () => void;
+    onClick: MouseHandler;
     position?: XYZ;
     value: string;
 }

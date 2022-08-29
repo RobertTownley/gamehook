@@ -11,7 +11,7 @@ var __assign = (this && this.__assign) || function () {
 };
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState } from "react";
-import { Container, Scene, Sphere } from "../../gamehook";
+import { Box, Container, Scene, Text } from "../../gamehook";
 export function ContainerExample() {
     var RED = 0xff0000;
     var BLUE = 0x0000ff;
@@ -19,15 +19,6 @@ export function ContainerExample() {
     var handleClick = function () {
         setColor(function (c) { return (c === RED ? BLUE : RED); });
     };
-    return (_jsx(Scene, { children: _jsxs(Container, __assign({ onClick: handleClick }, { children: [_jsx(Sphere, { position: { x: 3, y: 0, z: 0 }, material: {
-                        type: "basic",
-                        color: color,
-                    } }), _jsx(Sphere, { position: { x: 7, y: 0, z: 0 }, material: {
-                        type: "basic",
-                        color: 0x0000ff,
-                    } }), _jsx(Sphere, { position: { x: 5, y: 0, z: 0 }, material: {
-                        type: "basic",
-                        color: 0xff0000,
-                    } })] })) }));
+    return (_jsxs(Scene, { children: [_jsxs(Container, __assign({ onClick: handleClick, onHoverEnter: function () { return setColor(RED); }, onHoverLeave: function () { return setColor(BLUE); } }, { children: [_jsx(Text, { position: { x: 2, y: 2, z: 0 }, value: "Hover Over Here", name: "MYTEXT", size: 0.4 }), _jsx(Text, { position: { x: 5, y: 5, z: 0 }, value: "Here too", size: 0.5, name: "MYTEXT" }), _jsx(Text, { position: { x: 5, y: -2, z: 0 }, value: "Anywhere in between", size: 0.5, name: "MYTEXT" })] })), _jsx(Box, { position: { x: 0, y: 0, z: 0 }, name: "MYBOX", material: { type: "basic", color: color } }), _jsx(Text, { position: { x: -5, y: -2, z: 0 }, value: "Not Here", size: 0.5, name: "MYTEXT" })] }));
 }
 //# sourceMappingURL=container.js.map

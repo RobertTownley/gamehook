@@ -19,10 +19,11 @@ import { createMaterial } from "../materials";
 import { useMesh } from "../mesh/hooks";
 import { HierarchyContext, useHierarchy } from "../hierarchy";
 import { useTheme } from "../theme";
+import { useContainer } from "../container";
 var loader = new FontLoader();
 function ProceduralText(props) {
     var theme = useTheme();
-    var children = props.children, _a = props.font, font = _a === void 0 ? DefaultFont : _a, _b = props.computeOffset, computeOffset = _b === void 0 ? true : _b, value = props.value, _c = props.size, size = _c === void 0 ? 2 : _c, _d = props.height, height = _d === void 0 ? 0 : _d, _e = props.bevelOffset, bevelOffset = _e === void 0 ? 0 : _e, _f = props.bevelSegments, bevelSegments = _f === void 0 ? 0 : _f, material = props.material;
+    var children = props.children, _a = props.font, font = _a === void 0 ? DefaultFont : _a, _b = props.computeOffset, computeOffset = _b === void 0 ? true : _b, value = props.value, _c = props.size, size = _c === void 0 ? 2 : _c, _d = props.height, height = _d === void 0 ? 0.01 : _d, _e = props.bevelOffset, bevelOffset = _e === void 0 ? 0 : _e, _f = props.bevelSegments, bevelSegments = _f === void 0 ? 0 : _f, material = props.material;
     var loadedFont = useMemo(function () {
         return loader.parse(font);
     }, [font]);
@@ -51,6 +52,7 @@ function ProceduralText(props) {
     }, [computeOffset, geometry, threeMaterial]);
     var mesh = useMesh(__assign({ threeMesh: threeMesh }, props));
     var hierarchyValue = useHierarchy(children, mesh);
+    useContainer(mesh.id, threeMesh, props.position);
     return (_jsx(HierarchyContext.Provider, __assign({ value: hierarchyValue }, { children: children })));
 }
 export function Text(props) {

@@ -19,9 +19,9 @@ export var DefaultTheme = {
             dark: 0x0099dd,
         },
         text: {
-            base: 0xe9c46a,
-            light: 0xe9c46a,
-            dark: 0xe9c46a,
+            base: 0xdddddd,
+            light: 0xffffff,
+            dark: 0xbbbbbb,
         },
     },
 };

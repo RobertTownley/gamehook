@@ -35,19 +35,21 @@ export function useContainer(id, threeMesh, position) {
 export function Container(props) {
     var children = props.children, id = props.id;
     var _a = useState({}), meshes = _a[0], setMeshes = _a[1];
-    var boundingBox = useMemo(function () {
-        var box = new THREE.Box3();
-        Object.values(meshes).forEach(function (mesh) {
-            var _a;
-            var newObject = mesh.threeMesh.clone();
-            (_a = newObject.position).set.apply(_a, normalizeXYZ(mesh.position));
-            box.expandByObject(newObject);
-        });
-        return box;
-    }, [meshes]);
     var containerId = useMemo(function () {
         return id !== null && id !== void 0 ? id : generateUUID();
     }, [id]);
+    var _b = useMemo(function () {
+        var box = new THREE.Box3();
+        var group = new THREE.Group();
+        Object.values(meshes).forEach(function (mesh) {
+            box.expandByObject(mesh.threeMesh);
+            group.add(mesh.threeMesh.clone());
+        });
+        var position = new THREE.Box3()
+            .setFromObject(group)
+            .getCenter(group.position);
+        return [box, position];
+    }, [meshes]), boundingBox = _b[0], position = _b[1];
     var addChild = useCallback(function (id, threeMesh, position) {
         setMeshes(function (prev) {
             var _a;
@@ -60,30 +62,19 @@ export function Container(props) {
     var removeChild = useCallback(function (id) {
         setMeshes(function (prev) { return _.omit(prev, id); });
     }, []);
-    var position = useMemo(function () {
-        var positions = Object.values(meshes).map(function (m) {
-            return normalizeXYZ(m.position);
-        });
-        return [
-            _.mean(positions.map(function (p) { return p[0]; })),
-            _.mean(positions.map(function (p) { return p[1]; })),
-            _.mean(positions.map(function (p) { return p[2]; })),
-        ];
-    }, [meshes]);
-    var _b = (function () {
+    var _c = (function () {
         var max = boundingBox.max, min = boundingBox.min;
         return {
             width: max.x - min.x,
             height: max.y - min.y,
             depth: max.z - min.z,
         };
-    })(), width = _b.width, height = _b.height, depth = _b.depth;
+    })(), width = _c.width, height = _c.height, depth = _c.depth;
     var value = { addChild: addChild, removeChild: removeChild, containerId: containerId };
-    var passThroughProps = ["onClick", "onHoverEnter", "onHoverLeave"];
-    return (_jsxs(ContainerContext.Provider, __assign({ value: value }, { children: [_jsx(Box, __assign({}, _.pick(props, passThroughProps), { material: {
+    return (_jsxs(ContainerContext.Provider, __assign({ value: value }, { children: [_jsx(Box, { onClick: props.onClick, onHoverEnter: props.onHoverEnter, onHoverLeave: props.onHoverLeave, material: {
                     opacity: 0,
                     transparent: true,
                     type: "basic",
-                }, width: width, height: height, depth: depth, position: position, id: containerId })), children] })));
+                }, width: width, height: height, depth: depth, position: position, id: containerId }), children] })));
 }
 //# sourceMappingURL=container.js.map

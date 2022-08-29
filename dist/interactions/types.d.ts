@@ -1,5 +1,5 @@
-declare type MouseHandler = (event: MouseEvent) => void;
-declare type KeyboardHandler = (event: KeyboardEvent) => void;
+export declare type MouseHandler = (event: MouseEvent) => void;
+export declare type KeyboardHandler = (event: KeyboardEvent) => void;
 interface MouseInteractable {
     onClick?: MouseHandler;
 }

@@ -17,7 +17,7 @@ import { useTheme } from "./theme";
 export function Button(_a) {
     var onClick = _a.onClick, position = _a.position, value = _a.value;
     var theme = useTheme();
-    var _b = theme.colors.primary, base = _b.base, light = _b.light;
+    var _b = theme.colors.text, base = _b.base, light = _b.light;
     var _c = useState(base), color = _c[0], setColor = _c[1];
     return (_jsx(Container, __assign({ onHoverEnter: function () { return setColor(light); }, onHoverLeave: function () { return setColor(base); }, onClick: onClick }, { children: _jsx(Text, { value: value, position: position, material: { type: "basic", color: color } }) })));
 }
