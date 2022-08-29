@@ -1,5 +1,8 @@
 import { useState } from "react";
-import { Container, Text, useTheme, XYZ } from "../gamehook";
+import { Container } from "./container";
+import { Text } from "./text";
+import { useTheme } from "./theme";
+import { XYZ } from "./physics/types";
 
 interface Props {
   onClick: () => void;
