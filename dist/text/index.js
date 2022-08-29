@@ -40,7 +40,8 @@ function ProceduralText(props) {
     }, [bevelOffset, bevelSegments, height, loadedFont, size, value]);
     // Material
     var threeMaterial = useMemo(function () {
-        return createMaterial(material !== null && material !== void 0 ? material : { type: "basic", color: theme.colors.text.base });
+        var opts = material !== null && material !== void 0 ? material : { type: "basic", color: theme.colors.text.base };
+        return createMaterial(opts);
     }, [material, theme.colors.text.base]);
     var threeMesh = useMemo(function () {
         var threeMesh = new THREE.Mesh(geometry, threeMaterial);

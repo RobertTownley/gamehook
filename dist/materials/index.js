@@ -56,6 +56,12 @@ export function createMaterial(options, useCache) {
         return cache.get(key);
     }
     var newMaterial = (function () {
+        if (!(options === null || options === void 0 ? void 0 : options.type)) {
+            return createNormalMaterial(defaultMaterialOptions);
+        }
+        if (options.type.includes("Mesh")) {
+            return options;
+        }
         switch (options === null || options === void 0 ? void 0 : options.type) {
             case "basic":
                 return createBasicMaterial(options);

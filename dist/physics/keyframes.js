@@ -121,9 +121,7 @@ export function detectCollisions(meshes) {
         }
         var sRadius = source.threeMesh.geometry.boundingSphere.radius;
         var proximateTargets = targets.filter(function (t) {
-            if (!t.threeMesh.geometry.boundingSphere) {
-                t.threeMesh.geometry.computeBoundingSphere();
-            }
+            t.threeMesh.geometry.computeBoundingSphere();
             var tRadius = t.threeMesh.geometry.boundingSphere.radius;
             var maxCollisionDistance = sRadius + tRadius;
             return (source.threeMesh.position.distanceTo(t.threeMesh.position) <

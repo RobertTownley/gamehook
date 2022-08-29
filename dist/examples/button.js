@@ -9,8 +9,9 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-import { jsx as _jsx } from "react/jsx-runtime";
-import { Button, createTheme, Scene } from "../../gamehook";
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { useState } from "react";
+import { Button, createTheme, Scene, Text } from "../../gamehook";
 var theme = createTheme({
     colors: {
         primary: {
@@ -20,12 +21,14 @@ var theme = createTheme({
         },
         text: {
             base: 0xe9c46a,
-            light: 0xe9c46a,
+            light: 0xffd57b,
             dark: 0xe9c46a,
         },
     },
 });
 export function ButtonExample() {
-    return (_jsx(Scene, __assign({ theme: theme }, { children: _jsx(Button, { position: { x: 0, y: 2, z: 0 }, onClick: function () { return console.log("WHEE"); }, value: "Click me!" }) })));
+    var _a = useState(false), showOther = _a[0], setShowOther = _a[1];
+    var _b = useState(false), showFinal = _b[0], setShowFinal = _b[1];
+    return (_jsxs(Scene, __assign({ theme: theme }, { children: [_jsx(Button, { position: { x: 0, y: 3, z: 0 }, onClick: function () { return setShowOther(!showOther); }, value: "I am a button" }), showOther && (_jsx(Button, { position: { x: 0, y: 0, z: 0 }, onClick: function () { return setShowFinal(!showFinal); }, value: "So am I" })), showFinal && (_jsx(Text, { position: { x: 0, y: -3, z: 0 }, onClick: function () { return setShowFinal(!showFinal); }, value: "I am not" }))] })));
 }
 //# sourceMappingURL=button.js.map

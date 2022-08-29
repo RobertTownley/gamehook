@@ -32,6 +32,6 @@ export interface StandardMaterialOptions extends BaseMaterial {
 }
 export declare type MaterialOptions = BasicMaterialOptions | NormalMaterialOptions | StandardMaterialOptions;
 export interface Designable {
-    material?: MaterialOptions;
+    material?: THREE.Material | MaterialOptions;
 }
 export {};

@@ -16,6 +16,7 @@ import { createContext, useContext, useState, useMemo, useEffect, useCallback, }
 import { generateUUID } from "three/src/math/MathUtils";
 import { Box } from "./mesh/box";
 import { normalizeXYZ } from "./physics/utils";
+import { createMaterial } from "./materials";
 var ContainerContext = createContext({
     addChild: function (_id, _bounds, _position) { return ({}); },
     removeChild: function (_id) { return ({}); },
@@ -71,10 +72,13 @@ export function Container(props) {
         };
     })(), width = _c.width, height = _c.height, depth = _c.depth;
     var value = { addChild: addChild, removeChild: removeChild, containerId: containerId };
-    return (_jsxs(ContainerContext.Provider, __assign({ value: value }, { children: [_jsx(Box, { onClick: props.onClick, onHoverEnter: props.onHoverEnter, onHoverLeave: props.onHoverLeave, material: {
-                    opacity: 0,
-                    transparent: true,
-                    type: "basic",
-                }, width: width, height: height, depth: depth, position: position, id: containerId }), children] })));
+    var material = useMemo(function () {
+        return createMaterial({
+            opacity: 0,
+            transparent: true,
+            type: "basic",
+        });
+    }, []);
+    return (_jsxs(ContainerContext.Provider, __assign({ value: value }, { children: [_jsx(Box, { onClick: props.onClick, onHoverEnter: props.onHoverEnter, onHoverLeave: props.onHoverLeave, material: material, width: width, height: height, depth: depth, position: position, id: containerId }), children] })));
 }
 //# sourceMappingURL=container.js.map
