@@ -9,6 +9,7 @@ import { Meshable } from "../mesh/types";
 import { useMesh } from "../mesh/hooks";
 import { HierarchyContext, useHierarchy } from "../hierarchy";
 import { useTheme } from "../theme";
+import { useContainer } from "../container";
 
 interface Props extends Meshable {
   font?: object;
@@ -31,7 +32,7 @@ function ProceduralText(props: Props) {
     computeOffset = true,
     value,
     size = 2,
-    height = 0,
+    height = 0.01,
     bevelOffset = 0,
     bevelSegments = 0,
     material,
@@ -70,6 +71,7 @@ function ProceduralText(props: Props) {
 
   const mesh = useMesh({ threeMesh, ...props });
   const hierarchyValue = useHierarchy(children, mesh);
+  useContainer(mesh.id, threeMesh, props.position);
   return (
     <HierarchyContext.Provider value={hierarchyValue}>
       {children}

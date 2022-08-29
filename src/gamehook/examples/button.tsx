@@ -23,7 +23,6 @@ export function ButtonExample() {
         onClick={() => console.log("WHEE")}
         value="Click me!"
       />
-      <Text value="Don't click me" position={{ x: 0, y: -2, z: 0 }} />
     </Scene>
   );
 }

@@ -3,16 +3,17 @@ import { Container } from "./container";
 import { Text } from "./text";
 import { useTheme } from "./theme";
 import { XYZ } from "./physics/types";
+import { MouseHandler } from "./interactions/types";
 
 interface Props {
-  onClick: () => void;
+  onClick: MouseHandler;
   position?: XYZ;
   value: string;
 }
 
 export function Button({ onClick, position, value }: Props) {
   const theme = useTheme();
-  const { base, light } = theme.colors.primary;
+  const { base, light } = theme.colors.text;
   const [color, setColor] = useState(base);
 
   return (

@@ -29,7 +29,7 @@ type AvailableExamples =
   | "text"
   | "texture";
 
-const exampleName: AvailableExamples = "button";
+const exampleName: AvailableExamples = "container";
 
 function App() {
   switch (exampleName) {

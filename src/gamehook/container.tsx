@@ -58,19 +58,24 @@ interface BoundDetails {
 export function Container(props: Props) {
   const { children, id } = props;
   const [meshes, setMeshes] = useState<Record<string, BoundDetails>>({});
-  const boundingBox = useMemo(() => {
-    const box = new THREE.Box3();
-    Object.values(meshes).forEach((mesh) => {
-      const newObject = mesh.threeMesh.clone();
-      newObject.position.set(...normalizeXYZ(mesh.position));
-      box.expandByObject(newObject);
-    });
-    return box;
-  }, [meshes]);
-
   const containerId = useMemo(() => {
     return id ?? generateUUID();
   }, [id]);
+
+  const [boundingBox, position] = useMemo(() => {
+    const box = new THREE.Box3();
+    const group = new THREE.Group();
+
+    Object.values(meshes).forEach((mesh) => {
+      box.expandByObject(mesh.threeMesh);
+      group.add(mesh.threeMesh.clone());
+    });
+
+    const position = new THREE.Box3()
+      .setFromObject(group)
+      .getCenter(group.position);
+    return [box, position];
+  }, [meshes]);
 
   const addChild = useCallback(
     (id: string, threeMesh: THREE.Mesh, position: XYZ) => {
@@ -88,17 +93,6 @@ export function Container(props: Props) {
     setMeshes((prev) => _.omit(prev, id));
   }, []);
 
-  const position: XYZ = useMemo(() => {
-    const positions = Object.values(meshes).map((m) =>
-      normalizeXYZ(m.position)
-    );
-    return [
-      _.mean(positions.map((p) => p[0])),
-      _.mean(positions.map((p) => p[1])),
-      _.mean(positions.map((p) => p[2])),
-    ];
-  }, [meshes]);
-
   const { width, height, depth } = (() => {
     const { max, min } = boundingBox;
     return {
@@ -110,12 +104,12 @@ export function Container(props: Props) {
 
   const value = { addChild, removeChild, containerId };
 
-  const passThroughProps = ["onClick", "onHoverEnter", "onHoverLeave"];
-
   return (
     <ContainerContext.Provider value={value}>
       <Box
-        {..._.pick(props, passThroughProps)}
+        onClick={props.onClick}
+        onHoverEnter={props.onHoverEnter}
+        onHoverLeave={props.onHoverLeave}
         material={{
           opacity: 0,
           transparent: true,
