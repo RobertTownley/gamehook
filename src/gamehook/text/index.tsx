@@ -55,9 +55,8 @@ function ProceduralText(props: Props) {
 
   // Material
   const threeMaterial = useMemo(() => {
-    return createMaterial(
-      material ?? { type: "basic", color: theme.colors.text.base }
-    );
+    const opts = material ?? { type: "basic", color: theme.colors.text.base };
+    return createMaterial(opts);
   }, [material, theme.colors.text.base]);
 
   const threeMesh = useMemo<THREE.Mesh>(() => {

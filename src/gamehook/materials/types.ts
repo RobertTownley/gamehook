@@ -44,5 +44,5 @@ export type MaterialOptions =
   | StandardMaterialOptions;
 
 export interface Designable {
-  material?: MaterialOptions;
+  material?: THREE.Material | MaterialOptions;
 }

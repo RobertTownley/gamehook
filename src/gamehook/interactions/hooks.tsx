@@ -66,7 +66,14 @@ export function useInteraction(
       // Get a list of all objects listening for this mouse event
       const eventType = MouseEventTypeMap[event.type];
       const interactables = [...Object.values(meshes)].filter((obj) => {
-        return obj[eventType] !== undefined;
+        if (obj[eventType] === undefined) {
+          return false;
+        }
+        obj.threeMesh.geometry.computeBoundingSphere();
+        if (!obj.threeMesh.geometry.boundingSphere?.radius) {
+          return false;
+        }
+        return true;
       });
       if (!interactables) return;
 

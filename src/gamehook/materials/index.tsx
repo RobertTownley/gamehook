@@ -74,7 +74,7 @@ function createNormalMaterial(options: NormalMaterialOptions) {
 }
 
 export function createMaterial(
-  options?: MaterialOptions,
+  options?: MaterialOptions | THREE.Material,
   useCache = true
 ): THREE.Material {
   const key = JSON.stringify(options);
@@ -82,6 +82,12 @@ export function createMaterial(
     return cache.get(key) as unknown as THREE.Material;
   }
   const newMaterial = (() => {
+    if (!options?.type) {
+      return createNormalMaterial(defaultMaterialOptions);
+    }
+    if (options.type.includes("Mesh")) {
+      return options as unknown as THREE.Material;
+    }
     switch (options?.type) {
       case "basic":
         return createBasicMaterial(options as BasicMaterialOptions);

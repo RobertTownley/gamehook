@@ -14,6 +14,7 @@ import { Box } from "./mesh/box";
 import { XYZ } from "./physics/types";
 import { normalizeXYZ } from "./physics/utils";
 import { Interactable } from "./interactions";
+import { createMaterial } from "./materials";
 
 interface Props extends Interactable {
   children: ReactNode;
@@ -103,6 +104,13 @@ export function Container(props: Props) {
   })();
 
   const value = { addChild, removeChild, containerId };
+  const material = useMemo(() => {
+    return createMaterial({
+      opacity: 0,
+      transparent: true,
+      type: "basic",
+    });
+  }, []);
 
   return (
     <ContainerContext.Provider value={value}>
@@ -110,11 +118,7 @@ export function Container(props: Props) {
         onClick={props.onClick}
         onHoverEnter={props.onHoverEnter}
         onHoverLeave={props.onHoverLeave}
-        material={{
-          opacity: 0,
-          transparent: true,
-          type: "basic",
-        }}
+        material={material}
         width={width}
         height={height}
         depth={depth}

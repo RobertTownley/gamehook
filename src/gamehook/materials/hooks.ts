@@ -1,3 +1,4 @@
+import * as THREE from "three";
 import { useLayoutEffect, useMemo } from "react";
 
 import { createMaterial } from "./index";
@@ -6,10 +7,10 @@ import { MaterialOptions } from "./types";
 
 export function useMaterial(
   mesh: Mesh,
-  materialOptions: MaterialOptions | undefined
+  materialOptions: THREE.Material | MaterialOptions | undefined
 ) {
   // Give material to mesh object
-  const material = useMemo(() => {
+  const material: THREE.Material = useMemo(() => {
     return createMaterial(materialOptions);
   }, [materialOptions]);
 
