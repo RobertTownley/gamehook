@@ -21,13 +21,24 @@ interface Message {
   payload: any;
 }
 
+const PROD_URL = "ws://oyster-app-bpngv.ondigitalocean.app/connectionws";
+const DEV_URL = "ws://localhost:8000/connectionws";
+const prod = true;
+
 export function useConnection({
   clientId,
   lobbyId,
 }: UseConnection): Connection {
   const ws = useMemo(() => {
-    return new WebSocket("ws://localhost:8000/ws");
-  }, []);
+    const queryParams = new URLSearchParams({
+      clientId,
+      lobbyId,
+      notSoSecret: "pear2022",
+    }).toString();
+    const url = prod ? PROD_URL : DEV_URL;
+    return new WebSocket(`${url}?${queryParams}`);
+  }, [clientId, lobbyId]);
+
   const listeners = useMemo<Record<string, EventListener>>(() => ({}), []);
 
   const emit = useCallback(
