@@ -1,9 +1,18 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+var PROD_URL = "ws://oyster-app-bpngv.ondigitalocean.app/connectionws";
+var DEV_URL = "ws://localhost:8000/connectionws";
+var prod = true;
 export function useConnection(_a) {
     var clientId = _a.clientId, lobbyId = _a.lobbyId;
     var ws = useMemo(function () {
-        return new WebSocket("ws://localhost:8000/ws");
-    }, []);
+        var queryParams = new URLSearchParams({
+            clientId: clientId,
+            lobbyId: lobbyId,
+            notSoSecret: "pear2022",
+        }).toString();
+        var url = prod ? PROD_URL : DEV_URL;
+        return new WebSocket("".concat(url, "?").concat(queryParams));
+    }, [clientId, lobbyId]);
     var listeners = useMemo(function () { return ({}); }, []);
     var emit = useCallback(function (eventName, payload) {
         var data = JSON.stringify({ clientId: clientId, lobbyId: lobbyId, eventName: eventName, payload: payload });
