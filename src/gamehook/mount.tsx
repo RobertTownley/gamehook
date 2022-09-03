@@ -57,53 +57,43 @@ export function useGameLoop({
   }, [camera, lights, models, meshes, renderer, scene]);
 }
 
-export function useMountRef(renderer: THREE.WebGLRenderer) {
-  const mountRef = useRef<HTMLDivElement>(null);
-
-  useLayoutEffect(() => {
-    let mounted = true;
-    const existingRef = mountRef.current;
-    const { domElement } = renderer;
-
-    if (mounted) {
-      mountRef.current?.appendChild(domElement);
-    }
-    return () => {
-      mounted = false;
-      if (existingRef?.contains(domElement)) {
-        existingRef?.removeChild(domElement);
-      }
-    };
-  }, [renderer]);
-  return mountRef;
-}
-
 interface UseResize {
   camera: GameCamera;
-  width?: number;
   height?: number;
+  width?: number;
   renderer: THREE.WebGLRenderer;
+  canvas?: HTMLCanvasElement;
 }
-function resize({ camera, width, height, renderer }: UseResize) {
-  const w = width ?? window.innerWidth;
-  const h = height ?? window.innerHeight;
+function resize({ camera, width, height, canvas, renderer }: UseResize) {
+  const w = width ?? canvas?.clientWidth ?? window.innerWidth;
+  const h = height ?? canvas?.clientHeight ?? window.innerHeight;
   const ratio = w / h;
   camera.camera.aspect = ratio;
   camera.camera.updateProjectionMatrix();
   renderer.setSize(w, h);
 }
-export function useResize({ camera, width, height, renderer }: UseResize) {
+export function useResize({
+  canvas,
+  camera,
+  width,
+  height,
+  renderer,
+}: UseResize) {
   useLayoutEffect(() => {
-    resize({ camera, width, height, renderer });
-  }, [camera, width, height, renderer]);
-  window.addEventListener("resize", () => {
-    resize({
-      camera,
-      width,
-      height,
-      renderer,
-    });
-  });
+    resize({ canvas, camera, width, height, renderer });
+    const listener = () =>
+      resize({
+        canvas,
+        camera,
+        width,
+        height,
+        renderer,
+      });
+    window.addEventListener("resize", listener);
+    return () => {
+      window.removeEventListener("resize", listener);
+    };
+  }, [camera, canvas, width, height, renderer]);
 }
 
 export function useAddToScene(mesh: Mesh) {
