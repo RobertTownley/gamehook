@@ -16,9 +16,11 @@ interface SceneProps {
   width?: number;
   height?: number;
   theme?: Theme;
+  antialias?: boolean;
 }
 
 export function Scene({
+  antialias = true,
   background = 0x000000,
   castShadow = false,
   children,
@@ -27,8 +29,15 @@ export function Scene({
   height,
   theme,
 }: SceneProps) {
+  const sceneId = useMemo(() => id ?? generateUUID(), [id]);
   const camera = useMemo(() => buildGameCamera({}), []);
-  const renderer = useMemo(() => new THREE.WebGLRenderer(), []);
+  const renderer = useMemo(
+    () =>
+      new THREE.WebGLRenderer({
+        antialias,
+      }),
+    [antialias]
+  );
   if (castShadow) {
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -44,13 +53,13 @@ export function Scene({
 
     return {
       camera,
-      id: id ?? generateUUID(),
+      id: sceneId,
       lights: {},
       meshes: {},
       models: {},
       threeScene,
     };
-  }, [camera, id]);
+  }, [camera, sceneId]);
 
   // Update Background color
   useEffect(() => {
@@ -71,12 +80,12 @@ export function Scene({
   useInteraction(value.meshes, renderer, camera.camera);
 
   return (
-    <div ref={mountRef}>
+    <canvas ref={mountRef} id={sceneId}>
       <SceneContext.Provider value={value}>
         <ThemeContext.Provider value={theme ?? DefaultTheme}>
           {children}
         </ThemeContext.Provider>
       </SceneContext.Provider>
-    </div>
+    </canvas>
   );
 }

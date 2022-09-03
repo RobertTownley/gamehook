@@ -58,7 +58,7 @@ export function useGameLoop({
 }
 
 export function useMountRef(renderer: THREE.WebGLRenderer) {
-  const mountRef = useRef<HTMLDivElement>(null);
+  const mountRef = useRef<HTMLCanvasElement>(null);
 
   useLayoutEffect(() => {
     let mounted = true;

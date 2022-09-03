@@ -13,6 +13,7 @@ import {
   TextExample,
   TextureExample,
 } from "./gamehook/examples";
+import { WindowExample } from "./gamehook/examples/window";
 
 type AvailableExamples =
   | "audio"
@@ -27,9 +28,10 @@ type AvailableExamples =
   | "parents"
   | "pong"
   | "text"
-  | "texture";
+  | "texture"
+  | "window";
 
-const exampleName: AvailableExamples = "multiplayer";
+const exampleName: AvailableExamples = "window";
 
 function App() {
   switch (exampleName) {
@@ -59,6 +61,8 @@ function App() {
       return <TextExample />;
     case "texture":
       return <TextureExample />;
+    case "window":
+      return <WindowExample />;
   }
 }
 
