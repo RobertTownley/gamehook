@@ -80,12 +80,12 @@ export function Scene({
   useInteraction(value.meshes, renderer, camera.camera);
 
   return (
-    <canvas ref={mountRef} id={sceneId}>
+    <div ref={mountRef} id={sceneId}>
       <SceneContext.Provider value={value}>
         <ThemeContext.Provider value={theme ?? DefaultTheme}>
           {children}
         </ThemeContext.Provider>
       </SceneContext.Provider>
-    </canvas>
+    </div>
   );
 }
