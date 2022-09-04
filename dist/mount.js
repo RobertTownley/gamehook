@@ -1,4 +1,4 @@
-import { useContext, useEffect, useLayoutEffect, useRef } from "react";
+import { useContext, useEffect, useLayoutEffect } from "react";
 import { moveCamera } from "./camera";
 import { accelerateObjects, detectCollisions, moveObjects, rotateObjects, } from "./physics";
 import { animateAndMoveModels } from "./models/keyframes";
@@ -6,6 +6,7 @@ import { detectHoverEntries } from "./interactions/loops";
 import { moveLights } from "./physics/keyframes";
 import { SceneContext } from "./scene/context";
 import { HierarchyContext } from "./hierarchy";
+import { convertCSSMeasureToPixels } from "./window";
 export function useGameLoop(_a) {
     var camera = _a.camera, lights = _a.lights, models = _a.models, renderer = _a.renderer, scene = _a.scene, meshes = _a.meshes;
     useLayoutEffect(function () {
@@ -27,47 +28,34 @@ export function useGameLoop(_a) {
         });
     }, [camera, lights, models, meshes, renderer, scene]);
 }
-export function useMountRef(renderer) {
-    var mountRef = useRef(null);
-    useLayoutEffect(function () {
-        var _a;
-        var mounted = true;
-        var existingRef = mountRef.current;
-        var domElement = renderer.domElement;
-        if (mounted) {
-            (_a = mountRef.current) === null || _a === void 0 ? void 0 : _a.appendChild(domElement);
-        }
-        return function () {
-            mounted = false;
-            if (existingRef === null || existingRef === void 0 ? void 0 : existingRef.contains(domElement)) {
-                existingRef === null || existingRef === void 0 ? void 0 : existingRef.removeChild(domElement);
-            }
-        };
-    }, [renderer]);
-    return mountRef;
-}
 function resize(_a) {
-    var camera = _a.camera, width = _a.width, height = _a.height, renderer = _a.renderer;
-    var w = width !== null && width !== void 0 ? width : window.innerWidth;
-    var h = height !== null && height !== void 0 ? height : window.innerHeight;
+    var _b, _c;
+    var camera = _a.camera, width = _a.width, height = _a.height, renderer = _a.renderer, sceneId = _a.sceneId;
+    var w = (_b = convertCSSMeasureToPixels(width, "width", sceneId)) !== null && _b !== void 0 ? _b : window.innerWidth;
+    var h = (_c = convertCSSMeasureToPixels(height, "height", sceneId)) !== null && _c !== void 0 ? _c : window.innerHeight;
     var ratio = w / h;
     camera.camera.aspect = ratio;
     camera.camera.updateProjectionMatrix();
     renderer.setSize(w, h);
 }
 export function useResize(_a) {
-    var camera = _a.camera, width = _a.width, height = _a.height, renderer = _a.renderer;
+    var camera = _a.camera, width = _a.width, height = _a.height, renderer = _a.renderer, sceneId = _a.sceneId;
     useLayoutEffect(function () {
-        resize({ camera: camera, width: width, height: height, renderer: renderer });
-    }, [camera, width, height, renderer]);
-    window.addEventListener("resize", function () {
-        resize({
-            camera: camera,
-            width: width,
-            height: height,
-            renderer: renderer,
-        });
-    });
+        resize({ camera: camera, width: width, height: height, renderer: renderer, sceneId: sceneId });
+        var listener = function () {
+            return resize({
+                camera: camera,
+                width: width,
+                height: height,
+                renderer: renderer,
+                sceneId: sceneId,
+            });
+        };
+        window.addEventListener("resize", listener);
+        return function () {
+            window.removeEventListener("resize", listener);
+        };
+    }, [camera, width, height, renderer, sceneId]);
 }
 export function useAddToScene(mesh) {
     var hierarchy = useContext(HierarchyContext);

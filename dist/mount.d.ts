@@ -1,9 +1,9 @@
-/// <reference types="react" />
 import * as THREE from "three";
 import { GameCamera } from "./camera";
 import { Mesh } from "./mesh";
 import { GameLight } from "./lights";
 import { LoadedGameModel } from "./models";
+import { CSSMeasure } from "./window";
 export declare function useGameLoop({ camera, lights, models, renderer, scene, meshes, }: {
     camera: GameCamera;
     lights: Record<string, GameLight>;
@@ -12,14 +12,14 @@ export declare function useGameLoop({ camera, lights, models, renderer, scene, m
     scene: THREE.Scene;
     meshes: Record<string, Mesh>;
 }): void;
-export declare function useMountRef(renderer: THREE.WebGLRenderer): import("react").RefObject<HTMLDivElement>;
 interface UseResize {
     camera: GameCamera;
-    width?: number;
-    height?: number;
+    height?: CSSMeasure;
+    width?: CSSMeasure;
     renderer: THREE.WebGLRenderer;
+    sceneId: string;
 }
-export declare function useResize({ camera, width, height, renderer }: UseResize): void;
+export declare function useResize({ camera, width, height, renderer, sceneId, }: UseResize): void;
 export declare function useAddToScene(mesh: Mesh): void;
 export declare function useAddLightToScene(light: GameLight): void;
 export {};
