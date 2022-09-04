@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { useContext, useEffect, useLayoutEffect, useRef } from "react";
+import { useContext, useEffect, useLayoutEffect } from "react";
 
 import { GameCamera, moveCamera } from "./camera";
 import { Mesh } from "./mesh";
@@ -16,6 +16,7 @@ import { SceneContext } from "./scene/context";
 import { HierarchyContext } from "./hierarchy";
 import { GameLight } from "./lights";
 import { LoadedGameModel } from "./models";
+import { convertCSSMeasureToPixels, CSSMeasure } from "./window";
 
 export function useGameLoop({
   camera,
@@ -59,41 +60,43 @@ export function useGameLoop({
 
 interface UseResize {
   camera: GameCamera;
-  height?: number;
-  width?: number;
+  height?: CSSMeasure;
+  width?: CSSMeasure;
   renderer: THREE.WebGLRenderer;
-  canvas?: HTMLCanvasElement;
+  sceneId: string;
 }
-function resize({ camera, width, height, canvas, renderer }: UseResize) {
-  const w = width ?? canvas?.clientWidth ?? window.innerWidth;
-  const h = height ?? canvas?.clientHeight ?? window.innerHeight;
+function resize({ camera, width, height, renderer, sceneId }: UseResize) {
+  const w =
+    convertCSSMeasureToPixels(width, "width", sceneId) ?? window.innerWidth;
+  const h =
+    convertCSSMeasureToPixels(height, "height", sceneId) ?? window.innerHeight;
   const ratio = w / h;
   camera.camera.aspect = ratio;
   camera.camera.updateProjectionMatrix();
   renderer.setSize(w, h);
 }
 export function useResize({
-  canvas,
   camera,
   width,
   height,
   renderer,
+  sceneId,
 }: UseResize) {
   useLayoutEffect(() => {
-    resize({ canvas, camera, width, height, renderer });
+    resize({ camera, width, height, renderer, sceneId });
     const listener = () =>
       resize({
-        canvas,
         camera,
         width,
         height,
         renderer,
+        sceneId,
       });
     window.addEventListener("resize", listener);
     return () => {
       window.removeEventListener("resize", listener);
     };
-  }, [camera, canvas, width, height, renderer]);
+  }, [camera, width, height, renderer, sceneId]);
 }
 
 export function useAddToScene(mesh: Mesh) {

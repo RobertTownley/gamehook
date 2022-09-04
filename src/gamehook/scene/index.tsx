@@ -7,14 +7,15 @@ import { useGameLoop, useResize } from "../mount";
 import { generateUUID } from "three/src/math/MathUtils";
 import { useInteraction } from "../interactions";
 import { Theme, DefaultTheme, ThemeContext } from "../theme";
+import { convertCSSMeasureToPixels, CSSMeasure } from "../window";
 
 interface SceneProps {
   background?: THREE.ColorRepresentation;
   castShadow?: boolean;
   children: ReactNode;
   id?: string;
-  width?: number | string;
-  height?: number | string;
+  width?: CSSMeasure;
+  height?: CSSMeasure;
   theme?: Theme;
   antialias?: boolean;
   canvas?: HTMLCanvasElement;
@@ -22,7 +23,13 @@ interface SceneProps {
 
 export function Scene(props: SceneProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { width, height } = props;
+  const sceneId = useMemo(() => props.id ?? generateUUID(), [props.id]);
+  const width =
+    convertCSSMeasureToPixels(props.width, "width", sceneId) ??
+    window.innerWidth;
+  const height =
+    convertCSSMeasureToPixels(props.height, "height", sceneId) ??
+    window.innerHeight;
   const [canvas, setCanvas] = useState<HTMLCanvasElement | undefined>(
     undefined
   );
@@ -38,27 +45,36 @@ export function Scene(props: SceneProps) {
     <canvas
       ref={canvasRef}
       style={{
-        width: width ?? window.innerWidth,
-        height: height ?? window.innerHeight,
+        width,
+        height,
       }}
+      id={sceneId}
     >
-      {canvasRef.current && <SceneContent {...props} canvas={canvas} />}
+      {canvasRef.current && (
+        <SceneContent
+          {...props}
+          canvas={canvas}
+          width={props.width}
+          height={props.height}
+          id={sceneId}
+        />
+      )}
     </canvas>
   );
 }
 
-function SceneContent({
-  antialias = true,
-  background = 0x000000,
-  castShadow = false,
-  children,
-  id,
-  theme,
-  canvas,
-  width,
-  height,
-}: SceneProps) {
-  const sceneId = useMemo(() => id ?? generateUUID(), [id]);
+function SceneContent(props: SceneProps) {
+  const {
+    antialias = true,
+    background = 0x000000,
+    castShadow = false,
+    children,
+    id,
+    theme,
+    canvas,
+    width,
+    height,
+  } = props;
   const camera = useMemo(() => buildGameCamera({}), []);
   const renderer = useMemo(
     () =>
@@ -73,13 +89,15 @@ function SceneContent({
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   }
 
+  const sceneId = id!; // Wrapper component ensures it's set
+
   // Rendering
   useResize({
-    canvas,
-    width: canvas?.clientWidth,
-    height: canvas?.clientHeight,
+    width,
+    height,
     camera,
     renderer,
+    sceneId,
   });
 
   // State
