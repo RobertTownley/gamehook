@@ -13,21 +13,19 @@ import { jsx as _jsx } from "react/jsx-runtime";
 import _ from "lodash";
 import { useState } from "react";
 import { Box, Sphere, Scene } from "../../gamehook";
+var numberOfSpheres = 1000;
+var positions = _.range(0, numberOfSpheres).map(function (_i) {
+    return [
+        _.random(-30, 30, true),
+        _.random(-30, 30, true),
+        _.random(-30, 30, true),
+    ];
+});
 export function ParentsExample() {
-    var numberOfSpheres = 1000;
     var red = 0xff0000;
     var green = 0x00ff00;
     var _a = useState(red), color = _a[0], setColor = _a[1];
-    var positions = _.range(0, numberOfSpheres).map(function (_i) {
-        return [
-            _.random(-30, 30, true),
-            _.random(-30, 30, true),
-            _.random(-30, 30, true),
-        ];
-    });
-    var handleClick = function () {
-        setColor(color === red ? green : red);
-    };
-    return (_jsx(Scene, { children: _jsx(Box, __assign({ rotation: { x: 0.002, y: 0.002, z: 0.002 }, onClick: handleClick }, { children: positions.map(function (position, i) { return (_jsx(Sphere, { material: { type: "basic", color: color }, position: position, radius: 0.1 }, i)); }) })) }));
+    var handleClick = function () { return setColor(color === red ? green : red); };
+    return (_jsx(Scene, { children: _jsx(Box, __assign({ rotation: { x: 0.004, y: 0.004, z: 0.002 }, onClick: handleClick }, { children: positions.map(function (position, i) { return (_jsx(Sphere, { material: { type: "basic", color: color }, position: position, radius: 0.1 }, i)); }) })) }));
 }
 //# sourceMappingURL=parents.js.map

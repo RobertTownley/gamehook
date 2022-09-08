@@ -11,8 +11,7 @@ var __assign = (this && this.__assign) || function () {
 };
 import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
 import { useMemo } from "react";
-import { Box, Scene } from "../../gamehook";
-import { useConnection, useSharedState } from "./lib";
+import { Box, Scene, useConnection, useSharedState, } from "../../gamehook";
 export function MultiplayerExample() {
     var _a = useMemo(function () {
         var _a, _b;

@@ -31,7 +31,7 @@ type AvailableExamples =
   | "texture"
   | "window";
 
-const exampleName: AvailableExamples = "window";
+const exampleName: AvailableExamples = "parents";
 
 function App() {
   switch (exampleName) {

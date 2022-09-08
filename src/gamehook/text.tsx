@@ -4,12 +4,13 @@ import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import { useMemo } from "react";
 
 import DefaultFont from "three/examples/fonts/helvetiker_regular.typeface.json";
-import { createMaterial } from "../materials";
-import { Meshable } from "../mesh/types";
-import { useMesh } from "../mesh/hooks";
-import { HierarchyContext, useHierarchy } from "../hierarchy";
-import { useTheme } from "../theme";
-import { useContainer } from "../container";
+
+import { createMaterial } from "./materials";
+import { Meshable } from "./mesh/types";
+import { useMesh } from "./mesh/hooks";
+import { HierarchyContext, useHierarchy } from "./hierarchy";
+import { useTheme } from "./theme";
+import { useContainer } from "./container";
 
 interface Props extends Meshable {
   font?: object;

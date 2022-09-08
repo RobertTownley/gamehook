@@ -1,8 +1,12 @@
 import { useMemo } from "react";
 
-import { Box, Scene } from "../../gamehook";
-import { XYZObject } from "../physics";
-import { useConnection, useSharedState } from "./lib";
+import {
+  Box,
+  Scene,
+  XYZObject,
+  useConnection,
+  useSharedState,
+} from "../../gamehook";
 
 export function MultiplayerExample() {
   const { clientId, lobbyId } = useMemo(() => {
