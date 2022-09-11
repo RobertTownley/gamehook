@@ -33,10 +33,10 @@ export function usePhysics(
 ) {
   // Physics
   useEffect(() => {
-    mesh.acceleration = acceleration;
+    mesh.acceleration = normalizeXYZ(acceleration);
   }, [mesh, acceleration]);
   useEffect(() => {
-    mesh.velocity = velocity;
+    mesh.velocity = normalizeXYZ(velocity);
   }, [mesh, velocity]);
   const [xOrientation, yOrientation, zOrientation] = useMemo(
     () => normalizeXYZ(orientation),

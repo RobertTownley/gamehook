@@ -11,32 +11,41 @@ import {
 export function MultiplayerExample() {
   const { clientId, lobbyId } = useMemo(() => {
     const params = new URLSearchParams(window.location.search);
-    const clientId = params.get("clientId") ?? "unknown";
-    const lobbyId = params.get("lobbyId") ?? "unknown";
+    const clientId = params.get("clientId");
+    const lobbyId = params.get("lobbyId");
     return { clientId, lobbyId };
   }, []);
+  if (!clientId || !lobbyId) {
+    return <p>Please provide a URL that includes both clientId and lobbyId</p>;
+  }
+  return <Game clientId={clientId} lobbyId={lobbyId} />;
+}
 
+const INITIAL_VELOCITY = { x: 0, y: 0.1, z: 0 };
+
+function Game({ clientId, lobbyId }: { clientId: string; lobbyId: string }) {
   const connection = useConnection({
     clientId,
     lobbyId,
   });
 
-  const [exampleState, setExampleState] = useSharedState<XYZObject>(
-    "example-state",
+  const [velocity, setVelocity] = useSharedState<XYZObject>(
+    "cube-velocity",
     connection,
     { x: 0, y: 0, z: 0 }
   );
 
-  const handleClick = () => {
-    setExampleState({ ...exampleState, x: exampleState.x + 1 });
-  };
-
   return (
     <>
-      <p>Click the button to move the box</p>
-      <button onClick={handleClick}>Click Me</button>
+      <p style={{ display: "fixed", top: 0 }}>
+        Press a key to make the cube bounce
+      </p>
       <Scene>
-        <Box position={exampleState} />
+        <Box
+          acceleration={{ x: 0, y: -0.002, z: 0 }}
+          onKeypress={() => setVelocity(INITIAL_VELOCITY)}
+          velocity={velocity}
+        />
       </Scene>
     </>
   );
