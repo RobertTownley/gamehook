@@ -13,6 +13,7 @@ interface SceneProps {
   background?: THREE.ColorRepresentation;
   castShadow?: boolean;
   children: ReactNode;
+  collisionThreshold?: number;
   id?: string;
   width?: CSSMeasure;
   height?: CSSMeasure;
@@ -72,6 +73,7 @@ function SceneContent(props: SceneProps) {
     id,
     theme,
     canvas,
+    collisionThreshold = 0.005,
     width,
     height,
   } = props;
@@ -122,6 +124,7 @@ function SceneContent(props: SceneProps) {
   // Render initial and new frames
   useGameLoop({
     camera: value.camera,
+    collisionThreshold,
     lights: value.lights,
     models: value.models,
     renderer,

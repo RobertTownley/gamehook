@@ -21,8 +21,8 @@ interface Message {
   payload: any;
 }
 
-const PROD_URL = "ws://oyster-app-bpngv.ondigitalocean.app/connectionws";
-const DEV_URL = "ws://localhost:8000/connectionws";
+const PROD_URL = "wss://oyster-app-bpngv.ondigitalocean.app/connectionws";
+const DEV_URL = "wss://localhost:8000/connectionws";
 const prod = true;
 
 export function useConnection({
@@ -80,7 +80,7 @@ export function useSharedState<T>(
 ): [T, (payload: T) => void] {
   const [state, setState] = useState<T>(initialValue);
 
-  const receiveRemoteState = useCallback((payload: T) => {
+  const receiveRemoteState = useCallback<(arg0: T) => void>((payload: T) => {
     setState(payload);
   }, []);
 

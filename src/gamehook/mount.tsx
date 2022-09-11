@@ -25,8 +25,10 @@ export function useGameLoop({
   renderer,
   scene,
   meshes,
+  collisionThreshold,
 }: {
   camera: GameCamera;
+  collisionThreshold: number;
   lights: Record<string, GameLight>;
   models: Record<string, LoadedGameModel>;
   renderer: THREE.WebGLRenderer;
@@ -41,7 +43,7 @@ export function useGameLoop({
       accelerateObjects(meshes);
       moveObjects(meshes);
       rotateObjects(meshes);
-      detectCollisions(meshes);
+      detectCollisions(meshes, collisionThreshold);
 
       // Camera
       moveCamera(meshes, models, camera);
@@ -55,7 +57,7 @@ export function useGameLoop({
       // Interaction
       detectHoverEntries({ meshes, camera, renderer });
     });
-  }, [camera, lights, models, meshes, renderer, scene]);
+  }, [camera, collisionThreshold, lights, models, meshes, renderer, scene]);
 }
 
 interface UseResize {
