@@ -8,25 +8,38 @@ import { SceneContext } from "./scene/context";
 import { HierarchyContext } from "./hierarchy";
 import { convertCSSMeasureToPixels } from "./window";
 export function useGameLoop(_a) {
-    var camera = _a.camera, lights = _a.lights, models = _a.models, renderer = _a.renderer, scene = _a.scene, meshes = _a.meshes;
+    var camera = _a.camera, lights = _a.lights, models = _a.models, renderer = _a.renderer, scene = _a.scene, meshes = _a.meshes, collisionThreshold = _a.collisionThreshold, fps = _a.fps;
     useLayoutEffect(function () {
-        renderer.setAnimationLoop(function () {
-            renderer.render(scene, camera.camera);
-            // Mesh Physics
-            accelerateObjects(meshes);
-            moveObjects(meshes);
-            rotateObjects(meshes);
-            detectCollisions(meshes);
-            // Camera
-            moveCamera(meshes, models, camera);
-            // Lights
-            moveLights(lights, meshes);
-            // Animation
-            animateAndMoveModels(models);
-            // Interaction
-            detectHoverEntries({ meshes: meshes, camera: camera, renderer: renderer });
+        var lastTimestamp = 0;
+        renderer.setAnimationLoop(function (timestamp) {
+            if (timestamp - lastTimestamp > 1000 / fps) {
+                renderer.render(scene, camera.camera);
+                // Mesh Physics
+                accelerateObjects(meshes);
+                moveObjects(meshes);
+                rotateObjects(meshes);
+                detectCollisions(meshes, collisionThreshold);
+                // Camera
+                moveCamera(meshes, models, camera);
+                // Lights
+                moveLights(lights, meshes);
+                // Animation
+                animateAndMoveModels(models);
+                // Interaction
+                detectHoverEntries({ meshes: meshes, camera: camera, renderer: renderer });
+                lastTimestamp = timestamp;
+            }
         });
-    }, [camera, lights, models, meshes, renderer, scene]);
+    }, [
+        camera,
+        collisionThreshold,
+        fps,
+        lights,
+        models,
+        meshes,
+        renderer,
+        scene,
+    ]);
 }
 function resize(_a) {
     var _b, _c;
@@ -88,5 +101,36 @@ export function useAddLightToScene(light) {
             light.threeLight.removeFromParent();
         };
     }, [light, scene.threeScene, scene.lights]);
+}
+function createFpsCap(loop, fps) {
+    if (fps === void 0) { fps = 60; }
+    var targetFps = 0, fpsInterval = 0;
+    var lastTime = 0, lastOverTime = 0, prevOverTime = 0, deltaTime = 0;
+    function updateFps(value) {
+        targetFps = value;
+        fpsInterval = 1000 / targetFps;
+    }
+    updateFps(fps);
+    return {
+        // the targeted frame rate
+        get fps() {
+            return targetFps;
+        },
+        set fps(value) {
+            updateFps(value);
+        },
+        // the frame-capped loop function
+        loop: function (time) {
+            deltaTime = time - lastTime;
+            if (deltaTime < fpsInterval) {
+                return;
+            }
+            prevOverTime = lastOverTime;
+            lastOverTime = deltaTime % fpsInterval;
+            lastTime = time - lastOverTime;
+            deltaTime -= prevOverTime;
+            return loop(deltaTime);
+        },
+    };
 }
 //# sourceMappingURL=mount.js.map

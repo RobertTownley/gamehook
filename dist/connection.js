@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-var PROD_URL = "ws://oyster-app-bpngv.ondigitalocean.app/connectionws";
-var DEV_URL = "ws://localhost:8000/connectionws";
+var PROD_URL = "wss://oyster-app-bpngv.ondigitalocean.app/connectionws";
+var DEV_URL = "wss://localhost:8000/connectionws";
 var prod = true;
 export function useConnection(_a) {
     var clientId = _a.clientId, lobbyId = _a.lobbyId;

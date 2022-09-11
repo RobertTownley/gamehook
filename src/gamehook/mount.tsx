@@ -26,6 +26,7 @@ export function useGameLoop({
   scene,
   meshes,
   collisionThreshold,
+  fps,
 }: {
   camera: GameCamera;
   collisionThreshold: number;
@@ -34,30 +35,45 @@ export function useGameLoop({
   renderer: THREE.WebGLRenderer;
   scene: THREE.Scene;
   meshes: Record<string, Mesh>;
+  fps: number;
 }) {
   useLayoutEffect(() => {
-    renderer.setAnimationLoop(() => {
-      renderer.render(scene, camera.camera);
+    let lastTimestamp = 0;
 
-      // Mesh Physics
-      accelerateObjects(meshes);
-      moveObjects(meshes);
-      rotateObjects(meshes);
-      detectCollisions(meshes, collisionThreshold);
+    renderer.setAnimationLoop((timestamp) => {
+      if (timestamp - lastTimestamp > 1000 / fps) {
+        renderer.render(scene, camera.camera);
 
-      // Camera
-      moveCamera(meshes, models, camera);
+        // Mesh Physics
+        accelerateObjects(meshes);
+        moveObjects(meshes);
+        rotateObjects(meshes);
+        detectCollisions(meshes, collisionThreshold);
 
-      // Lights
-      moveLights(lights, meshes);
+        // Camera
+        moveCamera(meshes, models, camera);
 
-      // Animation
-      animateAndMoveModels(models);
+        // Lights
+        moveLights(lights, meshes);
 
-      // Interaction
-      detectHoverEntries({ meshes, camera, renderer });
+        // Animation
+        animateAndMoveModels(models);
+
+        // Interaction
+        detectHoverEntries({ meshes, camera, renderer });
+        lastTimestamp = timestamp;
+      }
     });
-  }, [camera, collisionThreshold, lights, models, meshes, renderer, scene]);
+  }, [
+    camera,
+    collisionThreshold,
+    fps,
+    lights,
+    models,
+    meshes,
+    renderer,
+    scene,
+  ]);
 }
 
 interface UseResize {
@@ -133,4 +149,47 @@ export function useAddLightToScene(light: GameLight) {
       light.threeLight.removeFromParent();
     };
   }, [light, scene.threeScene, scene.lights]);
+}
+
+function createFpsCap(loop: (deltaTime: number) => void, fps = 60) {
+  let targetFps = 0,
+    fpsInterval = 0;
+  let lastTime = 0,
+    lastOverTime = 0,
+    prevOverTime = 0,
+    deltaTime = 0;
+
+  function updateFps(value: number) {
+    targetFps = value;
+    fpsInterval = 1000 / targetFps;
+  }
+
+  updateFps(fps);
+
+  return {
+    // the targeted frame rate
+    get fps() {
+      return targetFps;
+    },
+    set fps(value) {
+      updateFps(value);
+    },
+
+    // the frame-capped loop function
+    loop: function (time: number) {
+      deltaTime = time - lastTime;
+
+      if (deltaTime < fpsInterval) {
+        return;
+      }
+
+      prevOverTime = lastOverTime;
+      lastOverTime = deltaTime % fpsInterval;
+      lastTime = time - lastOverTime;
+
+      deltaTime -= prevOverTime;
+
+      return loop(deltaTime);
+    },
+  };
 }

@@ -100,7 +100,7 @@ function getVertexesForObject(_a) {
     }
     return vertices;
 }
-export function detectCollisions(meshes) {
+export function detectCollisions(meshes, threshold) {
     var meshList = Object.values(meshes);
     var collisionTargets = meshList.filter(function (m) { return m.collides || m.collidesWith; });
     var collisionSources = meshList.filter(function (m) { return m.onCollision; });
@@ -132,7 +132,7 @@ export function detectCollisions(meshes) {
         // Determine if any of the objects in the collision list have collided
         for (var _i = 0, proximateTargets_1 = proximateTargets; _i < proximateTargets_1.length; _i++) {
             var t = proximateTargets_1[_i];
-            var colliding = determineIfColliding(source, t);
+            var colliding = determineIfColliding(source, t, threshold);
             if (colliding) {
                 var handler = source.onCollision;
                 if (handler) {
@@ -148,7 +148,6 @@ export function detectCollisions(meshes) {
     });
 }
 function determineIfColliding(mesh1, mesh2, threshold) {
-    if (threshold === void 0) { threshold = 0.01; }
     var mesh1Vertexes = getVertexesForObject(mesh1);
     var mesh2Vertexes = getVertexesForObject(mesh2);
     for (var _i = 0, mesh1Vertexes_1 = mesh1Vertexes; _i < mesh1Vertexes_1.length; _i++) {

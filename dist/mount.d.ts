@@ -4,13 +4,15 @@ import { Mesh } from "./mesh";
 import { GameLight } from "./lights";
 import { LoadedGameModel } from "./models";
 import { CSSMeasure } from "./window";
-export declare function useGameLoop({ camera, lights, models, renderer, scene, meshes, }: {
+export declare function useGameLoop({ camera, lights, models, renderer, scene, meshes, collisionThreshold, fps, }: {
     camera: GameCamera;
+    collisionThreshold: number;
     lights: Record<string, GameLight>;
     models: Record<string, LoadedGameModel>;
     renderer: THREE.WebGLRenderer;
     scene: THREE.Scene;
     meshes: Record<string, Mesh>;
+    fps: number;
 }): void;
 interface UseResize {
     camera: GameCamera;

@@ -27,6 +27,8 @@ export function ParentsExample() {
             material={{ type: "basic", color }}
             position={position}
             radius={0.1}
+            heightSegments={8}
+            widthSegments={8}
           />
         ))}
       </Box>

@@ -14,6 +14,7 @@ interface SceneProps {
   castShadow?: boolean;
   children: ReactNode;
   collisionThreshold?: number;
+  fps?: number;
   id?: string;
   width?: CSSMeasure;
   height?: CSSMeasure;
@@ -71,6 +72,7 @@ function SceneContent(props: SceneProps) {
     castShadow = false,
     children,
     id,
+    fps = 60,
     theme,
     canvas,
     collisionThreshold = 0.005,
@@ -125,6 +127,7 @@ function SceneContent(props: SceneProps) {
   useGameLoop({
     camera: value.camera,
     collisionThreshold,
+    fps,
     lights: value.lights,
     models: value.models,
     renderer,

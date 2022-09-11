@@ -40,7 +40,7 @@ export function Scene(props) {
         }, id: sceneId }, { children: canvasRef.current && (_jsx(SceneContent, __assign({}, props, { canvas: canvas, width: props.width, height: props.height, id: sceneId }))) })));
 }
 function SceneContent(props) {
-    var _a = props.antialias, antialias = _a === void 0 ? true : _a, _b = props.background, background = _b === void 0 ? 0x000000 : _b, _c = props.castShadow, castShadow = _c === void 0 ? false : _c, children = props.children, id = props.id, theme = props.theme, canvas = props.canvas, width = props.width, height = props.height;
+    var _a = props.antialias, antialias = _a === void 0 ? true : _a, _b = props.background, background = _b === void 0 ? 0x000000 : _b, _c = props.castShadow, castShadow = _c === void 0 ? false : _c, children = props.children, id = props.id, _d = props.fps, fps = _d === void 0 ? 60 : _d, theme = props.theme, canvas = props.canvas, _e = props.collisionThreshold, collisionThreshold = _e === void 0 ? 0.005 : _e, width = props.width, height = props.height;
     var camera = useMemo(function () { return buildGameCamera({}); }, []);
     var renderer = useMemo(function () {
         return new THREE.WebGLRenderer({
@@ -80,6 +80,8 @@ function SceneContent(props) {
     // Render initial and new frames
     useGameLoop({
         camera: value.camera,
+        collisionThreshold: collisionThreshold,
+        fps: fps,
         lights: value.lights,
         models: value.models,
         renderer: renderer,

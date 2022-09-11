@@ -6,6 +6,8 @@ interface SceneProps {
     background?: THREE.ColorRepresentation;
     castShadow?: boolean;
     children: ReactNode;
+    collisionThreshold?: number;
+    fps?: number;
     id?: string;
     width?: CSSMeasure;
     height?: CSSMeasure;

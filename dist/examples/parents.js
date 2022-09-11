@@ -26,6 +26,6 @@ export function ParentsExample() {
     var green = 0x00ff00;
     var _a = useState(red), color = _a[0], setColor = _a[1];
     var handleClick = function () { return setColor(color === red ? green : red); };
-    return (_jsx(Scene, { children: _jsx(Box, __assign({ rotation: { x: 0.004, y: 0.004, z: 0.002 }, onClick: handleClick }, { children: positions.map(function (position, i) { return (_jsx(Sphere, { material: { type: "basic", color: color }, position: position, radius: 0.1 }, i)); }) })) }));
+    return (_jsx(Scene, { children: _jsx(Box, __assign({ rotation: { x: 0.004, y: 0.004, z: 0.002 }, onClick: handleClick }, { children: positions.map(function (position, i) { return (_jsx(Sphere, { material: { type: "basic", color: color }, position: position, radius: 0.1, heightSegments: 8, widthSegments: 8 }, i)); }) })) }));
 }
 //# sourceMappingURL=parents.js.map
