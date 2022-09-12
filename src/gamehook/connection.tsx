@@ -25,7 +25,7 @@ interface Message<T = any> {
 
 const PROD_URL = "wss://oyster-app-bpngv.ondigitalocean.app/connectionws";
 const DEV_URL = "ws://localhost:8000/connectionws";
-const prod = false;
+const prod = true;
 
 export function useConnection({
   clientId,
