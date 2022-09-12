@@ -2,11 +2,12 @@ import * as THREE from "three";
 import { useEffect, useMemo } from "react";
 import { Mesh, MeshProps } from "./types";
 import { generateUUID } from "three/src/math/MathUtils";
+
 import { usePosition, usePhysics } from "../physics/hooks";
 import { useAddToScene } from "../mount";
 import { useContainer } from "../container";
+import { useSyncProperties } from "../connection";
 
-// Add object to scene on mount, remove on dismount
 export function useMesh(props: MeshProps): Mesh {
   const {
     position,
@@ -32,6 +33,7 @@ export function useMesh(props: MeshProps): Mesh {
 
   usePhysics(mesh, props);
   usePosition(mesh, position);
+  useSyncProperties(mesh, props);
 
   // Interaction
   useEffect(() => {

@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 import { Designable } from "../materials";
 import { Physical } from "../physics";
 import { Interactable } from "../interactions";
+import { Networkable } from "../connection";
 
 export interface Nameable {
   attrs?: object;
@@ -10,7 +11,12 @@ export interface Nameable {
   tags?: string[];
 }
 
-export interface Meshable extends Physical, Interactable, Designable, Nameable {
+export interface Meshable
+  extends Physical,
+    Interactable,
+    Designable,
+    Nameable,
+    Networkable {
   children?: ReactNode;
   id?: string;
 }

@@ -4,7 +4,7 @@ import { generateUUID } from "three/src/math/MathUtils";
 import { usePosition, usePhysics } from "../physics/hooks";
 import { useAddToScene } from "../mount";
 import { useContainer } from "../container";
-// Add object to scene on mount, remove on dismount
+import { useSyncProperties } from "../connection";
 export function useMesh(props) {
     var position = props.position, threeMesh = props.threeMesh, onClick = props.onClick, onKeypress = props.onKeypress, onHoverEnter = props.onHoverEnter, onHoverLeave = props.onHoverLeave, id = props.id, attrs = props.attrs, name = props.name, tags = props.tags;
     var mesh = useMemo(function () {
@@ -15,6 +15,7 @@ export function useMesh(props) {
     }, [id, threeMesh]);
     usePhysics(mesh, props);
     usePosition(mesh, position);
+    useSyncProperties(mesh, props);
     // Interaction
     useEffect(function () {
         mesh.onClick = onClick;

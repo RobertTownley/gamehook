@@ -44,6 +44,13 @@ function Game({ clientId, lobbyId }: { clientId: string; lobbyId: string }) {
         <Box
           acceleration={{ x: 0, y: -0.002, z: 0 }}
           onKeypress={() => setVelocity(INITIAL_VELOCITY)}
+          id="bouncing-box"
+          syncProperties={{
+            connection,
+            properties: ["position"],
+            id: "bouncing-box",
+            frequency: 500,
+          }}
           velocity={velocity}
         />
       </Scene>

@@ -102,35 +102,4 @@ export function useAddLightToScene(light) {
         };
     }, [light, scene.threeScene, scene.lights]);
 }
-function createFpsCap(loop, fps) {
-    if (fps === void 0) { fps = 60; }
-    var targetFps = 0, fpsInterval = 0;
-    var lastTime = 0, lastOverTime = 0, prevOverTime = 0, deltaTime = 0;
-    function updateFps(value) {
-        targetFps = value;
-        fpsInterval = 1000 / targetFps;
-    }
-    updateFps(fps);
-    return {
-        // the targeted frame rate
-        get fps() {
-            return targetFps;
-        },
-        set fps(value) {
-            updateFps(value);
-        },
-        // the frame-capped loop function
-        loop: function (time) {
-            deltaTime = time - lastTime;
-            if (deltaTime < fpsInterval) {
-                return;
-            }
-            prevOverTime = lastOverTime;
-            lastOverTime = deltaTime % fpsInterval;
-            lastTime = time - lastOverTime;
-            deltaTime -= prevOverTime;
-            return loop(deltaTime);
-        },
-    };
-}
 //# sourceMappingURL=mount.js.map

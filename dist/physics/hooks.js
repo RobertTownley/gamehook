@@ -12,10 +12,10 @@ export function usePhysics(mesh, _a) {
     var acceleration = _a.acceleration, velocity = _a.velocity, orientation = _a.orientation, rotation = _a.rotation, onCollision = _a.onCollision, collides = _a.collides, collidesWith = _a.collidesWith, castShadow = _a.castShadow, receiveShadow = _a.receiveShadow;
     // Physics
     useEffect(function () {
-        mesh.acceleration = acceleration;
+        mesh.acceleration = normalizeXYZ(acceleration);
     }, [mesh, acceleration]);
     useEffect(function () {
-        mesh.velocity = velocity;
+        mesh.velocity = normalizeXYZ(velocity);
     }, [mesh, velocity]);
     var _b = useMemo(function () { return normalizeXYZ(orientation); }, [orientation]), xOrientation = _b[0], yOrientation = _b[1], zOrientation = _b[2];
     useEffect(function () {

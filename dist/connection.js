@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 var PROD_URL = "wss://oyster-app-bpngv.ondigitalocean.app/connectionws";
-var DEV_URL = "wss://localhost:8000/connectionws";
-var prod = true;
+var DEV_URL = "ws://localhost:8000/connectionws";
+var prod = false;
 export function useConnection(_a) {
     var clientId = _a.clientId, lobbyId = _a.lobbyId;
     var ws = useMemo(function () {
@@ -23,7 +23,7 @@ export function useConnection(_a) {
             var message = JSON.parse(JSON.parse(event.data));
             if (message.eventName in listeners) {
                 var callback = listeners[message.eventName];
-                callback(message.payload);
+                callback(message);
             }
         };
         return function () {
@@ -33,6 +33,7 @@ export function useConnection(_a) {
     var connection = useMemo(function () {
         return {
             emit: emit,
+            isAuthoritative: true,
             listeners: listeners,
             ws: ws,
         };
@@ -41,8 +42,8 @@ export function useConnection(_a) {
 }
 export function useSharedState(id, connection, initialValue) {
     var _a = useState(initialValue), state = _a[0], setState = _a[1];
-    var receiveRemoteState = useCallback(function (payload) {
-        setState(payload);
+    var receiveRemoteState = useCallback(function (message) {
+        setState(message.payload);
     }, []);
     useEffect(function () {
         connection.listeners[id] = receiveRemoteState;
@@ -55,5 +56,56 @@ export function useSharedState(id, connection, initialValue) {
         connection.emit(id, payload);
     }, [connection, id]);
     return [state, setSharedState];
+}
+export function useSyncProperties(mesh, props) {
+    useEffect(function () {
+        var interval;
+        if (props.syncProperties) {
+            var _a = props.syncProperties, connection_1 = _a.connection, id_1 = _a.id, properties_1 = _a.properties, frequency = _a.frequency;
+            // Listen for emitted updates to each property
+            properties_1.forEach(function (property) {
+                var listenerId = "".concat(id_1, "-").concat(property, "-listener");
+                connection_1.listeners[listenerId] = function (message) {
+                    setProperty(mesh, property, message);
+                };
+            });
+            // If authoritative, emit updates to the event properties at the declared frequency
+            if (connection_1.isAuthoritative) {
+                interval = setInterval(function () {
+                    properties_1.forEach(function (property) {
+                        // TODO: Emit property state
+                        var value = getValueFromMesh(mesh, property);
+                        var listenerId = "".concat(id_1, "-").concat(property, "-listener");
+                        connection_1.emit(listenerId, value);
+                    });
+                }, frequency);
+            }
+        }
+        return function () {
+            var _a;
+            if (interval && ((_a = props.syncProperties) === null || _a === void 0 ? void 0 : _a.connection.isAuthoritative)) {
+                clearInterval(interval);
+                interval = undefined;
+            }
+        };
+    }, [mesh, props.syncProperties]);
+}
+function getValueFromMesh(mesh, property) {
+    if (property === "position") {
+        return mesh.threeMesh.position;
+    }
+    else if (property === "orientation") {
+        return mesh.orientation;
+    }
+    return mesh[property];
+}
+function setProperty(mesh, property, message) {
+    // TODO: Message needs to be authorative, or two clients can make each other bounce around
+    if (property === "position") {
+        var _a = message.payload, x = _a.x, y = _a.y, z = _a.z;
+        mesh.position = message.payload;
+        mesh.threeMesh.position.set(x, y, z);
+    }
+    mesh[property] = message.payload;
 }
 //# sourceMappingURL=connection.js.map
