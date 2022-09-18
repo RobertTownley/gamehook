@@ -6,7 +6,7 @@ import { useAddToScene } from "../mount";
 import { useContainer } from "../container";
 import { useSyncProperties } from "../connection";
 export function useMesh(props) {
-    var position = props.position, threeMesh = props.threeMesh, onClick = props.onClick, onKeypress = props.onKeypress, onHoverEnter = props.onHoverEnter, onHoverLeave = props.onHoverLeave, id = props.id, attrs = props.attrs, name = props.name, tags = props.tags;
+    var position = props.position, threeMesh = props.threeMesh, onClick = props.onClick, onKeyPress = props.onKeyPress, onKeyUp = props.onKeyUp, onKeyDown = props.onKeyDown, onHoverEnter = props.onHoverEnter, onHoverLeave = props.onHoverLeave, id = props.id, attrs = props.attrs, name = props.name, tags = props.tags;
     var mesh = useMemo(function () {
         return {
             id: id !== null && id !== void 0 ? id : generateUUID(),
@@ -21,8 +21,14 @@ export function useMesh(props) {
         mesh.onClick = onClick;
     }, [mesh, onClick]);
     useEffect(function () {
-        mesh.onKeypress = onKeypress;
-    }, [mesh, onKeypress]);
+        mesh.onKeyPress = onKeyPress;
+    }, [mesh, onKeyPress]);
+    useEffect(function () {
+        mesh.onKeyUp = onKeyUp;
+    }, [mesh, onKeyUp]);
+    useEffect(function () {
+        mesh.onKeyDown = onKeyDown;
+    }, [mesh, onKeyDown]);
     useEffect(function () {
         mesh.onHoverEnter = onHoverEnter;
     }, [mesh, onHoverEnter]);

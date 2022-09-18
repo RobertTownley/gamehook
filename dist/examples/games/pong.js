@@ -12,7 +12,7 @@ function Paddle() {
             setX(x + 0.2);
         }
     }
-    return (_jsx(Box, { name: "paddle", onKeypress: movePaddle, position: { x: x, y: -8, z: 0 }, width: 5, depth: 0.5, collides: true }));
+    return (_jsx(Box, { name: "paddle", onKeyPress: movePaddle, position: { x: x, y: -8, z: 0 }, width: 5, depth: 0.5, collides: true }));
 }
 export function Pong() {
     var rateOfMovement = 0.05;

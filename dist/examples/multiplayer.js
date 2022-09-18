@@ -9,7 +9,7 @@ function Game(_a) {
     });
     var _b = useState({ x: 0, y: 0, z: 0 }), velocity = _b[0], setVelocity = _b[1];
     var interactionEvent = useSharedEvent("player-input", connection);
-    var handleKeypress = useCallback(function (sendTime, remote) {
+    var handleKeyPress = useCallback(function (sendTime, remote) {
         var newX = velocity.x > 0 ? -0.05 : 0.05;
         var now = Date.now();
         setVelocity({ x: newX, y: 0, z: 0 });
@@ -21,10 +21,10 @@ function Game(_a) {
             console.log("Message took ".concat(duration, "ms to arrive"));
         }
     }, [interactionEvent, velocity.x]);
-    interactionEvent.listen(function (message) { return handleKeypress(message.payload, true); });
-    return (_jsx(_Fragment, { children: _jsx(Box, { id: "mycube", velocity: velocity, onKeypress: function () {
+    interactionEvent.listen(function (message) { return handleKeyPress(message.payload, true); });
+    return (_jsx(_Fragment, { children: _jsx(Box, { id: "mycube", velocity: velocity, onKeyPress: function () {
                 var now = Date.now();
-                handleKeypress(now, false);
+                handleKeyPress(now, false);
             } }) }));
 }
 export function MultiplayerExample() {

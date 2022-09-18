@@ -10,5 +10,5 @@ interface Props extends Meshable {
     bevelSegments?: number;
     value: string;
 }
-export declare function Text(props: Props): JSX.Element;
+export declare function Text(props: Props): JSX.Element | null;
 export {};

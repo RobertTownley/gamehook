@@ -106,9 +106,13 @@ export function useInteraction(meshes, renderer, camera) {
         }
         window.addEventListener("click", handleMouseEvent);
         window.addEventListener("mousemove", handleMouseMoveEvent);
+        window.addEventListener("keydown", handleKeyboardEvent);
+        window.addEventListener("keyup", handleKeyboardEvent);
         window.addEventListener("keypress", handleKeyboardEvent);
         return function () {
             window.removeEventListener("click", handleMouseEvent);
+            window.removeEventListener("keydown", handleKeyboardEvent);
+            window.removeEventListener("keyup", handleKeyboardEvent);
             window.removeEventListener("keypress", handleKeyboardEvent);
         };
     }, [camera, meshes, renderer]);

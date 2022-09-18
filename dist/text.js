@@ -9,7 +9,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-import { jsx as _jsx, Fragment as _Fragment } from "react/jsx-runtime";
+import { jsx as _jsx } from "react/jsx-runtime";
 import * as THREE from "three";
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
@@ -31,7 +31,7 @@ function ProceduralText(props) {
         var geometry = new TextGeometry(value, {
             font: loadedFont,
             size: size,
-            height: height,
+            height: height !== null && height !== void 0 ? height : 0.01,
             bevelOffset: bevelOffset,
             bevelSegments: bevelSegments,
         });
@@ -61,7 +61,7 @@ export function Text(props) {
     switch (renderMethod) {
         case "dom":
             // Not implemented
-            return _jsx(_Fragment, {});
+            return null;
         default:
             // ProceduralText
             return _jsx(ProceduralText, __assign({}, props));
