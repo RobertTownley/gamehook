@@ -66,8 +66,6 @@ export function useConnection(_a) {
 export function useSharedState(id, connection, initialValue) {
     var _a = useState(initialValue), state = _a[0], setState = _a[1];
     var receiveRemoteState = useCallback(function (message) {
-        var time = Date.now();
-        console.log(time);
         setState(message.payload);
     }, []);
     useEffect(function () {
@@ -77,8 +75,6 @@ export function useSharedState(id, connection, initialValue) {
         };
     }, [connection, id, receiveRemoteState]);
     var setSharedState = useCallback(function (payload) {
-        var time = Date.now();
-        console.log(time);
         connection.emit(id, payload);
         setState(payload);
     }, [connection, id]);
