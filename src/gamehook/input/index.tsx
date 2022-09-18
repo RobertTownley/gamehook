@@ -15,6 +15,8 @@ interface Props {
   placeholder?: string;
   maxLength?: number;
   type: "text";
+
+  onChange?: (event: KeyboardEvent) => void;
 }
 
 /* TODO: This is an unhappy workaround that won't work for either a11y reasons or mobile
@@ -28,6 +30,7 @@ export function Input({
   hoveredMaterial,
   disablePointer,
   placeholder,
+  onChange,
 }: Props) {
   const [isActive, setActive] = useState(false);
   const [hovered, setHovered] = useState(false);
@@ -53,8 +56,11 @@ export function Input({
       } else if (isActive && !disabled) {
         setValue((current) => getNewValue(event, current, maxLength));
       }
+      if (onChange) {
+        onChange(event);
+      }
     },
-    [isActive, disabled]
+    [isActive, disabled, onChange, maxLength]
   );
 
   const handleClick = useCallback(() => {
@@ -80,7 +86,21 @@ export function Input({
   );
 }
 
-const ignoredKeys = ["Control", "Enter", "Meta", "Shift"];
+const ignoredKeys = [
+  "Alt",
+  "Control",
+  "Enter",
+  "Meta",
+  "Shift",
+  "ArrowUp",
+  "ArrowDown",
+  "ArrowLeft",
+  "ArrowRight",
+  "Help",
+  "Home",
+  "PageUp",
+  "PageDown",
+];
 function getNewValue(
   event: KeyboardEvent,
   formerValue: string,
