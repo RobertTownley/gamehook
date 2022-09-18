@@ -1,31 +1,24 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Mesh } from "./mesh";
+import { Mesh } from "../mesh";
 
-type EventEmitter = <T = object>(eventName: string, payload: T) => void;
-type EventListener = (message: Message) => void;
+import {
+  Connection,
+  EventListener,
+  MessageTypes,
+  Message,
+  NewConnectionMessage,
+  NewDisconnectionMessage,
+} from "./types";
 
-interface Connection {
-  emit: EventEmitter;
-  isAuthoritative: boolean;
-  listeners: Record<string, EventListener>;
-  ws: WebSocket;
-}
+/* Connections */
 
 interface UseConnection {
   clientId: string;
   lobbyId: string;
 }
-
-interface Message<T = any> {
-  clientId: string;
-  lobbyId: string;
-  eventName: string;
-  payload: T;
-}
-
 const PROD_URL = "wss://oyster-app-bpngv.ondigitalocean.app/connectionws";
 const DEV_URL = "ws://localhost:8000/connectionws";
-const prod = true;
+const prod = false;
 
 export function useConnection({
   clientId,
@@ -51,27 +44,49 @@ export function useConnection({
     [clientId, lobbyId, ws]
   );
 
-  useEffect(() => {
-    ws.onmessage = (event) => {
-      const message = JSON.parse(JSON.parse(event.data)) as unknown as Message;
-      if (message.eventName in listeners) {
-        const callback = listeners[message.eventName];
-        callback(message);
-      }
-    };
-    return () => {
-      ws.onmessage = () => {};
-    };
-  }, [listeners, ws]);
-
   const connection = useMemo<Connection>(() => {
     return {
       emit,
       isAuthoritative: true, // TODO: Have server determine authoritative status
       listeners,
       ws,
+      onNewConnection: function (callback) {
+        this.connectionListener = callback;
+      },
+      onNewDisconnection: function (callback) {
+        this.disconnectionListener = callback;
+      },
     };
   }, [emit, listeners, ws]);
+
+  useEffect(() => {
+    ws.onmessage = (event) => {
+      const message = JSON.parse(JSON.parse(event.data)) as unknown as Message;
+      if (message.clientId === clientId) {
+        // NOOP
+      } else if (message.eventName in listeners) {
+        const callback = listeners[message.eventName];
+        callback(message);
+      } else if (message.eventName === MessageTypes.NEW_CLIENT_CONNECTED) {
+        if (connection.connectionListener) {
+          connection.connectionListener(
+            message as unknown as NewConnectionMessage
+          );
+        }
+      } else if (message.eventName === MessageTypes.NEW_CLIENT_DISCONNECTED) {
+        if (connection.disconnectionListener) {
+          connection.disconnectionListener(
+            message as unknown as NewDisconnectionMessage
+          );
+        }
+      } else {
+        // Unknown message
+      }
+    };
+    return () => {
+      ws.onmessage = () => {};
+    };
+  }, [connection, listeners, clientId, ws]);
 
   return connection;
 }
@@ -85,6 +100,8 @@ export function useSharedState<T>(
 
   const receiveRemoteState = useCallback<(message: Message<T>) => void>(
     (message: Message<T>) => {
+      const time = Date.now();
+      console.log(time);
       setState(message.payload);
     },
     []
@@ -99,8 +116,10 @@ export function useSharedState<T>(
 
   const setSharedState = useCallback(
     (payload: T) => {
-      setState(payload);
+      const time = Date.now();
+      console.log(time);
       connection.emit<T>(id, payload);
+      setState(payload);
     },
     [connection, id]
   );
@@ -172,9 +191,34 @@ function setProperty(
 ) {
   // TODO: Message needs to be authorative, or two clients can make each other bounce around
   if (property === "position") {
-    const { x, y, z } = message.payload;
     mesh.position = message.payload;
-    mesh.threeMesh.position.set(x, y, z);
   }
   mesh[property] = message.payload;
+}
+
+type SharedEventListener<T> = (message: Message<T>) => void;
+interface SharedEvent<T> {
+  emit: (payload: T) => void;
+  listen: (callback: SharedEventListener<T>) => void;
+}
+
+export function useSharedEvent<T = any>(
+  id: string,
+  connection: Connection
+): SharedEvent<T> {
+  const eventId = `shared-listener-${id}`;
+
+  const sharedEvent = useMemo<SharedEvent<T>>(() => {
+    return {
+      emit: (payload: T) => connection.emit(eventId, payload),
+      listen: (callback) => (connection.listeners[eventId] = callback),
+    };
+  }, [connection, eventId]);
+
+  useEffect(() => {
+    return () => {
+      delete connection.listeners[eventId];
+    };
+  }, [connection.listeners, eventId]);
+  return sharedEvent;
 }
