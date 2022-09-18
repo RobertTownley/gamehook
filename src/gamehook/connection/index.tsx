@@ -100,8 +100,6 @@ export function useSharedState<T>(
 
   const receiveRemoteState = useCallback<(message: Message<T>) => void>(
     (message: Message<T>) => {
-      const time = Date.now();
-      console.log(time);
       setState(message.payload);
     },
     []
@@ -116,8 +114,6 @@ export function useSharedState<T>(
 
   const setSharedState = useCallback(
     (payload: T) => {
-      const time = Date.now();
-      console.log(time);
       connection.emit<T>(id, payload);
       setState(payload);
     },
