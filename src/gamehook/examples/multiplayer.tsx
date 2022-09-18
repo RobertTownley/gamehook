@@ -15,7 +15,7 @@ function Game({ clientId, lobbyId }: { clientId: string; lobbyId: string }) {
   const [velocity, setVelocity] = useState<XYZObject>({ x: 0, y: 0, z: 0 });
   const interactionEvent = useSharedEvent<number>("player-input", connection);
 
-  const handleKeypress = useCallback(
+  const handleKeyPress = useCallback(
     (sendTime: number, remote: boolean) => {
       const newX = velocity.x > 0 ? -0.05 : 0.05;
       const now = Date.now();
@@ -30,16 +30,16 @@ function Game({ clientId, lobbyId }: { clientId: string; lobbyId: string }) {
     [interactionEvent, velocity.x]
   );
 
-  interactionEvent.listen((message) => handleKeypress(message.payload, true));
+  interactionEvent.listen((message) => handleKeyPress(message.payload, true));
 
   return (
     <>
       <Box
         id="mycube"
         velocity={velocity}
-        onKeypress={() => {
+        onKeyPress={() => {
           const now = Date.now();
-          handleKeypress(now, false);
+          handleKeyPress(now, false);
         }}
       />
     </>

@@ -5,6 +5,7 @@ export { Audio } from "./audio";
 export { Button } from "./button";
 export { Camera } from "./camera";
 export { Container } from "./container";
+export { Input } from "./input";
 export { useConnection, useSharedEvent, useSharedState } from "./connection";
 export { createEvent, useEventListener } from "./events";
 export { Light } from "./lights";

@@ -25,7 +25,7 @@ function Paddle() {
   return (
     <Box
       name="paddle"
-      onKeypress={movePaddle}
+      onKeyPress={movePaddle}
       position={{ x, y: -8, z: 0 }}
       width={5}
       depth={0.5}

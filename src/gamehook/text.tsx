@@ -46,7 +46,7 @@ function ProceduralText(props: Props) {
     const geometry = new TextGeometry(value, {
       font: loadedFont,
       size,
-      height,
+      height: height ?? 0.01,
       bevelOffset,
       bevelSegments,
     });
@@ -84,7 +84,7 @@ export function Text(props: Props) {
   switch (renderMethod) {
     case "dom":
       // Not implemented
-      return <></>;
+      return null;
     default:
       // ProceduralText
       return <ProceduralText {...props} />;

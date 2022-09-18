@@ -13,6 +13,7 @@ import {
   TextExample,
   TextureExample,
 } from "./gamehook/examples";
+import { InputsExample } from "./gamehook/examples/inputs";
 import { WindowExample } from "./gamehook/examples/window";
 
 type AvailableExamples =
@@ -22,6 +23,7 @@ type AvailableExamples =
   | "events"
   | "fog"
   | "hover"
+  | "inputs"
   | "lights"
   | "model"
   | "multiplayer"
@@ -31,7 +33,7 @@ type AvailableExamples =
   | "texture"
   | "window";
 
-const exampleName: AvailableExamples = "multiplayer";
+const exampleName: AvailableExamples = "inputs";
 
 function App() {
   switch (exampleName) {
@@ -43,6 +45,8 @@ function App() {
       return <ContainerExample />;
     case "events":
       return <EventsExample />;
+    case "inputs":
+      return <InputsExample />;
     case "fog":
       return <FogExample />;
     case "hover":

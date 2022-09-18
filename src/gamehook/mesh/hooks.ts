@@ -14,7 +14,9 @@ export function useMesh(props: MeshProps): Mesh {
     threeMesh,
 
     onClick,
-    onKeypress,
+    onKeyPress,
+    onKeyUp,
+    onKeyDown,
     onHoverEnter,
     onHoverLeave,
 
@@ -40,8 +42,14 @@ export function useMesh(props: MeshProps): Mesh {
     mesh.onClick = onClick;
   }, [mesh, onClick]);
   useEffect(() => {
-    mesh.onKeypress = onKeypress;
-  }, [mesh, onKeypress]);
+    mesh.onKeyPress = onKeyPress;
+  }, [mesh, onKeyPress]);
+  useEffect(() => {
+    mesh.onKeyUp = onKeyUp;
+  }, [mesh, onKeyUp]);
+  useEffect(() => {
+    mesh.onKeyDown = onKeyDown;
+  }, [mesh, onKeyDown]);
   useEffect(() => {
     mesh.onHoverEnter = onHoverEnter;
   }, [mesh, onHoverEnter]);

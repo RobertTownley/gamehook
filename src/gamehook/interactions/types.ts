@@ -5,20 +5,27 @@ interface MouseInteractable {
   onClick?: MouseHandler;
 }
 interface KeyboardInteractable {
-  onKeypress?: KeyboardHandler;
+  onKeyDown?: KeyboardHandler;
+  onKeyUp?: KeyboardHandler;
+  onKeyPress?: KeyboardHandler;
 }
 export const MouseEventTypeMap: Record<string, keyof MouseInteractable> = {
   click: "onClick",
 };
 export const KeyboardEventTypeMap: Record<string, keyof KeyboardInteractable> =
   {
-    keypress: "onKeypress",
+    keydown: "onKeyDown",
+    keyup: "onKeyUp",
+    keypress: "onKeyPress",
   };
 export interface Interactable {
   onClick?: (event: MouseEvent) => void;
-  onKeypress?: (event: KeyboardEvent) => void;
   onHoverEnter?: (event?: MouseEvent) => void;
   onHoverLeave?: (event?: MouseEvent) => void;
 
   hoverState?: "active" | "inactive" | undefined;
+
+  onKeyDown?: (event: KeyboardEvent) => void;
+  onKeyUp?: (event: KeyboardEvent) => void;
+  onKeyPress?: (event: KeyboardEvent) => void;
 }
