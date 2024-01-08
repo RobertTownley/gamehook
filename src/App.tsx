@@ -1,73 +1,35 @@
-import {
-  AudioExample,
-  ButtonExample,
-  ContainerExample,
-  EventsExample,
-  FogExample,
-  HoverExample,
-  LightExample,
-  ModelExample,
-  MultiplayerExample,
-  ParentsExample,
-  Pong,
-  TextExample,
-  TextureExample,
-} from "./gamehook/examples";
-import { InputsExample } from "./gamehook/examples/inputs";
-import { WindowExample } from "./gamehook/examples/window";
-
-type AvailableExamples =
-  | "audio"
-  | "button"
-  | "container"
-  | "events"
-  | "fog"
-  | "hover"
-  | "inputs"
-  | "lights"
-  | "model"
-  | "multiplayer"
-  | "parents"
-  | "pong"
-  | "text"
-  | "texture"
-  | "window";
-
-const exampleName: AvailableExamples = "inputs";
+import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
 
 function App() {
-  switch (exampleName) {
-    case "audio":
-      return <AudioExample />;
-    case "button":
-      return <ButtonExample />;
-    case "container":
-      return <ContainerExample />;
-    case "events":
-      return <EventsExample />;
-    case "inputs":
-      return <InputsExample />;
-    case "fog":
-      return <FogExample />;
-    case "hover":
-      return <HoverExample />;
-    case "lights":
-      return <LightExample />;
-    case "model":
-      return <ModelExample />;
-    case "multiplayer":
-      return <MultiplayerExample />;
-    case "parents":
-      return <ParentsExample />;
-    case "pong":
-      return <Pong />;
-    case "text":
-      return <TextExample />;
-    case "texture":
-      return <TextureExample />;
-    case "window":
-      return <WindowExample />;
-  }
+  const [count, setCount] = useState(0)
+
+  return (
+    <>
+      <div>
+        <a href="https://vitejs.dev" target="_blank">
+          <img src={viteLogo} className="logo" alt="Vite logo" />
+        </a>
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
+      </div>
+      <h1>Vite + React</h1>
+      <div className="card">
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+        <p>
+          Edit <code>src/App.tsx</code> and save to test HMR
+        </p>
+      </div>
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more
+      </p>
+    </>
+  )
 }
 
-export default App;
+export default App
