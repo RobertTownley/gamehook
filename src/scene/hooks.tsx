@@ -14,6 +14,9 @@ export function useSceneReady(): boolean {
     setTimeout(() => {
       setReady(true);
     }, 100);
+    return () => {
+      setReady(false);
+    };
   }, []);
   return ready;
 }
