@@ -14,4 +14,9 @@ export default defineConfig({
       fileName: "gamehook",
     },
   },
+  resolve: {
+    alias: {
+      gamehook: path.resolve(__dirname, "./src"),
+    },
+  },
 });

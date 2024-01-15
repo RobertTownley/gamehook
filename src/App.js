@@ -1,5 +1,15 @@
 import { jsx as _jsx, Fragment as _Fragment } from "react/jsx-runtime";
+import { useMemo } from "react";
+import { BasicExample } from "./examples/Basic";
+const ExampleMap = {
+    Basic: _jsx(BasicExample, {}),
+};
 function App() {
-    return (_jsx(_Fragment, { children: _jsx("div", { children: _jsx("p", { children: "Hello World!" }) }) }));
+    const exampleName = "Basic";
+    const Example = useMemo(() => {
+        return ExampleMap[exampleName];
+    }, []);
+    console.log(Example);
+    return _jsx(_Fragment, {});
 }
 export default App;

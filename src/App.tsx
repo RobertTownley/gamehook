@@ -1,11 +1,16 @@
+import { ReactNode, useMemo } from "react";
+import { BasicExample } from "./examples/Basic";
+
+const ExampleMap: Record<string, ReactNode> = {
+  Basic: <BasicExample />,
+};
 function App() {
-  return (
-    <>
-      <div>
-        <p>Hello World!</p>
-      </div>
-    </>
-  );
+  const exampleName: keyof typeof ExampleMap = "Basic";
+  const Example = useMemo(() => {
+    return ExampleMap[exampleName];
+  }, []);
+  console.log(Example);
+  return <></>;
 }
 
 export default App;
