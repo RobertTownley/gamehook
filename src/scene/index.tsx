@@ -1,6 +1,16 @@
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
+import * as THREE from "three";
 
-import { useSceneId, useSceneReady } from "./hooks";
+import { useCamera } from "../camera/hooks";
+import { AnimationLoop } from "../animation/AnimationLoop";
+
+import { SceneDetailsContext } from "./context";
+import {
+  useBackgroundColor,
+  useRender,
+  useSceneId,
+  useSceneReady,
+} from "./hooks";
 import { InnerSceneProps, SceneProps } from "./types";
 
 export function Scene(props: SceneProps) {
@@ -20,5 +30,30 @@ export function Scene(props: SceneProps) {
 
 function GamehookScene(props: InnerSceneProps) {
   const { children } = props;
-  return <>{children}</>;
+
+  const scene = useMemo(() => {
+    return new THREE.Scene();
+  }, []);
+
+  useBackgroundColor(props, scene);
+
+  const [camera, setCamera] = useCamera();
+
+  const render = useRender(props, scene, camera);
+
+  const sceneDetails = useMemo(() => {
+    return {
+      render,
+      camera,
+      setCamera,
+      scene,
+    };
+  }, [camera, setCamera, render, scene]);
+
+  return (
+    <SceneDetailsContext.Provider value={sceneDetails}>
+      <AnimationLoop />
+      {children}
+    </SceneDetailsContext.Provider>
+  );
 }
