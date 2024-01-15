@@ -9,8 +9,7 @@ function App() {
   const Example = useMemo(() => {
     return ExampleMap[exampleName];
   }, []);
-  console.log(Example);
-  return <></>;
+  return <>{Example}</>;
 }
 
 export default App;
