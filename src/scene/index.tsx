@@ -1,8 +1,24 @@
-import { ReactNode } from "react";
+import { useRef } from "react";
 
-interface Props {
-  children: ReactNode;
+import { useSceneId, useSceneReady } from "./hooks";
+import { InnerSceneProps, SceneProps } from "./types";
+
+export function Scene(props: SceneProps) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const id = useSceneId(props);
+  const ready = useSceneReady();
+
+  return (
+    <>
+      <canvas ref={canvasRef} id={id} />
+      {ready && canvasRef.current && (
+        <GamehookScene {...props} id={id} canvas={canvasRef.current} />
+      )}
+    </>
+  );
 }
-export function Scene({ children }: Props) {
+
+function GamehookScene(props: InnerSceneProps) {
+  const { children } = props;
   return <>{children}</>;
 }
