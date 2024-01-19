@@ -74,3 +74,19 @@ export function useRender(
 export function useSceneDetails() {
   return useContext(SceneDetailsContext);
 }
+
+interface UseAddToScene {
+  obj: THREE.Object3D;
+  parent?: THREE.Object3D;
+}
+export function useAddToScene({ obj, parent }: UseAddToScene) {
+  const { scene } = useSceneDetails();
+  const entrypoint = parent ?? scene;
+
+  useEffect(() => {
+    entrypoint.add(obj);
+    return () => {
+      entrypoint.remove(obj);
+    };
+  }, [entrypoint, obj]);
+}

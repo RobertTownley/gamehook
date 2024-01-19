@@ -1,9 +1,9 @@
-import { Scene } from "gamehook";
+import { Scene, Shape } from "gamehook";
 
 export function BasicExample() {
   return (
     <Scene>
-      <p>Hello World</p>
+      <Shape geometry={{ type: "sphere" }} />
     </Scene>
   );
 }
