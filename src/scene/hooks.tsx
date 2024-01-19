@@ -1,4 +1,11 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import {
+  CSSProperties,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import * as THREE from "three";
 
 import { SceneDetailsContext } from "./context";
@@ -57,18 +64,11 @@ export function useRender(
     });
   }, [antialias, canvas, preserveDrawingBuffer]);
 
-  // Listen for adjustments to screensize
-  const width = canvas!.offsetWidth;
-  const height = canvas!.offsetHeight;
-  useEffect(() => {
-    renderer.setSize(width, height);
-  }, [renderer, width, height]);
-
   // Create the render function for use in animation and loops
   const render = useCallback(() => {
     renderer.render(scene, camera);
   }, [camera, renderer, scene]);
-  return render;
+  return { render, renderer };
 }
 
 export function useSceneDetails() {
@@ -90,3 +90,11 @@ export function useAddToScene({ obj, parent }: UseAddToScene) {
     };
   }, [entrypoint, obj]);
 }
+
+export const SceneStyles: CSSProperties = {
+  width: "100vw",
+  height: "100vh",
+  position: "absolute",
+  top: 0,
+  left: 0,
+};

@@ -23,8 +23,11 @@ export interface InnerSceneProps extends IScene {
 /** Context Values */
 export interface SceneDetails {
   render: () => void;
+  renderer: THREE.WebGLRenderer;
   scene: THREE.Scene;
 
-  camera: THREE.Camera;
-  setCamera: (camera: THREE.Camera) => void;
+  canvas: HTMLCanvasElement | undefined;
+
+  camera: THREE.PerspectiveCamera;
+  setCamera: (camera: THREE.PerspectiveCamera) => void;
 }

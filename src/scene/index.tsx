@@ -6,12 +6,13 @@ import { AnimationLoop } from "../animation/AnimationLoop";
 
 import { SceneDetailsContext } from "./context";
 import {
+  SceneStyles,
   useBackgroundColor,
   useRender,
   useSceneId,
   useSceneReady,
 } from "./hooks";
-import { InnerSceneProps, SceneProps } from "./types";
+import { InnerSceneProps, SceneDetails, SceneProps } from "./types";
 
 export function Scene(props: SceneProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -20,7 +21,7 @@ export function Scene(props: SceneProps) {
 
   return (
     <>
-      <canvas ref={canvasRef} id={id} />
+      <canvas ref={canvasRef} id={id} style={SceneStyles} />
       {ready && canvasRef.current && (
         <GamehookScene {...props} id={id} canvas={canvasRef.current} />
       )}
@@ -29,7 +30,7 @@ export function Scene(props: SceneProps) {
 }
 
 function GamehookScene(props: InnerSceneProps) {
-  const { children } = props;
+  const { canvas, children } = props;
 
   const scene = useMemo(() => {
     return new THREE.Scene();
@@ -39,16 +40,18 @@ function GamehookScene(props: InnerSceneProps) {
 
   const [camera, setCamera] = useCamera();
 
-  const render = useRender(props, scene, camera);
+  const { render, renderer } = useRender(props, scene, camera);
 
-  const sceneDetails = useMemo(() => {
+  const sceneDetails: SceneDetails = useMemo(() => {
     return {
+      canvas,
       render,
+      renderer,
       camera,
       setCamera,
       scene,
     };
-  }, [camera, setCamera, render, scene]);
+  }, [camera, canvas, setCamera, render, renderer, scene]);
 
   return (
     <SceneDetailsContext.Provider value={sceneDetails}>
