@@ -1,9 +1,14 @@
 import { ReactNode } from "react";
 
 import { Nameable } from "../taxonomy/types";
+import { Materializable } from "../materials/types";
 import { Shapeable } from "../geometry/types";
-import { Materializable } from "src/materials/types";
+import { Physical } from "../physics/types";
 
-export interface ShapeProps extends Materializable, Nameable, Shapeable {
+export interface ShapeProps
+  extends Materializable,
+    Nameable,
+    Physical,
+    Shapeable {
   children?: ReactNode;
 }

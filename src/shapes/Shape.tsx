@@ -6,14 +6,17 @@ import { useMaterial } from "../materials/hooks";
 import { useAddToScene } from "../scene/hooks";
 import { useMesh } from "./hooks";
 import { HierarchyContext } from "../hierarchy/context";
+import { usePhysics } from "../physics/hooks";
 
-export function Shape({ children, geometry, material }: ShapeProps) {
+export function Shape(props: ShapeProps) {
+  const { children, geometry, material } = props;
   const threeGeometry = useGeometry(geometry);
   const threeMaterial = useMaterial(material);
   const obj = useMesh(threeGeometry, threeMaterial);
 
   const parent = useHierarchy(obj);
   useAddToScene({ obj, parent });
+  usePhysics(obj, props);
 
   return (
     <HierarchyContext.Provider value={{ parent: obj }}>
