@@ -18,6 +18,7 @@ export function Scene(props: SceneProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const id = useSceneId(props);
   const ready = useSceneReady();
+  // TODO: Optionally don't render canvas, in case the user wants to provide their own canvas
 
   return (
     <>

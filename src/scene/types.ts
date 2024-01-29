@@ -21,6 +21,7 @@ export interface InnerSceneProps extends IScene {
 }
 
 /** Context Values */
+type ThreeCameras = THREE.OrthographicCamera | THREE.PerspectiveCamera;
 export interface SceneDetails {
   render: () => void;
   renderer: THREE.WebGLRenderer;
@@ -28,6 +29,6 @@ export interface SceneDetails {
 
   canvas: HTMLCanvasElement | undefined;
 
-  camera: THREE.PerspectiveCamera;
-  setCamera: (camera: THREE.PerspectiveCamera) => void;
+  camera: ThreeCameras;
+  setCamera: (camera: ThreeCameras) => void;
 }
