@@ -8,6 +8,7 @@ import dts from "vite-plugin-dts";
 export default defineConfig({
   plugins: [react(), dts()],
   build: {
+    sourcemap: true,
     lib: {
       entry: path.resolve(__dirname, "src/index.tsx"),
       name: "gamehook",

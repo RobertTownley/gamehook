@@ -19,6 +19,7 @@
     "jsx": "react-jsx",
     "esModuleInterop": true,
     "outDir": "dist",
+    "sourceMap": true,
 
     /* Linting */
     "strict": true,
