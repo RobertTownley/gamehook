@@ -8,7 +8,9 @@ import { getDefaultCamera, DefaultCameraType } from "./defaults";
 import { CameraProps } from "./types";
 import { HierarchyContext } from "../hierarchy/context";
 import { useHierarchy } from "../hierarchy/hooks";
+import { XYZ } from "src/physics/types";
 
+const DefaultCameraPosition: XYZ = [0, 0, 5];
 export function Camera(props: CameraProps) {
   const {
     children,
@@ -41,7 +43,10 @@ export function Camera(props: CameraProps) {
     };
   }, [camera, setCamera]);
 
-  usePhysics(camera, props);
+  usePhysics(camera, {
+    position: props.position ?? DefaultCameraPosition,
+    ...props,
+  });
 
   const parent = useHierarchy(camera);
   const value = useMemo(() => {

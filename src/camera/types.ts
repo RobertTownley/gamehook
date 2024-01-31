@@ -1,7 +1,7 @@
-import { ReactNode } from "react";
+import { Hierarchical } from "../hierarchy/types";
 import { Physical } from "../physics/types";
 
-export interface CameraProps extends Physical {
+export interface CameraProps extends Physical, Hierarchical {
   type?: "perspective" | "orthographic";
   near?: number;
   far?: number;
@@ -13,8 +13,6 @@ export interface CameraProps extends Physical {
   right?: number;
   top?: number;
   bottom?: number;
-
-  children?: ReactNode;
 }
 
 export type ThreeCameras = THREE.PerspectiveCamera | THREE.OrthographicCamera;

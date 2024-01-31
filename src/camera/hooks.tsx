@@ -1,12 +1,15 @@
-import { useMemo, useState } from "react";
+import { MutableRefObject, useCallback, useRef } from "react";
 
 import { getDefaultCamera } from "./defaults";
 import { ThreeCameras } from "./types";
 
-export function useCamera() {
-  const defaultCamera = useMemo(() => {
-    return getDefaultCamera();
+export function useCamera(): [
+  MutableRefObject<ThreeCameras>,
+  (c: ThreeCameras) => void
+] {
+  const camera = useRef<ThreeCameras>(getDefaultCamera());
+  const setCamera = useCallback((c: ThreeCameras) => {
+    camera.current = c;
   }, []);
-  const cameraState = useState<ThreeCameras>(defaultCamera);
-  return cameraState;
+  return [camera, setCamera];
 }

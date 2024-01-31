@@ -41,7 +41,7 @@ function GamehookScene(props: InnerSceneProps) {
 
   const [camera, setCamera] = useCamera();
 
-  const { render, renderer } = useRender(props, scene, camera);
+  const { render, renderer } = useRender(props, scene, camera.current);
 
   const sceneDetails: SceneDetails = useMemo(() => {
     return {

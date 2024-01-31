@@ -13,10 +13,10 @@ export function useResize() {
     const height = window.innerHeight;
     if (canvas!.width !== width || canvas!.height !== height) {
       renderer.setSize(width, height);
-      if (isPerspectiveCamera(camera)) {
-        camera.aspect = width / height;
+      if (isPerspectiveCamera(camera.current)) {
+        camera.current.aspect = width / height;
       }
-      camera.updateProjectionMatrix();
+      camera.current.updateProjectionMatrix();
     }
   }, [camera, canvas, renderer]);
 

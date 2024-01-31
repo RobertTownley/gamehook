@@ -1,7 +1,9 @@
-import { ReactNode } from "react";
+import { MutableRefObject, ReactNode } from "react";
 import * as THREE from "three";
 
-interface IScene {
+import { Hierarchical } from "../hierarchy/types";
+
+interface IScene extends Hierarchical {
   children?: ReactNode;
   id?: string;
 
@@ -29,6 +31,6 @@ export interface SceneDetails {
 
   canvas: HTMLCanvasElement | undefined;
 
-  camera: ThreeCameras;
+  camera: MutableRefObject<ThreeCameras>;
   setCamera: (camera: ThreeCameras) => void;
 }

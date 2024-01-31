@@ -8,6 +8,7 @@ import { useAddToScene } from "../scene/hooks";
 import { useMesh } from "./hooks";
 import { HierarchyContext } from "../hierarchy/context";
 import { usePhysics } from "../physics/hooks";
+import { useLighting } from "../lights/hooks";
 
 export function Shape(props: ShapeProps) {
   const { children, geometry, material } = props;
@@ -17,6 +18,7 @@ export function Shape(props: ShapeProps) {
 
   const parent = useHierarchy(obj);
   useAddToScene({ obj, parent });
+  useLighting(obj, props);
   usePhysics(obj, props);
 
   const value = useMemo(() => {

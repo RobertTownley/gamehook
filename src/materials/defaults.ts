@@ -1,3 +1,5 @@
 import * as THREE from "three";
 
-export const DefaultMaterial = new THREE.MeshNormalMaterial();
+export function getDefaultMaterial() {
+  return new THREE.MeshNormalMaterial();
+}
