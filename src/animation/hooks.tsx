@@ -1,5 +1,6 @@
 import { useCallback, useEffect } from "react";
 
+import { updateControls } from "../controls/listeners";
 import { useSceneDetails } from "../scene/hooks";
 import { animateSceneObjects } from "../physics/scenePhysics";
 
@@ -37,6 +38,7 @@ export function useAnimate() {
     const frame = requestAnimationFrame(animate);
 
     animateSceneObjects(scene);
+    updateControls(scene);
     render();
     return frame;
   }, [render, scene]);

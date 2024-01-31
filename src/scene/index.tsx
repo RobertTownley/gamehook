@@ -33,8 +33,11 @@ export function Scene(props: SceneProps) {
 function GamehookScene(props: InnerSceneProps) {
   const { canvas, children } = props;
 
+  // TODO: Make this into its own hook
   const scene = useMemo(() => {
-    return new THREE.Scene();
+    const scene = new THREE.Scene();
+    scene.userData["controls"] = [];
+    return scene;
   }, []);
 
   useBackgroundColor(props, scene);
