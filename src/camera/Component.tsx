@@ -1,5 +1,4 @@
 import { useEffect, useMemo } from "react";
-import { useSceneDetails } from "../scene/hooks";
 import * as THREE from "three";
 
 import { usePhysics } from "../physics/hooks";
@@ -9,6 +8,7 @@ import { CameraProps } from "./types";
 import { HierarchyContext } from "../hierarchy/context";
 import { useHierarchy } from "../hierarchy/hooks";
 import { XYZ } from "src/physics/types";
+import { useCamera } from "./hooks";
 
 const DefaultCameraPosition: XYZ = [0, 0, 5];
 export function Camera(props: CameraProps) {
@@ -24,7 +24,7 @@ export function Camera(props: CameraProps) {
     left,
     right,
   } = props;
-  const { camera } = useSceneDetails();
+  const { setCamera } = useCamera();
 
   const threeCamera = useMemo(() => {
     if (type === "perspective") {
@@ -37,18 +37,18 @@ export function Camera(props: CameraProps) {
   useEffect(() => {}, []);
 
   useEffect(() => {
-    camera.current = threeCamera;
+    setCamera(threeCamera);
     return () => {
-      camera.current = getDefaultCamera();
+      setCamera(getDefaultCamera());
     };
-  }, [camera, threeCamera]);
+  }, [threeCamera, setCamera]);
 
-  usePhysics(camera.current, {
+  usePhysics(threeCamera, {
     position: props.position ?? DefaultCameraPosition,
     ...props,
   });
 
-  const parent = useHierarchy(camera.current);
+  const parent = useHierarchy(threeCamera);
   const value = useMemo(() => {
     return { parent };
   }, [parent]);

@@ -1,4 +1,4 @@
-import { Light, Shape, Scene } from "gamehook";
+import { Shape, Scene } from "gamehook";
 
 export function LightingExample() {
   return (

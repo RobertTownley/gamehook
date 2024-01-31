@@ -1,11 +1,4 @@
-import {
-  CSSProperties,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { CSSProperties, useContext, useEffect, useMemo, useState } from "react";
 import * as THREE from "three";
 
 import { SceneDetailsContext } from "./context";
@@ -47,28 +40,6 @@ export function useBackgroundColor(props: SceneProps, scene: THREE.Scene) {
   useEffect(() => {
     scene.background = backgroundColor;
   }, [scene, backgroundColor]);
-}
-
-/** Generate the scene's renderer */
-export function useRender(
-  { antialias, canvas, preserveDrawingBuffer }: SceneProps,
-  scene: THREE.Scene,
-  camera: THREE.Camera
-) {
-  // Build the renderer
-  const renderer = useMemo(() => {
-    return new THREE.WebGLRenderer({
-      antialias,
-      canvas,
-      preserveDrawingBuffer,
-    });
-  }, [antialias, canvas, preserveDrawingBuffer]);
-
-  // Create the render function for use in animation and loops
-  const render = useCallback(() => {
-    renderer.render(scene, camera);
-  }, [camera, renderer, scene]);
-  return { render, renderer };
 }
 
 export function useSceneDetails() {

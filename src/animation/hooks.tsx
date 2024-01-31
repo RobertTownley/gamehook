@@ -6,19 +6,23 @@ import { useSceneDetails } from "../scene/hooks";
 import { animateSceneObjects } from "../physics/scenePhysics";
 
 import { isPerspectiveCamera } from "../camera/guards";
+import { useCamera } from "../camera/hooks";
+import { useRender } from "../render/hooks";
 
 export function useResize() {
-  const { canvas, renderer, camera } = useSceneDetails();
+  const { camera } = useCamera();
+  const { canvas } = useSceneDetails();
+  const { renderer } = useRender();
 
   const resizeCanvas = useCallback(() => {
     const width = window.innerWidth;
     const height = window.innerHeight;
     if (canvas!.width !== width || canvas!.height !== height) {
       renderer.setSize(width, height);
-      if (isPerspectiveCamera(camera.current)) {
-        camera.current.aspect = width / height;
+      if (isPerspectiveCamera(camera)) {
+        camera.aspect = width / height;
       }
-      camera.current.updateProjectionMatrix();
+      camera.updateProjectionMatrix();
     }
   }, [camera, canvas, renderer]);
 
@@ -33,7 +37,8 @@ export function useResize() {
 }
 
 export function useAnimate() {
-  const { render, scene } = useSceneDetails();
+  const { scene } = useSceneDetails();
+  const { render } = useRender();
 
   const clock = useMemo(() => {
     return new THREE.Clock();

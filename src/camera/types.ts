@@ -16,3 +16,8 @@ export interface CameraProps extends Physical, Hierarchical {
 }
 
 export type ThreeCameras = THREE.PerspectiveCamera | THREE.OrthographicCamera;
+
+export interface CameraContextValues {
+  camera: ThreeCameras;
+  setCamera: (c: ThreeCameras) => void;
+}
