@@ -23,7 +23,7 @@ const ExampleMap: Record<string, ReactNode> = {
 };
 
 function App() {
-  const exampleName: keyof typeof ExampleMap = "Controls";
+  const exampleName: keyof typeof ExampleMap = "Basic";
   const Example = useMemo(() => {
     return ExampleMap[exampleName];
   }, []);
