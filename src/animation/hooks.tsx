@@ -1,4 +1,5 @@
-import { useCallback, useEffect } from "react";
+import * as THREE from "three";
+import { useCallback, useEffect, useMemo } from "react";
 
 import { updateControls } from "../controls/listeners";
 import { useSceneDetails } from "../scene/hooks";
@@ -34,14 +35,20 @@ export function useResize() {
 export function useAnimate() {
   const { render, scene } = useSceneDetails();
 
+  const clock = useMemo(() => {
+    return new THREE.Clock();
+  }, []);
+
   const animate = useCallback(() => {
     const frame = requestAnimationFrame(animate);
 
+    const delta = clock.getDelta();
+
     animateSceneObjects(scene);
-    updateControls(scene);
+    updateControls(scene, delta);
     render();
     return frame;
-  }, [render, scene]);
+  }, [render, scene, clock]);
 
   useEffect(() => {
     const frame = animate();

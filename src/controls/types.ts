@@ -16,5 +16,5 @@ export interface ControlsProps {
 
 // Workaround for not having yet found a unified Controls generic
 export interface IControls {
-  update: () => void;
+  update: (delta: number) => void;
 }

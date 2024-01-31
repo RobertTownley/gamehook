@@ -6,7 +6,7 @@ export function CameraExample() {
       <Shape position={[-2, 0, 0]} />
       <Shape position={[2, 0, 0]} />
 
-      <Camera position={[0, 0, 10]} orientation={[0, 0, 0.5]} />
+      <Camera position={[0, 0, 10]} orientation={[0, 0, 0]} />
     </Scene>
   );
 }

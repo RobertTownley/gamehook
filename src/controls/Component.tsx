@@ -63,14 +63,17 @@ export function Controls(props: ControlsProps) {
     if (variant === "transform") {
       return new TransformControls(camera.current, renderer.domElement);
     }
+    throw new Error(`Control not implemented: ${variant}`);
   }, [camera, renderer.domElement, scene, targetIds, variant]);
 
   useEffect(() => {
+    console.log(threeControls);
     scene.userData["controls"].push(threeControls);
     return () => {
       scene.userData["controls"] = scene.userData["controls"].filter(
         (c: unknown) => c !== threeControls
       );
+      threeControls.dispose();
     };
   }, [scene.userData, threeControls]);
   return null;

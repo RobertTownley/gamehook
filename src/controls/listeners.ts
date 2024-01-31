@@ -1,8 +1,10 @@
 import * as THREE from "three";
 import { IControls } from "./types";
 
-export function updateControls(scene: THREE.Scene) {
+export function updateControls(scene: THREE.Scene, delta: number) {
   scene.userData["controls"].forEach((controls: IControls) => {
-    controls.update();
+    if (controls.update) {
+      controls.update(delta);
+    }
   });
 }

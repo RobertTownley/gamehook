@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { Camera, Light, Shape, Scene } from "gamehook";
+import { Camera, Light, Shape, Scene, Controls } from "gamehook";
 import { useMemo } from "react";
 
 export function MaterialExample() {
@@ -21,6 +21,7 @@ export function MaterialExample() {
 
       <Light type="point" position={[0, 4, -8]} castShadow />
       <Camera />
+      <Controls variant="fly" />
     </Scene>
   );
 }

@@ -24,9 +24,9 @@ export function Camera(props: CameraProps) {
     left,
     right,
   } = props;
-  const { setCamera } = useSceneDetails();
+  const { camera } = useSceneDetails();
 
-  const camera = useMemo(() => {
+  const threeCamera = useMemo(() => {
     if (type === "perspective") {
       return new THREE.PerspectiveCamera(fov, aspect, near, far);
     } else {
@@ -37,18 +37,18 @@ export function Camera(props: CameraProps) {
   useEffect(() => {}, []);
 
   useEffect(() => {
-    setCamera(camera);
+    camera.current = threeCamera;
     return () => {
-      setCamera(getDefaultCamera());
+      camera.current = getDefaultCamera();
     };
-  }, [camera, setCamera]);
+  }, [camera, threeCamera]);
 
-  usePhysics(camera, {
+  usePhysics(camera.current, {
     position: props.position ?? DefaultCameraPosition,
     ...props,
   });
 
-  const parent = useHierarchy(camera);
+  const parent = useHierarchy(camera.current);
   const value = useMemo(() => {
     return { parent };
   }, [parent]);
