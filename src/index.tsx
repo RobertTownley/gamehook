@@ -1,15 +1,7 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import "./index.css";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
-
-const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
-);
-root.render(<App />);
-
-// If you want to start measuring performance in your app, pass a function
-// to log results
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+export { Camera } from "./camera/Component";
+export { Controls } from "./controls/Component";
+export type { Materializable } from "./materials/types";
+export { Light } from "./lights/Component";
+export type { Physical, XYZ } from "./physics/types";
+export { Scene } from "./scene";
+export { Shape } from "./shapes/Component";

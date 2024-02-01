@@ -1,73 +1,33 @@
-import {
-  AudioExample,
-  ButtonExample,
-  ContainerExample,
-  EventsExample,
-  FogExample,
-  HoverExample,
-  LightExample,
-  ModelExample,
-  MultiplayerExample,
-  ParentsExample,
-  Pong,
-  TextExample,
-  TextureExample,
-} from "./gamehook/examples";
-import { InputsExample } from "./gamehook/examples/inputs";
-import { WindowExample } from "./gamehook/examples/window";
+import { ReactNode, useMemo } from "react";
 
-type AvailableExamples =
-  | "audio"
-  | "button"
-  | "container"
-  | "events"
-  | "fog"
-  | "hover"
-  | "inputs"
-  | "lights"
-  | "model"
-  | "multiplayer"
-  | "parents"
-  | "pong"
-  | "text"
-  | "texture"
-  | "window";
+import { BasicExample } from "./examples/Basic";
+import { CameraExample } from "./examples/Camera";
+import { ControlsExample } from "./examples/Controls";
+import { PositionExample } from "./examples/Position";
+import { MaterialExample } from "./examples/Material";
+import { MovementExample } from "./examples/Movement";
+import { LightingExample } from "./examples/Lighting";
 
-const exampleName: AvailableExamples = "inputs";
+const ExampleMap: Record<string, ReactNode> = {
+  Basic: <BasicExample />,
+  Position: <PositionExample />,
+  Movement: <MovementExample />,
+  Camera: <CameraExample />,
+  Controls: <ControlsExample />,
+  Material: <MaterialExample />,
+  Lighting: <LightingExample />,
+  Interaction: null,
+  Materials: null,
+  Models: null,
+  Animation: null,
+};
 
 function App() {
-  switch (exampleName) {
-    case "audio":
-      return <AudioExample />;
-    case "button":
-      return <ButtonExample />;
-    case "container":
-      return <ContainerExample />;
-    case "events":
-      return <EventsExample />;
-    case "inputs":
-      return <InputsExample />;
-    case "fog":
-      return <FogExample />;
-    case "hover":
-      return <HoverExample />;
-    case "lights":
-      return <LightExample />;
-    case "model":
-      return <ModelExample />;
-    case "multiplayer":
-      return <MultiplayerExample />;
-    case "parents":
-      return <ParentsExample />;
-    case "pong":
-      return <Pong />;
-    case "text":
-      return <TextExample />;
-    case "texture":
-      return <TextureExample />;
-    case "window":
-      return <WindowExample />;
-  }
+  const exampleName: keyof typeof ExampleMap = "Movement";
+  const Example = useMemo(() => {
+    return ExampleMap[exampleName];
+  }, []);
+  return <>{Example}</>;
 }
 
 export default App;

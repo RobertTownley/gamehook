@@ -1,69 +1,38 @@
 {
   "name": "gamehook",
-  "version": "0.7.0",
-  "license": "MIT",
-  "author": {
-    "name": "Robert Townley",
-    "url": "https://roberttownley.com"
-  },
-  "description": "A react and typescript based game engine, built on top of ThreeJS",
-  "keywords": [
-    "react",
-    "typescript",
-    "game",
-    "engine",
-    "threejs"
-  ],
-  "homepage": "https://roberttownley.com",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/RobertTownley/gamehook"
-  },
-  "main": "dist/index.js",
-  "files": [
-    "dist/"
-  ],
-  "dependencies": {
-    "@types/jest": "^27.0.1",
-    "@types/node": "^16.7.13",
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0",
-    "axios": "^0.27.2",
-    "lodash": "^4.17.21",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "styled-components": "^5.3.5",
-    "three": "^0.139.2",
-    "typescript": "^4.4.2",
-    "web-vitals": "^2.1.0"
-  },
+  "private": false,
+  "version": "0.8.8",
+  "type": "module",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "tsc --build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "three": "^0.161.0"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+  "main": "./dist/gamehook.umd.cjs",
+  "module": "./dist/gamehook.js",
+  "types": "./dist/index.d.ts",
   "devDependencies": {
-    "@types/lodash": "^4.14.182",
-    "@types/three": "^0.139.0",
-    "react-scripts": "^5.0.1"
-  }
+    "@types/node": "^20.10.7",
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@types/three": "^0.161.1",
+    "@typescript-eslint/eslint-plugin": "^6.14.0",
+    "@typescript-eslint/parser": "^6.14.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^8.55.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.8",
+    "vite-plugin-dts": "^3.7.0"
+  },
+  "files": [
+    "dist"
+  ]
 }

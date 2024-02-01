@@ -10,8 +10,6 @@ The end result is a greatly simplified API that will feel comfortable for react 
 
 The end result of React and ThreeJS working together is a convenient and developer friendly way of managing visualizations.
 
-![basic-cube-gif](./docs/assets/basicSpinningCube.gif)
-
 ## Why Gamehook?
 
 - Games built with javascript will run in most modern browsers, without installation. It's like being able to make Flash games again, but without horrible security issues.
