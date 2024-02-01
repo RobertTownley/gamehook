@@ -17,7 +17,7 @@ import { InnerSceneProps, SceneDetails, SceneProps } from "./types";
 export function Scene(props: SceneProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const id = useSceneId(props);
-  const ready = useSceneReady();
+  const sceneReady = useSceneReady();
   // TODO: Optionally don't render canvas, in case the user wants to provide their own canvas
 
   const scene = useMemo(() => {
@@ -29,7 +29,7 @@ export function Scene(props: SceneProps) {
   return (
     <>
       <canvas ref={canvasRef} id={id} style={SceneStyles} />
-      {ready && canvasRef.current && (
+      {sceneReady && canvasRef.current && (
         <GamehookScene
           {...props}
           id={id}
