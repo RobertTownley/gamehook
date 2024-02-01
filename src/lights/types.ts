@@ -1,8 +1,10 @@
 import { Hierarchical } from "../hierarchy/types";
 import { Physical } from "../physics/types";
 
+type LightVariant = "ambient" | "directional" | "hemisphere" | "point" | "spot";
+
 export interface LightProps extends Physical, Hierarchical {
-  type?: "directional" | "point" | "spot" | "hemisphere" | "ambient";
+  variant?: LightVariant;
 
   color?: number;
   intensity?: number;

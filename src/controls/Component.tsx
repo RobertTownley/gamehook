@@ -53,6 +53,7 @@ export function Controls(props: ControlsProps) {
     if (variant === "map") {
       const controls = new MapControls(camera, listenerTarget);
       controls.enableDamping = true;
+      controls.enableRotate = true;
       return controls;
     }
     if (variant === "orbit") {

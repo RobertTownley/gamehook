@@ -4,19 +4,27 @@ import * as THREE from "three";
 import { useCamera } from "../camera/hooks";
 import { useSceneDetails } from "../scene/hooks";
 import { RenderContext } from "./context";
+import { RendererProps } from "./types";
 
 /** Generate the scene's renderer */
-export function useCreateRenderer() {
+export function useCreateRenderer({
+  antialias = true,
+  enableShadowMaps = true,
+  preserveDrawingBuffer = false,
+}: RendererProps) {
   const { canvas, scene } = useSceneDetails();
   const { camera } = useCamera();
 
   const renderer = useMemo(() => {
-    return new THREE.WebGLRenderer({
-      antialias: true, // TODO
+    const renderer = new THREE.WebGLRenderer({
+      antialias,
       canvas,
-      preserveDrawingBuffer: false, // TODO
+      preserveDrawingBuffer,
     });
-  }, [canvas]);
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.shadowMap.enabled = enableShadowMaps;
+    return renderer;
+  }, [antialias, canvas, enableShadowMaps, preserveDrawingBuffer]);
 
   // Create the render function for use in animation and loops
   const render = useCallback(() => {

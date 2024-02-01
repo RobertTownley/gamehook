@@ -37,7 +37,7 @@ export function Camera(props: CameraProps) {
   }, [type, left, right, top, bottom, aspect, far, fov, near]);
 
   useEffect(() => {
-    threeCamera.position.setZ(5);
+    threeCamera.position.set(...DefaultCameraPosition);
     setCamera(threeCamera);
     return () => {
       setCamera(getDefaultCamera());

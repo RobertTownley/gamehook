@@ -4,18 +4,66 @@ import * as THREE from "three";
 import { HierarchyContext } from "../hierarchy/context";
 import { useHierarchy } from "../hierarchy/hooks";
 import { useLighting } from "./hooks";
+import { useAddToScene } from "../scene/hooks";
 
 import { LightProps } from "./types";
+import { usePhysics } from "../physics/hooks";
 
 export function Light(props: LightProps) {
-  const { children } = props;
+  const {
+    color,
+    skyColor,
+    groundColor,
+
+    angle,
+    penumbra,
+    intensity,
+    distance,
+    decay,
+    children,
+    variant,
+  } = props;
+
   const light = useMemo(() => {
-    return new THREE.AmbientLight();
-  }, []);
+    if (variant === "ambient") {
+      return new THREE.AmbientLight(color, intensity);
+    } else if (variant === "directional") {
+      return new THREE.DirectionalLight(color, intensity);
+    } else if (variant === "hemisphere") {
+      return new THREE.HemisphereLight(skyColor, groundColor, intensity);
+    } else if (variant === "point") {
+      return new THREE.PointLight(color, intensity, distance, decay);
+    } else if (variant === "spot") {
+      return new THREE.SpotLight(
+        color,
+        intensity,
+        distance,
+        angle,
+        penumbra,
+        decay
+      );
+    } else {
+      // Default
+      return new THREE.AmbientLight();
+    }
+  }, [
+    color,
+    skyColor,
+    groundColor,
+    angle,
+    penumbra,
+    intensity,
+    distance,
+    decay,
+    variant,
+  ]);
 
-  useLighting(light, props);
-
+  console.log(light.position);
   const parent = useHierarchy(light);
+  useAddToScene({ obj: light, parent });
+  useLighting(light, props);
+  usePhysics(light, props);
+
   const value = useMemo(() => {
     return { parent: light };
   }, [light]);

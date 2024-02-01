@@ -7,7 +7,7 @@ interface Props {
   children: ReactNode;
 }
 export function RenderProvider({ children }: Props) {
-  const { render, renderer } = useCreateRenderer();
+  const { render, renderer } = useCreateRenderer({});
   const value = useMemo(() => {
     return { render, renderer };
   }, [render, renderer]);

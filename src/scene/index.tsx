@@ -4,6 +4,7 @@ import * as THREE from "three";
 import { CameraProvider } from "../camera/providers";
 import { AnimationLoop } from "../animation/AnimationLoop";
 import { RenderProvider } from "../render/provider";
+import { useStats } from "../stats/hooks";
 
 import { SceneDetailsContext } from "./context";
 import {
@@ -25,6 +26,8 @@ export function Scene(props: SceneProps) {
     scene.userData["controls"] = [];
     return scene;
   }, []);
+
+  useStats();
 
   return (
     <>
