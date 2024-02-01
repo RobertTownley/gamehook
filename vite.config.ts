@@ -14,6 +14,16 @@ export default defineConfig({
       name: "gamehook",
       fileName: "gamehook",
     },
+    rollupOptions: {
+      external: ["three", "react", "react-dom"],
+      output: {
+        globals: {
+          three: "three",
+          react: "react",
+          "react-dom": "react-dom",
+        },
+      },
+    },
   },
   resolve: {
     alias: {
