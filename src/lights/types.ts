@@ -27,4 +27,11 @@ export interface LightProps extends Physical, Hierarchical {
 export interface Lightable {
   castShadow?: boolean;
   receiveShadow?: boolean;
+  shadows?: {
+    bias?: number;
+    mapSize?: {
+      height?: number;
+      width?: number;
+    };
+  };
 }

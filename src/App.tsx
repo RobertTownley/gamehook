@@ -24,7 +24,7 @@ const ExampleMap: Record<string, ReactNode> = {
 type ExampleName = keyof typeof ExampleMap;
 
 function App() {
-  const exampleName: ExampleName = "Material";
+  const exampleName: ExampleName = "Lighting";
   const Example = useMemo(() => {
     return ExampleMap[exampleName];
   }, []);

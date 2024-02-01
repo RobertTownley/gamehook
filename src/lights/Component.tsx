@@ -3,7 +3,7 @@ import * as THREE from "three";
 
 import { HierarchyContext } from "../hierarchy/context";
 import { useHierarchy } from "../hierarchy/hooks";
-import { useLighting } from "./hooks";
+import { useLighting, useShadowMaps } from "./hooks";
 import { useAddToScene } from "../scene/hooks";
 
 import { LightProps } from "./types";
@@ -58,10 +58,10 @@ export function Light(props: LightProps) {
     variant,
   ]);
 
-  console.log(light.position);
   const parent = useHierarchy(light);
   useAddToScene({ obj: light, parent });
   useLighting(light, props);
+  useShadowMaps(light, props);
   usePhysics(light, props);
 
   const value = useMemo(() => {

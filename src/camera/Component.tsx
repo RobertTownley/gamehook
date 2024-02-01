@@ -5,8 +5,8 @@ import { usePhysics } from "../physics/hooks";
 
 import {
   getDefaultCamera,
-  DefaultCameraPosition,
   DefaultCameraType,
+  DefaultCameraPosition,
 } from "./defaults";
 import { CameraProps } from "./types";
 import { HierarchyContext } from "../hierarchy/context";
@@ -25,6 +25,7 @@ export function Camera(props: CameraProps) {
     bottom,
     left,
     right,
+    position = DefaultCameraPosition,
   } = props;
   const { setCamera } = useCamera();
 
@@ -37,7 +38,6 @@ export function Camera(props: CameraProps) {
   }, [type, left, right, top, bottom, aspect, far, fov, near]);
 
   useEffect(() => {
-    threeCamera.position.set(...DefaultCameraPosition);
     setCamera(threeCamera);
     return () => {
       setCamera(getDefaultCamera());
@@ -45,7 +45,7 @@ export function Camera(props: CameraProps) {
   }, [threeCamera, setCamera]);
 
   usePhysics(threeCamera, {
-    position: [0, 0, 10], //props.position ?? DefaultCameraPosition,
+    position,
     ...props,
   });
 

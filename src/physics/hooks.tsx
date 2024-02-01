@@ -13,14 +13,8 @@ const DEFAULT_POSITION = [0, 0, 0];
 function useMovement(obj: THREE.Object3D, { position, velocity }: Physical) {
   const [x, y, z] = position ?? DEFAULT_POSITION;
   useEffect(() => {
-    obj.position.setX(x);
-  }, [obj.position, x]);
-  useEffect(() => {
-    obj.position.setY(y);
-  }, [obj.position, y]);
-  useEffect(() => {
-    obj.position.setZ(z);
-  }, [obj.position, z]);
+    obj.position.set(x, y, z);
+  }, [obj.position, x, y, z]);
 
   useEffect(() => {
     obj.userData["velocity"] = velocity;
@@ -35,8 +29,10 @@ function useRotation(obj: THREE.Object3D, { orientation, rotation }: Physical) {
   }, [x, y, z]);
 
   useEffect(() => {
-    obj.rotation.set(threeRotation[0], threeRotation[1], threeRotation[2]);
-  }, [obj.rotation, threeRotation]);
+    obj.rotateX(threeRotation[0]);
+    obj.rotateY(threeRotation[1]);
+    obj.rotateZ(threeRotation[2]);
+  }, [obj, threeRotation]);
 
   useEffect(() => {
     obj.userData["rotation"] = rotation;
