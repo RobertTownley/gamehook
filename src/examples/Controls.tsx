@@ -1,4 +1,4 @@
-import { Shape, Scene, Controls, XYZ } from "gamehook";
+import { Camera, Shape, Scene, Controls, XYZ } from "gamehook";
 
 export function ControlsExample() {
   const positions: XYZ[] = [
@@ -17,7 +17,8 @@ export function ControlsExample() {
       {positions.map((p, i) => {
         return <Shape rotation={[0.01, 0.01, 0.01]} position={p} key={i} />;
       })}
-      <Controls variant="fly" />
+      <Controls variant="map" />
+      <Camera position={[0, 0, 10]} />
     </Scene>
   );
 }

@@ -17,8 +17,8 @@ export function Light(props: LightProps) {
 
   const parent = useHierarchy(light);
   const value = useMemo(() => {
-    return { parent };
-  }, [parent]);
+    return { parent: light };
+  }, [light]);
 
   return (
     <HierarchyContext.Provider value={value}>

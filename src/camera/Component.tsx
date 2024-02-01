@@ -3,14 +3,16 @@ import * as THREE from "three";
 
 import { usePhysics } from "../physics/hooks";
 
-import { getDefaultCamera, DefaultCameraType } from "./defaults";
+import {
+  getDefaultCamera,
+  DefaultCameraPosition,
+  DefaultCameraType,
+} from "./defaults";
 import { CameraProps } from "./types";
 import { HierarchyContext } from "../hierarchy/context";
 import { useHierarchy } from "../hierarchy/hooks";
-import { XYZ } from "src/physics/types";
 import { useCamera } from "./hooks";
 
-const DefaultCameraPosition: XYZ = [0, 0, 5];
 export function Camera(props: CameraProps) {
   const {
     children,
@@ -34,9 +36,8 @@ export function Camera(props: CameraProps) {
     }
   }, [type, left, right, top, bottom, aspect, far, fov, near]);
 
-  useEffect(() => {}, []);
-
   useEffect(() => {
+    threeCamera.position.setZ(5);
     setCamera(threeCamera);
     return () => {
       setCamera(getDefaultCamera());
@@ -44,14 +45,15 @@ export function Camera(props: CameraProps) {
   }, [threeCamera, setCamera]);
 
   usePhysics(threeCamera, {
-    position: props.position ?? DefaultCameraPosition,
+    position: [0, 0, 10], //props.position ?? DefaultCameraPosition,
     ...props,
   });
 
-  const parent = useHierarchy(threeCamera);
+  useHierarchy(threeCamera);
+
   const value = useMemo(() => {
-    return { parent };
-  }, [parent]);
+    return { parent: threeCamera };
+  }, [threeCamera]);
 
   return (
     <HierarchyContext.Provider value={value}>

@@ -47,7 +47,6 @@ export function Controls(props: ControlsProps) {
 
     if (variant === "fly") {
       const controls = new FlyControls(camera, listenerTarget);
-      console.log("NEW CONTROLS");
       return controls;
     }
 
@@ -72,7 +71,6 @@ export function Controls(props: ControlsProps) {
   }, [camera, listenerTarget, scene, targetIds, variant]);
 
   useEffect(() => {
-    console.log("Controls in place");
     scene.userData["controls"].push(threeControls);
     return () => {
       threeControls.dispose();
