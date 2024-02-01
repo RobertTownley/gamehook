@@ -3,7 +3,7 @@ import { Scene, Shape } from "gamehook";
 export function BasicExample() {
   return (
     <Scene>
-      <Shape />
+      <Shape rotation={[0.005, 0.005, 0.005]} />
     </Scene>
   );
 }

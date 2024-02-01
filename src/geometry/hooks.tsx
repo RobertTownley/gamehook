@@ -18,7 +18,7 @@ export function useGeometry(
   const geometry = useMemo(() => {
     if (!params) return DefaultGeometry;
 
-    switch (params.type) {
+    switch (params.variant) {
       case "box":
         return new THREE.BoxGeometry(
           params.width,

@@ -1,5 +1,5 @@
 interface BoxParams {
-  type: "box";
+  variant: "box";
   width?: number;
   height?: number;
   depth?: number;
@@ -8,7 +8,7 @@ interface BoxParams {
   depthSegments?: number;
 }
 interface CylinderParams {
-  type: "cylinder";
+  variant: "cylinder";
   radiusTop?: number;
   radiusBottom?: number;
   height?: number;
@@ -19,7 +19,7 @@ interface CylinderParams {
   thetaLength?: number;
 }
 interface SphereParams {
-  type: "sphere";
+  variant: "sphere";
   radius?: number;
   widthSegments?: number;
   heightSegments?: number;
