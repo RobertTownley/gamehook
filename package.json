@@ -11,7 +11,8 @@
   },
   "peerDependencies": {
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "three": "^0.161.0"
   },
   "main": "./dist/gamehook.umd.cjs",
   "module": "./dist/gamehook.js",
@@ -34,8 +35,5 @@
   },
   "files": [
     "dist"
-  ],
-  "dependencies": {
-    "three": "^0.161.0"
-  }
+  ]
 }
