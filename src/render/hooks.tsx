@@ -40,9 +40,9 @@ export function useCreateRenderer({
 
   useEffect(() => {
     resize();
-    window.addEventListener("resize", resize);
+    window.addEventListener("resize", resize, false);
     return () => {
-      window.removeEventListener("resize", resize);
+      window.removeEventListener("resize", resize, false);
     };
   }, [resize]);
 

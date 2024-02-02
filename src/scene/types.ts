@@ -22,7 +22,6 @@ export interface SceneProps extends IScene {
 export interface InnerSceneProps extends IScene {
   canvas: HTMLCanvasElement;
   id: string;
-  scene: THREE.Scene;
 }
 
 /** Context Values */

@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { AnimationLoop } from "../animation/AnimationLoop";
 import { CameraProvider } from "../camera/providers";
 import { buildInitialInteractions } from "../interactions/defaults";
-import { useInteractionListeners } from "../interactions/hooks";
+import { InteractionListener } from "../interactions/Component";
 import { RenderProvider } from "../render/provider";
 import { useStats } from "../stats/hooks";
 
@@ -15,7 +15,7 @@ import {
   useSceneId,
   useSceneReady,
 } from "./hooks";
-import { InnerSceneProps, SceneDetails, SceneProps } from "./types";
+import { InnerSceneProps, SceneProps } from "./types";
 
 export function Scene(props: SceneProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -23,48 +23,37 @@ export function Scene(props: SceneProps) {
   const sceneReady = useSceneReady();
   // TODO: Optionally don't render canvas, in case the user wants to provide their own canvas
 
-  const scene = useMemo(() => {
-    const scene = new THREE.Scene();
-    scene.userData["controls"] = [];
-    scene.userData["interactions"] = buildInitialInteractions();
-    return scene;
-  }, []);
-
   useStats();
 
   return (
     <>
       <canvas ref={canvasRef} id={id} style={SceneStyles} />
       {sceneReady && canvasRef.current && (
-        <GamehookScene
-          {...props}
-          id={id}
-          canvas={canvasRef.current}
-          scene={scene}
-        />
+        <GamehookScene {...props} id={id} canvas={canvasRef.current} />
       )}
     </>
   );
 }
 
 function GamehookScene(props: InnerSceneProps) {
-  const { canvas, children, scene } = props;
+  const { canvas, children } = props;
+
+  const scene = useMemo(() => {
+    const scene = new THREE.Scene();
+    scene.userData["controls"] = [];
+    scene.userData["interactions"] = buildInitialInteractions();
+    scene.userData["foo"] = "I AM A SCENE";
+    return scene;
+  }, []);
 
   useBackgroundColor(props, scene);
-  useInteractionListeners(scene);
-
-  const sceneDetails: SceneDetails = useMemo(() => {
-    return {
-      canvas,
-      scene,
-    };
-  }, [canvas, scene]);
 
   return (
-    <SceneDetailsContext.Provider value={sceneDetails}>
+    <SceneDetailsContext.Provider value={{ canvas, scene }}>
       <CameraProvider>
         <RenderProvider>
           <AnimationLoop />
+          <InteractionListener />
           {children}
         </RenderProvider>
       </CameraProvider>

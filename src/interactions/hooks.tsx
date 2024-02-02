@@ -5,7 +5,6 @@ import { useSceneDetails } from "../scene/hooks";
 import { useCamera } from "../camera/hooks";
 
 import { Interactable, InteractionStore } from "./types";
-import { useRender } from "../render/hooks";
 
 export function useInteraction(obj: THREE.Object3D, props: Interactable) {
   const { scene } = useSceneDetails();
@@ -40,10 +39,10 @@ export function useInteraction(obj: THREE.Object3D, props: Interactable) {
   }, [obj, interactions, onHoverExit]);
 }
 
-export function useInteractionListeners(scene: THREE.Scene) {
-  const interactions: InteractionStore = scene.userData.interactions;
-  const { renderer } = useRender();
+export function useInteractionListeners() {
   const { camera } = useCamera();
+  const { scene } = useSceneDetails();
+  const interactions: InteractionStore = scene.userData.interactions;
 
   const handleClick = useCallback(
     (event: MouseEvent) => {
@@ -56,10 +55,16 @@ export function useInteractionListeners(scene: THREE.Scene) {
       const raycaster = new THREE.Raycaster();
       raycaster.setFromCamera(mouse, camera);
 
-      const targets = Object.values(interactions.onClick).map((o) => o[0]);
+      const clickEntries = Object.values(interactions.onClick);
+      const targets = clickEntries.map((o) => o[0]);
       const intersections = raycaster.intersectObjects(targets, true);
       if (intersections.length > 0) {
-        console.log("GOT ONE");
+        const first = intersections[0];
+        const entry = clickEntries.find((t) => t[0].id === first.object.id);
+        if (entry) {
+          const callback = entry[1];
+          callback();
+        }
       }
     },
     [camera, interactions]
@@ -67,12 +72,12 @@ export function useInteractionListeners(scene: THREE.Scene) {
 
   const handleMouseMove = useCallback(
     (event: MouseEvent) => {
-      const mouse = new THREE.Vector2();
       const width = window.innerWidth;
       const height = window.innerHeight;
-      mouse.x = (event.clientX / width) * 2 - 1;
-      mouse.y = -(event.clientY / height) * 2 + 1;
-      console.log(mouse);
+      const mouse = new THREE.Vector2(
+        (event.clientX / width) * 2 - 1,
+        (event.clientY / height) * 2 + 1
+      );
 
       const raycaster = new THREE.Raycaster();
       raycaster.setFromCamera(mouse, camera);
@@ -80,12 +85,11 @@ export function useInteractionListeners(scene: THREE.Scene) {
       const hoverEnterEntries = Object.values(interactions.onHoverEnter);
       const targets = hoverEnterEntries.map((o) => {
         const obj = o[0];
-        obj.updateMatrixWorld();
         return obj;
       });
 
       // Find newly hovered items
-      const intersections = raycaster.intersectObjects(targets, true);
+      const intersections = raycaster.intersectObjects(targets);
       if (intersections.length > 0) {
         const first = intersections[0];
         const entry = hoverEnterEntries.find(

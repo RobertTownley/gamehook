@@ -7,7 +7,7 @@ export function InteractionExample() {
     <Scene>
       <ClickToRotate position={[-2, 1, 0]} />
       <ClickToRotate position={[2, 1, 0]} />
-      <HoverToChangeColor position={[0, -2, 0]} />
+      <HoverToChangeColor position={[0, 0, 0]} />
     </Scene>
   );
 }
