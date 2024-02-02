@@ -5,9 +5,10 @@ import * as THREE from "three";
 export function InteractionExample() {
   return (
     <Scene>
-      <ClickToRotate position={[-2, 1, 0]} />
-      <ClickToRotate position={[2, 1, 0]} />
-      <HoverToChangeColor position={[0, 0, 0]} />
+      <ClickToRotate position={[-2, 2, 0]} />
+      <ClickToRotate position={[2, 2, 0]} />
+      <HoverToChangeColor />
+      <PressSpaceToGrow />
     </Scene>
   );
 }
@@ -31,7 +32,7 @@ export function ClickToRotate({ position }: CubeProps) {
   );
 }
 
-export function HoverToChangeColor({ position }: CubeProps) {
+export function HoverToChangeColor() {
   const [isRed, setIsRed] = useState(false);
   const material = useMemo(() => {
     return isRed
@@ -46,12 +47,33 @@ export function HoverToChangeColor({ position }: CubeProps) {
   const handleHoverExit = useCallback(() => {
     setIsRed(false);
   }, []);
+
   return (
     <Shape
-      position={position}
       onHoverEnter={handleHoverEnter}
       onHoverExit={handleHoverExit}
       material={material}
+      position={[0, 0, 0]}
     />
+  );
+}
+
+function PressSpaceToGrow() {
+  const [isBig, setIsBig] = useState(false);
+  const scale: XYZ = useMemo(() => {
+    return isBig ? [8, 1, 1] : [1, 1, 1];
+  }, [isBig]);
+
+  const handleKeypress = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.key === " ") {
+        setIsBig(!isBig);
+      }
+    },
+    [isBig]
+  );
+
+  return (
+    <Shape position={[0, -2, 0]} scale={scale} onKeyDown={handleKeypress} />
   );
 }
