@@ -35,6 +35,6 @@ export function useModelMaterial(model: THREE.Object3D, props: Materializable) {
   }, [model, props.material, threeMaterial]);
 }
 
-export function hasMaterial(obj: THREE.Object3D): obj is THREE.Mesh {
-  return true;
+function hasMaterial(obj: THREE.Object3D): obj is THREE.Mesh {
+  return obj !== null;
 }

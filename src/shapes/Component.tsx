@@ -1,5 +1,3 @@
-import { useMemo } from "react";
-
 import { ShapeProps } from "./types";
 import { useGeometry } from "../geometry/hooks";
 import { useInteraction } from "../interactions/hooks";
