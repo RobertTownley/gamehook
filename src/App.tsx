@@ -6,6 +6,7 @@ import { ControlsExample } from "./examples/Controls";
 import { InteractionExample } from "./examples/Interaction";
 import { PositionExample } from "./examples/Position";
 import { MaterialExample } from "./examples/Material";
+import { ModelExample } from "./examples/Model";
 import { MovementExample } from "./examples/Movement";
 import { LightingExample } from "./examples/Lighting";
 
@@ -18,14 +19,12 @@ const ExampleMap: Record<string, ReactNode> = {
   Material: <MaterialExample />,
   Lighting: <LightingExample />,
   Interaction: <InteractionExample />,
-  Materials: null,
-  Models: null,
+  Models: <ModelExample />,
   Animation: null,
 };
-type ExampleName = keyof typeof ExampleMap;
 
 function App() {
-  const exampleName: ExampleName = "Interaction";
+  const exampleName = "Models";
   const Example = useMemo(() => {
     return ExampleMap[exampleName];
   }, []);
