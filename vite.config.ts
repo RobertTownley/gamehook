@@ -30,5 +30,4 @@ export default defineConfig({
       gamehook: path.resolve(__dirname, "./src"),
     },
   },
-  base: "/gamehook/",
 });

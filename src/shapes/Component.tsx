@@ -13,9 +13,9 @@ import { useLighting } from "../lights/hooks";
 import { useTaxonomy } from "../taxonomy/hooks";
 
 export function Shape(props: ShapeProps) {
-  const { children, geometry, material } = props;
-  const threeGeometry = useGeometry(geometry);
-  const threeMaterial = useMaterial(material);
+  const { children } = props;
+  const threeGeometry = useGeometry(props);
+  const threeMaterial = useMaterial(props);
   const obj = useMesh(threeGeometry, threeMaterial);
 
   const parent = useHierarchy(obj);
@@ -25,12 +25,8 @@ export function Shape(props: ShapeProps) {
   usePhysics(obj, props);
   useTaxonomy(obj, props);
 
-  const value = useMemo(() => {
-    return { parent: obj };
-  }, [obj]);
-
   return (
-    <HierarchyContext.Provider value={value}>
+    <HierarchyContext.Provider value={{ parent: obj, animations: [] }}>
       {children}
     </HierarchyContext.Provider>
   );

@@ -64,12 +64,8 @@ export function Light(props: LightProps) {
   useShadowMaps(light, props);
   usePhysics(light, props);
 
-  const value = useMemo(() => {
-    return { parent: light };
-  }, [light]);
-
   return (
-    <HierarchyContext.Provider value={value}>
+    <HierarchyContext.Provider value={{ parent: light, animations: [] }}>
       {children}
     </HierarchyContext.Provider>
   );

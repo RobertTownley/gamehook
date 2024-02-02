@@ -41,8 +41,8 @@ function GamehookScene(props: InnerSceneProps) {
   const scene = useMemo(() => {
     const scene = new THREE.Scene();
     scene.userData["controls"] = [];
+    scene.userData["mixers"] = [];
     scene.userData["interactions"] = buildInitialInteractions();
-    scene.userData["foo"] = "I AM A SCENE";
     return scene;
   }, []);
 

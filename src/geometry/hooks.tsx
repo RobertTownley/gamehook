@@ -1,14 +1,12 @@
 import { useEffect, useMemo } from "react";
 import * as THREE from "three";
 
-import { GeometryProps } from "./types";
+import { GeometryProps, Shapeable } from "./types";
 import { DefaultGeometry } from "./defaults";
 
-export function useGeometry(
-  props: GeometryProps | undefined
-): THREE.BufferGeometry {
+export function useGeometry(props: Shapeable): THREE.BufferGeometry {
   const stringified = useMemo(() => {
-    return props ? JSON.stringify(props) : undefined;
+    return props.geometry ? JSON.stringify(props.geometry) : undefined;
   }, [props]);
 
   const params = useMemo(() => {

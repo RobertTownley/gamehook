@@ -1,10 +1,9 @@
-import * as THREE from "three";
 import { useContext, useEffect, useMemo } from "react";
 import { Object3D } from "three";
-import { GLTF } from "three/examples/jsm/loaders/GLTFLoader";
 
 import { useSceneDetails } from "../scene/hooks";
 import { HierarchyContext } from "./context";
+import { isGLTF } from "./guards";
 
 export function useHierarchy(obj: Object3D): Object3D | undefined {
   const hierarchy = useContext(HierarchyContext);
@@ -32,8 +31,4 @@ export function useHierarchy(obj: Object3D): Object3D | undefined {
   }, [scene, obj, parent]);
 
   return parent;
-}
-
-function isGLTF(obj: THREE.Object3D | GLTF): obj is GLTF {
-  return obj instanceof THREE.Object3D !== true;
 }

@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { useCallback, useEffect, useMemo } from "react";
 
 import { updateControls } from "../controls/listeners";
+import { updateMixers } from "./listeners";
 import { useSceneDetails } from "../scene/hooks";
 import { animateSceneObjects } from "../physics/scenePhysics";
 
@@ -22,6 +23,7 @@ export function useAnimate() {
 
     animateSceneObjects(scene);
     updateControls(scene, delta);
+    updateMixers(scene, delta);
     render();
     return frame;
   }, [render, scene, clock]);

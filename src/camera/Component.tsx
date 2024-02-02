@@ -51,12 +51,8 @@ export function Camera(props: CameraProps) {
 
   useHierarchy(threeCamera);
 
-  const value = useMemo(() => {
-    return { parent: threeCamera };
-  }, [threeCamera]);
-
   return (
-    <HierarchyContext.Provider value={value}>
+    <HierarchyContext.Provider value={{ parent: threeCamera, animations: [] }}>
       {children}
     </HierarchyContext.Provider>
   );
