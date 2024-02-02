@@ -20,7 +20,6 @@ const ExampleMap: Record<string, ReactNode> = {
   Lighting: <LightingExample />,
   Interaction: <InteractionExample />,
   Models: <ModelExample />,
-  Animation: null,
 };
 
 function App() {
