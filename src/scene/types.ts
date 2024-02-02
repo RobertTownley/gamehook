@@ -16,6 +16,8 @@ interface IScene extends Hierarchical {
 }
 export interface SceneProps extends IScene {
   canvas?: HTMLCanvasElement;
+  width?: number;
+  height?: number;
 }
 export interface InnerSceneProps extends IScene {
   canvas: HTMLCanvasElement;

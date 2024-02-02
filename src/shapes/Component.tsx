@@ -2,6 +2,7 @@ import { useMemo } from "react";
 
 import { ShapeProps } from "./types";
 import { useGeometry } from "../geometry/hooks";
+import { useInteraction } from "../interactions/hooks";
 import { useHierarchy } from "../hierarchy/hooks";
 import { useMaterial } from "../materials/hooks";
 import { useAddToScene } from "../scene/hooks";
@@ -19,6 +20,7 @@ export function Shape(props: ShapeProps) {
 
   const parent = useHierarchy(obj);
   useAddToScene({ obj, parent });
+  useInteraction(obj, props);
   useLighting(obj, props);
   usePhysics(obj, props);
   useTaxonomy(obj, props);

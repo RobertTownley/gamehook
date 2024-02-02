@@ -3,6 +3,7 @@ import { ReactNode, useMemo } from "react";
 import { BasicExample } from "./examples/Basic";
 import { CameraExample } from "./examples/Camera";
 import { ControlsExample } from "./examples/Controls";
+import { InteractionExample } from "./examples/Interaction";
 import { PositionExample } from "./examples/Position";
 import { MaterialExample } from "./examples/Material";
 import { MovementExample } from "./examples/Movement";
@@ -16,7 +17,7 @@ const ExampleMap: Record<string, ReactNode> = {
   Controls: <ControlsExample />,
   Material: <MaterialExample />,
   Lighting: <LightingExample />,
-  Interaction: null,
+  Interaction: <InteractionExample />,
   Materials: null,
   Models: null,
   Animation: null,
@@ -24,7 +25,7 @@ const ExampleMap: Record<string, ReactNode> = {
 type ExampleName = keyof typeof ExampleMap;
 
 function App() {
-  const exampleName: ExampleName = "Lighting";
+  const exampleName: ExampleName = "Interaction";
   const Example = useMemo(() => {
     return ExampleMap[exampleName];
   }, []);

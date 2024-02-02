@@ -1,4 +1,11 @@
-import { CSSProperties, useContext, useEffect, useMemo, useState } from "react";
+import {
+  CSSProperties,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import * as THREE from "three";
 
 import { SceneDetailsContext } from "./context";

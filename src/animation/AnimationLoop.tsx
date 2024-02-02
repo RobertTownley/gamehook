@@ -1,7 +1,6 @@
-import { useAnimate, useResize } from "./hooks";
+import { useAnimate } from "./hooks";
 
 export function AnimationLoop() {
   useAnimate();
-  useResize();
   return null;
 }

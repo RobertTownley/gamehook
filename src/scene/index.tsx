@@ -1,8 +1,10 @@
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 
-import { CameraProvider } from "../camera/providers";
 import { AnimationLoop } from "../animation/AnimationLoop";
+import { CameraProvider } from "../camera/providers";
+import { buildInitialInteractions } from "../interactions/defaults";
+import { useInteractionListeners } from "../interactions/hooks";
 import { RenderProvider } from "../render/provider";
 import { useStats } from "../stats/hooks";
 
@@ -24,6 +26,7 @@ export function Scene(props: SceneProps) {
   const scene = useMemo(() => {
     const scene = new THREE.Scene();
     scene.userData["controls"] = [];
+    scene.userData["interactions"] = buildInitialInteractions();
     return scene;
   }, []);
 
@@ -47,8 +50,8 @@ export function Scene(props: SceneProps) {
 function GamehookScene(props: InnerSceneProps) {
   const { canvas, children, scene } = props;
 
-  // TODO: Make this into its own hook
   useBackgroundColor(props, scene);
+  useInteractionListeners(scene);
 
   const sceneDetails: SceneDetails = useMemo(() => {
     return {
