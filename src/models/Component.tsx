@@ -8,6 +8,7 @@ import { useLighting } from "../lights/hooks";
 import { usePhysics } from "../physics/hooks";
 import { useAddToScene } from "../scene/hooks";
 import { useTaxonomy } from "../taxonomy/hooks";
+import { useModelMaterial } from "../materials/hooks";
 
 import { DefaultModelURL } from "./constants";
 import { ModelProps } from "./types";
@@ -67,7 +68,7 @@ function LoadedModel(props: LoadedModelProps) {
   useAddToScene({ obj, parent });
   useInteraction(obj, props);
   useLighting(obj, props);
-  // useModelMaterial(obj, props);
+  useModelMaterial(obj, props);
   usePhysics(obj, props);
   useTaxonomy(obj, props);
 

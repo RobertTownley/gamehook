@@ -17,14 +17,13 @@ export function useAnimate() {
   }, []);
 
   const animate = useCallback(() => {
-    const frame = requestAnimationFrame(animate);
-
     const delta = clock.getDelta();
-
     animateSceneObjects(scene);
     updateControls(scene, delta);
     updateMixers(scene, delta);
     render();
+
+    const frame = requestAnimationFrame(animate);
     return frame;
   }, [render, scene, clock]);
 
