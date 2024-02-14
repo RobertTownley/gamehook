@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-import { deg, Animation, Camera, Light, Model, Scene } from "gamehook";
+import { Animation, Camera, Light, Model, Scene } from "gamehook";
 
 const material = new THREE.MeshNormalMaterial();
 export function ModelExample() {
