@@ -29,9 +29,9 @@ function useRotation(obj: THREE.Object3D, { orientation, rotation }: Physical) {
   }, [x, y, z]);
 
   useEffect(() => {
-    obj.rotateX(threeRotation[0]);
-    obj.rotateY(threeRotation[1]);
-    obj.rotateZ(threeRotation[2]);
+    obj.rotation.x += threeRotation[0];
+    obj.rotation.y += threeRotation[1];
+    obj.rotation.z += threeRotation[2];
   }, [obj, threeRotation]);
 
   useEffect(() => {

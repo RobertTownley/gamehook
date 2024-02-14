@@ -17,6 +17,9 @@ export function ModelExample() {
       >
         <Animation name="Take 001" />
       </Model>
+      <Model scale={[0.005, 0.005, 0.005]} position={[4, 0, 0]}>
+        <Animation name="Take 001" />
+      </Model>
     </Scene>
   );
 }
