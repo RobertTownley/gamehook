@@ -25,6 +25,7 @@ export function Controls(props: ControlsProps) {
     screenSpacePanning,
     targetIds,
     variant,
+    zoomToCursor,
   } = props;
   const { camera } = useCamera();
   const { canvas, scene } = useSceneDetails();
@@ -80,6 +81,9 @@ export function Controls(props: ControlsProps) {
         controls.maxPolarAngle = maxPolarAngle;
       }
       controls.enableRotate = true;
+      if (zoomToCursor !== undefined) {
+        controls.zoomToCursor = zoomToCursor;
+      }
       return controls;
     }
     if (variant === "orbit") {

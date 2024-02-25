@@ -18,6 +18,7 @@ export interface ControlsProps {
   screenSpacePanning?: boolean;
   targetIds?: string[];
   variant: ControlsVariant;
+  zoomToCursor?: boolean;
 }
 
 // Workaround for not having yet found a unified Controls generic
