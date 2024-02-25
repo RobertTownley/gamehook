@@ -16,7 +16,16 @@ import { useSceneDetails } from "../scene/hooks";
 import { ControlsProps } from "./types";
 
 export function Controls(props: ControlsProps) {
-  const { targetIds, variant } = props;
+  const {
+    dampingFactor,
+    enableDamping,
+    maxDistance,
+    maxPolarAngle,
+    minDistance,
+    screenSpacePanning,
+    targetIds,
+    variant,
+  } = props;
   const { camera } = useCamera();
   const { canvas, scene } = useSceneDetails();
 
@@ -52,7 +61,24 @@ export function Controls(props: ControlsProps) {
 
     if (variant === "map") {
       const controls = new MapControls(camera, listenerTarget);
-      controls.enableDamping = true;
+      if (dampingFactor !== undefined) {
+        controls.dampingFactor = dampingFactor;
+      }
+      if (screenSpacePanning !== undefined) {
+        controls.screenSpacePanning = screenSpacePanning;
+      }
+      if (enableDamping !== undefined) {
+        controls.enableDamping = enableDamping;
+      }
+      if (maxDistance !== undefined) {
+        controls.maxDistance = maxDistance;
+      }
+      if (minDistance !== undefined) {
+        controls.minDistance = minDistance;
+      }
+      if (maxPolarAngle !== undefined) {
+        controls.maxPolarAngle = maxPolarAngle;
+      }
       controls.enableRotate = true;
       return controls;
     }
@@ -69,7 +95,19 @@ export function Controls(props: ControlsProps) {
       return new TransformControls(camera, listenerTarget);
     }
     throw new Error(`Control not implemented: ${variant}`);
-  }, [camera, listenerTarget, scene, targetIds, variant]);
+  }, [
+    camera,
+    dampingFactor,
+    enableDamping,
+    maxDistance,
+    minDistance,
+    maxPolarAngle,
+    listenerTarget,
+    scene,
+    screenSpacePanning,
+    targetIds,
+    variant,
+  ]);
 
   useEffect(() => {
     scene.userData["controls"].push(threeControls);

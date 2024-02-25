@@ -10,6 +10,12 @@ type ControlsVariant =
   | "transform";
 
 export interface ControlsProps {
+  enableDamping?: boolean;
+  dampingFactor?: number;
+  maxDistance?: number;
+  minDistance?: number;
+  maxPolarAngle?: number;
+  screenSpacePanning?: boolean;
   targetIds?: string[];
   variant: ControlsVariant;
 }
