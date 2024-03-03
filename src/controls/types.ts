@@ -10,12 +10,14 @@ type ControlsVariant =
   | "transform";
 
 export interface ControlsProps {
+  disabled?: boolean;
   enableDamping?: boolean;
   dampingFactor?: number;
   maxDistance?: number;
   minDistance?: number;
   maxPolarAngle?: number;
   screenSpacePanning?: boolean;
+  targetId?: string;
   targetIds?: string[];
   variant: ControlsVariant;
   zoomToCursor?: boolean;

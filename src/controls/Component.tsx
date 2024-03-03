@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from "react";
+import * as THREE from "three";
 import { useCamera } from "../camera/hooks";
 import {
   ArcballControls,
@@ -18,11 +19,13 @@ import { ControlsProps } from "./types";
 export function Controls(props: ControlsProps) {
   const {
     dampingFactor,
+    disabled,
     enableDamping,
     maxDistance,
     maxPolarAngle,
     minDistance,
     screenSpacePanning,
+    targetId,
     targetIds,
     variant,
     zoomToCursor,
@@ -61,7 +64,23 @@ export function Controls(props: ControlsProps) {
     }
 
     if (variant === "map") {
+      let target: THREE.Vector3 | undefined;
+      if (targetId) {
+        scene.traverse((obj) => {
+          if (obj.userData["id"] == targetId) {
+            target = new THREE.Vector3(
+              obj.position.x,
+              obj.position.y,
+              obj.position.z
+            );
+          }
+        });
+      }
+
       const controls = new MapControls(camera, listenerTarget);
+      if (target) {
+        controls.target = target;
+      }
       if (dampingFactor !== undefined) {
         controls.dampingFactor = dampingFactor;
       }
@@ -84,6 +103,7 @@ export function Controls(props: ControlsProps) {
       if (zoomToCursor !== undefined) {
         controls.zoomToCursor = zoomToCursor;
       }
+      controls.enabled = disabled !== true;
       return controls;
     }
     if (variant === "orbit") {
@@ -111,6 +131,8 @@ export function Controls(props: ControlsProps) {
     screenSpacePanning,
     targetIds,
     variant,
+    disabled,
+    zoomToCursor,
   ]);
 
   useEffect(() => {
