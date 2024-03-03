@@ -129,6 +129,7 @@ export function Controls(props: ControlsProps) {
     listenerTarget,
     scene,
     screenSpacePanning,
+    targetId,
     targetIds,
     variant,
     disabled,
