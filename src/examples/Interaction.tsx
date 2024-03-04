@@ -1,6 +1,6 @@
 import { Scene, Shape, XYZ } from "gamehook";
 import { useCallback, useMemo, useState } from "react";
-import { InteractionEvent } from "src/interactions/hooks";
+import { InteractionEvent } from "../interactions/types";
 import * as THREE from "three";
 
 export function InteractionExample() {
