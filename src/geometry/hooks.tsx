@@ -2,7 +2,7 @@ import { useEffect, useMemo } from "react";
 import * as THREE from "three";
 
 import { GeometryProps, Shapeable } from "./types";
-import { DefaultGeometry } from "./defaults";
+import { getDefaultGeometry } from "./defaults";
 
 function isGeometryGuard(
   geo: GeometryProps | THREE.BufferGeometry | undefined
@@ -56,10 +56,10 @@ export function useGeometry(props: Shapeable): THREE.BufferGeometry {
             params.thetaLength
           );
         default:
-          return DefaultGeometry;
+          return getDefaultGeometry();
       }
     } else {
-      return DefaultGeometry;
+      return getDefaultGeometry();
     }
   }, [params, providedGeometry]);
 

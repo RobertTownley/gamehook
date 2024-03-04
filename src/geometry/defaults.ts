@@ -1,3 +1,5 @@
 import * as THREE from "three";
 
-export const DefaultGeometry = new THREE.BoxGeometry();
+export function getDefaultGeometry() {
+  return new THREE.BoxGeometry();
+}
