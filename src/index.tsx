@@ -1,6 +1,7 @@
 export { Animation } from "./animation/Component";
 export { Camera } from "./camera/Component";
 export { Controls } from "./controls/Component";
+export type { InteractionEvent } from "./interactions/types";
 export { deg } from "./math";
 export type { Materializable } from "./materials/types";
 export { Model } from "./models/Component";
