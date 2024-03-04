@@ -1,5 +1,6 @@
 import { Scene, Shape, XYZ } from "gamehook";
 import { useCallback, useMemo, useState } from "react";
+import { InteractionEvent } from "src/interactions/hooks";
 import * as THREE from "three";
 
 export function InteractionExample() {
@@ -19,9 +20,13 @@ interface CubeProps {
 export function ClickToRotate({ position }: CubeProps) {
   const [isRotating, setIsRotating] = useState(false);
 
-  const handleClick = useCallback(() => {
-    setIsRotating(!isRotating);
-  }, [isRotating]);
+  const handleClick = useCallback(
+    (foo: InteractionEvent) => {
+      console.log(foo.intersection);
+      setIsRotating(!isRotating);
+    },
+    [isRotating]
+  );
 
   return (
     <Shape

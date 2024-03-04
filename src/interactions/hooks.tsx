@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { useSceneDetails } from "../scene/hooks";
 import { useCamera } from "../camera/hooks";
 
-import { Interactable, InteractionStore } from "./types";
+import { Interactable, InteractionEvent, InteractionStore } from "./types";
 import { getMouse } from "./raycaster";
 
 export function useInteraction(obj: THREE.Object3D, props: Interactable) {
@@ -72,7 +72,11 @@ export function useInteractionListeners() {
         const entry = clickEntries.find((t) => t[0].id === first.object.id);
         if (entry) {
           const callback = entry[1];
-          callback(event);
+          const params: InteractionEvent = {
+            ...event,
+            intersection: first,
+          };
+          callback(params);
         }
       }
     },
