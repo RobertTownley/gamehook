@@ -31,5 +31,5 @@ interface SphereParams {
 export type GeometryProps = BoxParams | CylinderParams | SphereParams;
 
 export interface Shapeable {
-  geometry?: GeometryProps;
+  geometry?: GeometryProps | THREE.BufferGeometry;
 }

@@ -15,7 +15,6 @@ export function ControlsExample() {
   ];
 
   const onClick = useCallback(() => {
-    console.log("MOVING CAMERA");
     setCameraPosition((pos) => [pos[0], pos[1] + 5, pos[2]]);
   }, []);
 
