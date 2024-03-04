@@ -1,4 +1,4 @@
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
 import { AnimationLoop } from "../animation/AnimationLoop";
@@ -45,6 +45,13 @@ function GamehookScene(props: InnerSceneProps) {
     scene.userData["interactions"] = buildInitialInteractions();
     return scene;
   }, []);
+
+  useEffect(() => {
+    window.scene = scene;
+    return () => {
+      window.scene = undefined;
+    };
+  }, [scene]);
 
   useBackgroundColor(props, scene);
 
