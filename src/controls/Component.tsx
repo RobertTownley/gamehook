@@ -79,7 +79,11 @@ export function Controls(props: ControlsProps) {
 
       const controls = new MapControls(camera, listenerTarget);
       if (target) {
+        console.log(controls.target);
         controls.target = target;
+      } else if (targetId) {
+        const msg = `Gamehook error: Object with ${targetId} not found. No target set.`;
+        console.error(msg);
       }
       if (dampingFactor !== undefined) {
         controls.dampingFactor = dampingFactor;
