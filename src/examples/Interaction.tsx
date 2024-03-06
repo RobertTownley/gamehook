@@ -5,12 +5,31 @@ import * as THREE from "three";
 
 export function InteractionExample() {
   return (
-    <Scene>
-      <ClickToRotate position={[-2, 2, 0]} />
-      <ClickToRotate position={[2, 2, 0]} />
-      <HoverToChangeColor />
-      <PressSpaceToGrow />
-    </Scene>
+    <>
+      <Scene alpha={true} clearColor={0x000000} clearOpacity={0}>
+        <ClickToRotate position={[-2, 2, 0]} />
+        <ClickToRotate position={[2, 2, 0]} />
+        <HoverToChangeColor />
+        <PressSpaceToGrow />
+      </Scene>
+      <div
+        style={{
+          backgroundColor: "blue",
+          width: "100vw",
+          top: 0,
+          left: 0,
+          height: "100vh",
+          boxSizing: "border-box",
+          position: "fixed",
+          zIndex: -1,
+          padding: 32,
+        }}
+      >
+        <p style={{ fontSize: 49, color: "orange" }}>
+          The canvas can be transparent, btw
+        </p>
+      </div>
+    </>
   );
 }
 

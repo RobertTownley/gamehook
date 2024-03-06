@@ -13,6 +13,11 @@ interface IScene extends Hierarchical {
   // Renderer settings
   antialias?: boolean;
   preserveDrawingBuffer?: boolean;
+  //
+  // For clear backgrounds
+  alpha?: boolean;
+  clearColor?: number;
+  clearOpacity?: number;
 }
 export interface SceneProps extends IScene {
   canvas?: HTMLCanvasElement;

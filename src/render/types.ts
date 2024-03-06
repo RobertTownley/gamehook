@@ -6,6 +6,9 @@ export interface IRenderContext {
 }
 
 export interface RendererProps {
+  alpha?: boolean;
+  clearColor?: number;
+  clearOpacity?: number;
   antialias?: boolean;
   enableShadowMaps?: boolean;
   preserveDrawingBuffer?: boolean;

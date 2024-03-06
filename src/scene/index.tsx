@@ -58,7 +58,11 @@ function GamehookScene(props: InnerSceneProps) {
   return (
     <SceneDetailsContext.Provider value={{ canvas, scene }}>
       <CameraProvider>
-        <RenderProvider>
+        <RenderProvider
+          alpha={props.alpha}
+          clearColor={props.clearColor}
+          clearOpacity={props.clearOpacity}
+        >
           <AnimationLoop />
           <InteractionListener />
           {children}

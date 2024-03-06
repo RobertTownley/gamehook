@@ -9,7 +9,10 @@ import { RendererProps } from "./types";
 
 /** Generate the scene's renderer */
 export function useCreateRenderer({
+  alpha,
   antialias = true,
+  clearColor,
+  clearOpacity,
   enableShadowMaps = true,
   preserveDrawingBuffer = false,
 }: RendererProps) {
@@ -17,16 +20,32 @@ export function useCreateRenderer({
   const { camera } = useCamera();
 
   const renderer = useMemo(() => {
+    console.log("YEPP");
     const renderer = new THREE.WebGLRenderer({
+      alpha,
       antialias,
       canvas,
       preserveDrawingBuffer,
     });
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.shadowMap.enabled = enableShadowMaps;
+    if (clearColor) {
+      console.log("SETTING COLOR", clearColor);
+      renderer.setClearColor(clearColor, clearOpacity);
+    } else {
+      console.log("NOPER");
+    }
 
     return renderer;
-  }, [antialias, canvas, enableShadowMaps, preserveDrawingBuffer]);
+  }, [
+    antialias,
+    alpha,
+    clearColor,
+    clearOpacity,
+    canvas,
+    enableShadowMaps,
+    preserveDrawingBuffer,
+  ]);
 
   const resize = useCallback(() => {
     const width = window.innerWidth;

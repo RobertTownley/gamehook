@@ -5,9 +5,21 @@ import { useCreateRenderer } from "./hooks";
 
 interface Props {
   children: ReactNode;
+  alpha?: boolean;
+  clearColor?: number;
+  clearOpacity?: number;
 }
-export function RenderProvider({ children }: Props) {
-  const { render, renderer } = useCreateRenderer({});
+export function RenderProvider({
+  alpha,
+  clearColor,
+  clearOpacity,
+  children,
+}: Props) {
+  const { render, renderer } = useCreateRenderer({
+    alpha,
+    clearColor,
+    clearOpacity,
+  });
   const value = useMemo(() => {
     return { render, renderer };
   }, [render, renderer]);
