@@ -18,18 +18,34 @@ import { ControlsProps } from "./types";
 
 export function Controls(props: ControlsProps) {
   const {
-    dampingFactor,
-    disabled,
-    enableDamping,
-    maxDistance,
-    maxPolarAngle,
     minDistance,
+    maxDistance,
+    minZoom,
+    maxZoom,
+    minTargetRadius,
+    maxTargetRadius,
+    minPolarAngle,
+    maxPolarAngle,
+    minAzimuthAngle,
+    maxAzimuthAngle,
+    enableDamping,
+    dampingFactor,
+    enableZoom,
+    zoomSpeed,
+    zoomToCursor,
+    enableRotate,
+    rotateSpeed,
+    enablePan,
+    panSpeed,
     screenSpacePanning,
+    keyPanSpeed,
+    autoRotate,
+    autoRotateSpeed,
+    disabled,
     target,
     targetId,
     targetIds,
     variant,
-    zoomToCursor,
   } = props;
   const { camera } = useCamera();
   const { canvas, scene } = useSceneDetails();
@@ -88,28 +104,31 @@ export function Controls(props: ControlsProps) {
       if (targetVector) {
         controls.target = targetVector;
       }
-      if (dampingFactor !== undefined) {
-        controls.dampingFactor = dampingFactor;
-      }
-      if (screenSpacePanning !== undefined) {
-        controls.screenSpacePanning = screenSpacePanning;
-      }
-      if (enableDamping !== undefined) {
-        controls.enableDamping = enableDamping;
-      }
-      if (maxDistance !== undefined) {
-        controls.maxDistance = maxDistance;
-      }
-      if (minDistance !== undefined) {
-        controls.minDistance = minDistance;
-      }
-      if (maxPolarAngle !== undefined) {
-        controls.maxPolarAngle = maxPolarAngle;
-      }
-      controls.enableRotate = true;
-      if (zoomToCursor !== undefined) {
-        controls.zoomToCursor = zoomToCursor;
-      }
+
+      // Controls configuration
+      controls.minDistance = minDistance ?? 0;
+      controls.maxDistance = maxDistance ?? Infinity;
+      controls.minZoom = minZoom ?? 0;
+      controls.maxZoom = maxZoom ?? Infinity;
+      controls.minTargetRadius = minTargetRadius ?? 0;
+      controls.maxTargetRadius = maxTargetRadius ?? Infinity;
+      controls.minPolarAngle = minPolarAngle ?? 0;
+      controls.maxPolarAngle = maxPolarAngle ?? Infinity;
+      controls.minAzimuthAngle = minAzimuthAngle ?? 0;
+      controls.maxAzimuthAngle = maxAzimuthAngle ?? Infinity;
+      controls.enableDamping = enableDamping ?? false;
+      controls.dampingFactor = dampingFactor ?? 0.05;
+      controls.enableZoom = enableZoom ?? true;
+      controls.zoomSpeed = zoomSpeed ?? 1;
+      controls.zoomToCursor = zoomToCursor ?? false;
+      controls.enableRotate = enableRotate ?? true;
+      controls.rotateSpeed = rotateSpeed ?? 1;
+      controls.enablePan = enablePan ?? true;
+      controls.panSpeed = panSpeed ?? 1;
+      controls.screenSpacePanning = screenSpacePanning ?? true;
+      controls.keyPanSpeed = keyPanSpeed ?? 7;
+      controls.autoRotate = autoRotate ?? false;
+      controls.autoRotateSpeed = autoRotateSpeed ?? 2;
       controls.enabled = disabled !== true;
       return controls;
     }
@@ -127,20 +146,36 @@ export function Controls(props: ControlsProps) {
     }
     throw new Error(`Control not implemented: ${variant}`);
   }, [
+    autoRotate,
+    autoRotateSpeed,
     camera,
     dampingFactor,
+    disabled,
     enableDamping,
-    maxDistance,
-    minDistance,
-    maxPolarAngle,
+    enablePan,
+    enableRotate,
+    enableZoom,
+    keyPanSpeed,
     listenerTarget,
+    maxAzimuthAngle,
+    maxDistance,
+    maxPolarAngle,
+    maxTargetRadius,
+    maxZoom,
+    minAzimuthAngle,
+    minDistance,
+    minPolarAngle,
+    minTargetRadius,
+    minZoom,
+    panSpeed,
+    rotateSpeed,
     scene,
     screenSpacePanning,
     target,
     targetId,
     targetIds,
     variant,
-    disabled,
+    zoomSpeed,
     zoomToCursor,
   ]);
 

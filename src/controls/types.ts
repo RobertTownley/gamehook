@@ -12,18 +12,34 @@ type ControlsVariant =
   | "transform";
 
 export interface ControlsProps {
-  disabled?: boolean;
+  minDistance?: number;
+  maxDistance?: number;
+  minZoom?: number;
+  maxZoom?: number;
+  minTargetRadius?: number;
+  maxTargetRadius?: number;
+  minPolarAngle?: number;
+  maxPolarAngle?: number;
+  minAzimuthAngle?: number;
+  maxAzimuthAngle?: number;
   enableDamping?: boolean;
   dampingFactor?: number;
-  maxDistance?: number;
-  minDistance?: number;
-  maxPolarAngle?: number;
+  enableZoom?: boolean;
+  zoomSpeed?: number;
+  zoomToCursor?: boolean;
+  enableRotate?: boolean;
+  rotateSpeed?: number;
+  enablePan?: boolean;
+  panSpeed?: number;
   screenSpacePanning?: boolean;
+  keyPanSpeed?: number;
+  autoRotate?: boolean;
+  autoRotateSpeed?: number;
+  disabled?: boolean;
   target?: XYZ;
   targetId?: string;
   targetIds?: string[];
   variant: ControlsVariant;
-  zoomToCursor?: boolean;
 }
 
 // Workaround for not having yet found a unified Controls generic
