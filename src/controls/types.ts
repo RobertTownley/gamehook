@@ -1,3 +1,5 @@
+import { XYZ } from "src/physics/types";
+
 type ControlsVariant =
   | "arcball"
   | "drag"
@@ -17,6 +19,7 @@ export interface ControlsProps {
   minDistance?: number;
   maxPolarAngle?: number;
   screenSpacePanning?: boolean;
+  target?: XYZ;
   targetId?: string;
   targetIds?: string[];
   variant: ControlsVariant;

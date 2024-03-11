@@ -25,6 +25,7 @@ export function Controls(props: ControlsProps) {
     maxPolarAngle,
     minDistance,
     screenSpacePanning,
+    target,
     targetId,
     targetIds,
     variant,
@@ -64,25 +65,28 @@ export function Controls(props: ControlsProps) {
     }
 
     if (variant === "map") {
-      let target: THREE.Vector3 | undefined;
+      let targetVector: THREE.Vector3 | undefined;
       if (targetId) {
         scene.traverse((obj) => {
           if (obj.userData["id"] == targetId) {
-            target = new THREE.Vector3(
+            targetVector = new THREE.Vector3(
               obj.position.x,
               obj.position.y,
               obj.position.z
             );
           }
         });
+        if (!targetVector) {
+          const msg = `Gamehook error: Object with ${targetId} not found. No target set.`;
+          console.error(msg);
+        }
+      } else if (target) {
+        targetVector = new THREE.Vector3(...target);
       }
 
       const controls = new MapControls(camera, listenerTarget);
-      if (target) {
-        controls.target = target;
-      } else if (targetId) {
-        const msg = `Gamehook error: Object with ${targetId} not found. No target set.`;
-        console.error(msg);
+      if (targetVector) {
+        controls.target = targetVector;
       }
       if (dampingFactor !== undefined) {
         controls.dampingFactor = dampingFactor;
@@ -132,6 +136,7 @@ export function Controls(props: ControlsProps) {
     listenerTarget,
     scene,
     screenSpacePanning,
+    target,
     targetId,
     targetIds,
     variant,

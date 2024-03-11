@@ -36,9 +36,15 @@ export function ControlsExample() {
         {positions.map((p, i) => {
           return <Shape rotation={[0.01, 0.01, 0.01]} position={p} key={i} />;
         })}
-        <Controls variant="map" targetId="foobar" />
+        <Controls
+          variant="map"
+          target={[0, 0, 0]}
+          minDistance={10}
+          maxDistance={50}
+        />
         <Shape rotation={[0.01, 0.01, 0.01]} position={[0, 0, 0]} id="foobar" />
         <Camera position={cameraPosition} />
+        <Shape scale={[100, 0.1, 100]} position={[0, -4, 0]} />
       </Scene>
     </>
   );

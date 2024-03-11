@@ -23,7 +23,7 @@ const ExampleMap: Record<string, ReactNode> = {
 };
 
 function App() {
-  const exampleName = "Interaction";
+  const exampleName = "Controls";
   const Example = useMemo(() => {
     return ExampleMap[exampleName];
   }, []);
