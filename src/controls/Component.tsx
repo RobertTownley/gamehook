@@ -103,6 +103,7 @@ export function Controls(props: ControlsProps) {
       const controls = new MapControls(camera, listenerTarget);
       if (targetVector) {
         controls.target = targetVector;
+        controls.cursor = targetVector;
       }
 
       // Controls configuration
@@ -133,7 +134,34 @@ export function Controls(props: ControlsProps) {
       return controls;
     }
     if (variant === "orbit") {
-      return new OrbitControls(camera, listenerTarget);
+      const controls = new OrbitControls(camera, listenerTarget);
+      //
+      // Controls configuration
+      controls.minDistance = minDistance ?? 0;
+      controls.maxDistance = maxDistance ?? Infinity;
+      controls.minZoom = minZoom ?? 0;
+      controls.maxZoom = maxZoom ?? Infinity;
+      controls.minTargetRadius = minTargetRadius ?? 0;
+      controls.maxTargetRadius = maxTargetRadius ?? Infinity;
+      controls.minPolarAngle = minPolarAngle ?? 0;
+      controls.maxPolarAngle = maxPolarAngle ?? Infinity;
+      controls.minAzimuthAngle = minAzimuthAngle ?? 0;
+      controls.maxAzimuthAngle = maxAzimuthAngle ?? Infinity;
+      controls.enableDamping = enableDamping ?? false;
+      controls.dampingFactor = dampingFactor ?? 0.05;
+      controls.enableZoom = enableZoom ?? true;
+      controls.zoomSpeed = zoomSpeed ?? 1;
+      controls.zoomToCursor = zoomToCursor ?? false;
+      controls.enableRotate = enableRotate ?? true;
+      controls.rotateSpeed = rotateSpeed ?? 1;
+      controls.enablePan = enablePan ?? true;
+      controls.panSpeed = panSpeed ?? 1;
+      controls.screenSpacePanning = screenSpacePanning ?? true;
+      controls.keyPanSpeed = keyPanSpeed ?? 7;
+      controls.autoRotate = autoRotate ?? false;
+      controls.autoRotateSpeed = autoRotateSpeed ?? 2;
+      controls.enabled = disabled !== true;
+      return controls;
     }
     if (variant === "pointerLock") {
       return new PointerLockControls(camera, listenerTarget);

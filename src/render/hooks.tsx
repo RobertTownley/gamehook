@@ -20,7 +20,6 @@ export function useCreateRenderer({
   const { camera } = useCamera();
 
   const renderer = useMemo(() => {
-    console.log("YEPP");
     const renderer = new THREE.WebGLRenderer({
       alpha,
       antialias,
@@ -30,10 +29,7 @@ export function useCreateRenderer({
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.shadowMap.enabled = enableShadowMaps;
     if (clearColor) {
-      console.log("SETTING COLOR", clearColor);
       renderer.setClearColor(clearColor, clearOpacity);
-    } else {
-      console.log("NOPER");
     }
 
     return renderer;

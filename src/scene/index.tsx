@@ -36,15 +36,18 @@ export function Scene(props: SceneProps) {
 }
 
 function GamehookScene(props: InnerSceneProps) {
-  const { canvas, children } = props;
+  const { canvas, children, fog } = props;
 
   const scene = useMemo(() => {
     const scene = new THREE.Scene();
+    if (fog) {
+      scene.fog = fog;
+    }
     scene.userData["controls"] = [];
     scene.userData["mixers"] = [];
     scene.userData["interactions"] = buildInitialInteractions();
     return scene;
-  }, []);
+  }, [fog]);
 
   useEffect(() => {
     window.scene = scene;

@@ -9,11 +9,12 @@ interface IScene extends Hierarchical {
 
   // Scene settings
   backgroundColor?: string | THREE.Color;
+  fog?: THREE.Fog | THREE.FogExp2;
 
   // Renderer settings
   antialias?: boolean;
   preserveDrawingBuffer?: boolean;
-  //
+
   // For clear backgrounds
   alpha?: boolean;
   clearColor?: number;
@@ -21,6 +22,7 @@ interface IScene extends Hierarchical {
 }
 export interface SceneProps extends IScene {
   canvas?: HTMLCanvasElement;
+  fog?: THREE.Fog | THREE.FogExp2;
   width?: number;
   height?: number;
 }

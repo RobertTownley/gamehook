@@ -3,6 +3,7 @@ import { ReactNode, useMemo } from "react";
 import { BasicExample } from "./examples/Basic";
 import { CameraExample } from "./examples/Camera";
 import { ControlsExample } from "./examples/Controls";
+import { FogExample } from "./examples/Fog";
 import { InteractionExample } from "./examples/Interaction";
 import { PositionExample } from "./examples/Position";
 import { MaterialExample } from "./examples/Material";
@@ -20,6 +21,7 @@ const ExampleMap: Record<string, ReactNode> = {
   Lighting: <LightingExample />,
   Interaction: <InteractionExample />,
   Models: <ModelExample />,
+  Fog: <FogExample />,
 };
 
 function App() {

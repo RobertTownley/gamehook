@@ -39,13 +39,9 @@ interface CubeProps {
 export function ClickToRotate({ position }: CubeProps) {
   const [isRotating, setIsRotating] = useState(false);
 
-  const handleClick = useCallback(
-    (foo: InteractionEvent) => {
-      console.log(foo.intersection);
-      setIsRotating(!isRotating);
-    },
-    [isRotating]
-  );
+  const handleClick = useCallback(() => {
+    setIsRotating(!isRotating);
+  }, [isRotating]);
 
   return (
     <Shape
