@@ -8,7 +8,7 @@ import { useAddToScene } from "../scene/hooks";
 
 import { LightProps } from "./types";
 import { usePhysics } from "../physics/hooks";
-import { useTaxonomy } from "src/taxonomy/hooks";
+import { useTaxonomy } from "../taxonomy/hooks";
 
 export function Light(props: LightProps) {
   const {

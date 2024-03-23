@@ -15,6 +15,7 @@ import {
 
 import { useSceneDetails } from "../scene/hooks";
 import { ControlsProps } from "./types";
+import { hasDispose } from "./guards";
 
 export function Controls(props: ControlsProps) {
   const {
@@ -218,6 +219,9 @@ export function Controls(props: ControlsProps) {
     scene.userData["controls"].push(threeControls);
     return () => {
       threeControls.dispose();
+      if (hasDispose(threeControls)) {
+        console.log("TEST");
+      }
       scene.userData["controls"] = scene.userData["controls"].filter(
         (c: unknown) => c !== threeControls
       );

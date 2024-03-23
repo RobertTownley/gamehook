@@ -22,16 +22,26 @@ type ControlsVariant =
   | "trackball"
   | "transform";
 
-type ThreeControls =
-  | typeof ArcballControls
-  | typeof DragControls
-  | typeof FirstPersonControls
-  | typeof FlyControls
-  | typeof MapControls
-  | typeof OrbitControls
-  | typeof PointerLockControls
-  | typeof TrackballControls
-  | typeof TransformControls;
+export type ThreeControls =
+  | ArcballControls
+  | DragControls
+  | FirstPersonControls
+  | FlyControls
+  | MapControls
+  | OrbitControls
+  | PointerLockControls
+  | TrackballControls
+  | TransformControls;
+export type TypeWithDispose =
+  | ArcballControls
+  | DragControls
+  | FirstPersonControls
+  | FlyControls
+  | MapControls
+  | OrbitControls
+  | PointerLockControls
+  | TrackballControls
+  | TransformControls;
 export interface ControlsProps {
   controls?: ThreeControls;
   minDistance?: number;
