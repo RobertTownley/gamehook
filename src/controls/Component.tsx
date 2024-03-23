@@ -218,9 +218,8 @@ export function Controls(props: ControlsProps) {
   useEffect(() => {
     scene.userData["controls"].push(threeControls);
     return () => {
-      threeControls.dispose();
       if (hasDispose(threeControls)) {
-        console.log("TEST");
+        threeControls.dispose();
       }
       scene.userData["controls"] = scene.userData["controls"].filter(
         (c: unknown) => c !== threeControls
