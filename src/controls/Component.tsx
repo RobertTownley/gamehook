@@ -18,6 +18,7 @@ import { ControlsProps } from "./types";
 
 export function Controls(props: ControlsProps) {
   const {
+    controls,
     minDistance,
     maxDistance,
     minZoom,
@@ -53,6 +54,7 @@ export function Controls(props: ControlsProps) {
   const listenerTarget = canvas;
 
   const threeControls = useMemo(() => {
+    if (controls) return controls;
     if (!listenerTarget) {
       throw new Error("Listener target not found");
     }
@@ -104,6 +106,10 @@ export function Controls(props: ControlsProps) {
       if (targetVector) {
         controls.target = targetVector;
         controls.cursor = targetVector;
+      } else {
+        const emptyVector = new THREE.Vector3(0, 0, 0);
+        controls.target = emptyVector;
+        controls.cursor = emptyVector;
       }
 
       // Controls configuration
@@ -177,6 +183,7 @@ export function Controls(props: ControlsProps) {
     autoRotate,
     autoRotateSpeed,
     camera,
+    controls,
     dampingFactor,
     disabled,
     enableDamping,

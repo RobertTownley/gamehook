@@ -8,6 +8,7 @@ import { useAddToScene } from "../scene/hooks";
 
 import { LightProps } from "./types";
 import { usePhysics } from "../physics/hooks";
+import { useTaxonomy } from "src/taxonomy/hooks";
 
 export function Light(props: LightProps) {
   const {
@@ -63,6 +64,7 @@ export function Light(props: LightProps) {
   useLighting(light, props);
   useShadowMaps(light, props);
   usePhysics(light, props);
+  useTaxonomy(light, props);
 
   return (
     <HierarchyContext.Provider value={{ parent: light, animations: [] }}>

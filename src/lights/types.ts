@@ -1,9 +1,10 @@
+import { Nameable } from "src/taxonomy/types";
 import { Hierarchical } from "../hierarchy/types";
 import { Physical } from "../physics/types";
 
 type LightVariant = "ambient" | "directional" | "hemisphere" | "point" | "spot";
 
-export interface LightProps extends Physical, Hierarchical {
+export interface LightProps extends Physical, Hierarchical, Nameable {
   variant?: LightVariant;
 
   color?: number;

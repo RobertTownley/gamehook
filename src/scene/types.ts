@@ -26,6 +26,7 @@ export interface SceneProps extends IScene {
   width?: number;
   height?: number;
 }
+
 export interface InnerSceneProps extends IScene {
   canvas: HTMLCanvasElement;
   id: string;

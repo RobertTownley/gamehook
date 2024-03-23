@@ -20,25 +20,25 @@ devDependencies:
     specifier: ^20.10.7
     version: 20.10.7
   '@types/react':
-    specifier: ^18.2.43
+    specifier: ^18.2.47
     version: 18.2.47
   '@types/react-dom':
-    specifier: ^18.2.17
+    specifier: ^18.2.18
     version: 18.2.18
   '@types/three':
     specifier: ^0.161.1
     version: 0.161.1
   '@typescript-eslint/eslint-plugin':
-    specifier: ^6.14.0
+    specifier: ^6.18.0
     version: 6.18.0(@typescript-eslint/parser@6.18.0)(eslint@8.56.0)(typescript@5.3.3)
   '@typescript-eslint/parser':
-    specifier: ^6.14.0
+    specifier: ^6.18.0
     version: 6.18.0(eslint@8.56.0)(typescript@5.3.3)
   '@vitejs/plugin-react':
     specifier: ^4.2.1
     version: 4.2.1(vite@5.0.11)
   eslint:
-    specifier: ^8.55.0
+    specifier: ^8.56.0
     version: 8.56.0
   eslint-plugin-react-hooks:
     specifier: ^4.6.0
@@ -50,7 +50,7 @@ devDependencies:
     specifier: ^5.3.3
     version: 5.3.3
   vite:
-    specifier: ^5.0.8
+    specifier: ^5.0.11
     version: 5.0.11(@types/node@20.10.7)
   vite-plugin-dts:
     specifier: ^3.7.0
