@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
 import { AnimationLoop } from "../animation/AnimationLoop";
-import { CameraProvider } from "../camera/providers";
 import { buildInitialInteractions } from "../interactions/defaults";
 import { InteractionListener } from "../interactions/Component";
 import { RenderProvider } from "../render/provider";
@@ -22,6 +21,16 @@ export function Scene(props: SceneProps) {
   const id = useSceneId(props);
   const sceneReady = useSceneReady();
   // TODO: Optionally don't render canvas, in case the user wants to provide their own canvas
+  const threeScene = useMemo(() => {
+    const threeScene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera();
+    camera.position.set(0, 200, -400);
+    threeScene.userData["camera"] = camera;
+    threeScene.userData["controls"] = undefined;
+    threeScene.userData["mixers"] = [];
+    threeScene.userData["interactions"] = buildInitialInteractions();
+    return threeScene;
+  }, []);
 
   useStats();
 
@@ -29,48 +38,44 @@ export function Scene(props: SceneProps) {
     <>
       <canvas ref={canvasRef} id={id} style={SceneStyles} />
       {sceneReady && canvasRef.current && (
-        <GamehookScene {...props} id={id} canvas={canvasRef.current} />
+        <GamehookScene
+          {...props}
+          id={id}
+          canvas={canvasRef.current}
+          threeScene={threeScene}
+        />
       )}
     </>
   );
 }
 
 function GamehookScene(props: InnerSceneProps) {
-  const { canvas, children, fog } = props;
-
-  const scene = useMemo(() => {
-    const scene = new THREE.Scene();
-    if (fog) {
-      scene.fog = fog;
-    }
-    scene.userData["controls"] = [];
-    scene.userData["mixers"] = [];
-    scene.userData["interactions"] = buildInitialInteractions();
-    return scene;
-  }, [fog]);
+  const { canvas, children, threeScene } = props;
 
   useEffect(() => {
-    window.scene = scene;
+    window.scene = threeScene;
     return () => {
       window.scene = undefined;
     };
-  }, [scene]);
+  }, [threeScene]);
 
-  useBackgroundColor(props, scene);
+  useBackgroundColor(props, threeScene);
+
+  const details = useMemo(() => {
+    return { canvas, scene: threeScene };
+  }, [canvas, threeScene]);
 
   return (
-    <SceneDetailsContext.Provider value={{ canvas, scene }}>
-      <CameraProvider>
-        <RenderProvider
-          alpha={props.alpha}
-          clearColor={props.clearColor}
-          clearOpacity={props.clearOpacity}
-        >
-          <AnimationLoop />
-          <InteractionListener />
-          {children}
-        </RenderProvider>
-      </CameraProvider>
+    <SceneDetailsContext.Provider value={details}>
+      <RenderProvider
+        alpha={props.alpha}
+        clearColor={props.clearColor}
+        clearOpacity={props.clearOpacity}
+      >
+        <AnimationLoop />
+        <InteractionListener />
+        {children}
+      </RenderProvider>
     </SceneDetailsContext.Provider>
   );
 }

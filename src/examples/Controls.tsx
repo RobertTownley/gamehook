@@ -1,53 +1,59 @@
-import { Camera, Shape, Scene, Controls, XYZ } from "gamehook";
-import { useCallback, useState } from "react";
+import _ from "lodash";
+import * as THREE from "three";
+import { Camera, Fog, Shape, Scene, XYZ, Light, MapControls } from "gamehook";
 
+const Geometry = new THREE.BoxGeometry();
+const Material = new THREE.MeshPhongMaterial({
+  color: 0xeeeeee,
+  flatShading: true,
+});
+const range = _.range(0, 500);
+Geometry.translate(0, 0.5, 0);
+
+const CameraPosition: XYZ = [0, 200, -400];
 export function ControlsExample() {
-  const [cameraPosition, setCameraPosition] = useState<XYZ>([0, 0, 20]);
-  const positions: XYZ[] = [
-    [8, 3, 3],
-    [8, 3, -3],
-    [8, -3, 3],
-    [8, -3, -3],
-    [-8, 3, 3],
-    [-8, 3, -3],
-    [-8, -3, 3],
-    [-8, -3, -3],
-  ];
-
-  const onClick = useCallback(() => {
-    setCameraPosition((pos) => [pos[0], pos[1] + 5, pos[2]]);
-  }, []);
-
+  return (
+    <Scene backgroundColor={new THREE.Color(0xcccccc)}>
+      <Camera position={CameraPosition} fov={60} near={1} far={1000} />
+      <MapControls />
+      <Fog variant="exponential" density={0.002} color={0xcccccc} />
+      <Inner />
+    </Scene>
+  );
+}
+function Inner() {
   return (
     <>
-      <button
-        style={{
-          position: "fixed",
-          top: 0,
-          zIndex: 20,
-          margin: 16,
-          padding: 16,
-        }}
-        onClick={onClick}
-      >
-        Click Me
-      </button>
-      <Scene>
-        {positions.map((p, i) => {
-          return <Shape rotation={[0.01, 0.01, 0.01]} position={p} key={i} />;
-        })}
-        <Controls
-          variant="orbit"
-          target={[0, 0, 0]}
-          minDistance={10}
-          maxDistance={50}
-          maxPolarAngle={Math.PI / 2}
-          zoomToCursor
-        />
-        <Shape rotation={[0.01, 0.01, 0.01]} position={[0, 0, 0]} id="foobar" />
-        <Camera position={cameraPosition} />
-        <Shape scale={[100, 0.1, 100]} position={[0, -4, 0]} />
-      </Scene>
+      {range.map((i: number) => {
+        const position: XYZ = [
+          Math.random() * 1600 - 800,
+          0,
+          Math.random() * 1600 - 800,
+        ];
+        const scale: XYZ = [20, Math.random() * 80 + 10, 20];
+
+        return (
+          <Shape
+            scale={scale}
+            position={position}
+            key={i}
+            geometry={Geometry}
+            material={Material}
+          />
+        );
+      })}
+      <Light
+        variant="directional"
+        color={0xffffff}
+        intensity={3}
+        position={[1, 1, 1]}
+      />
+      <Light
+        variant="directional"
+        color={0x002288}
+        intensity={3}
+        position={[-1, -1, -1]}
+      />
     </>
   );
 }

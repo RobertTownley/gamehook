@@ -28,6 +28,7 @@ export function useCreateRenderer({
     });
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.shadowMap.enabled = enableShadowMaps;
+    renderer.setPixelRatio(window.devicePixelRatio);
     if (clearColor) {
       renderer.setClearColor(clearColor, clearOpacity);
     }

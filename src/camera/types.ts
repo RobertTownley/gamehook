@@ -1,3 +1,4 @@
+import { ControlsConstructor } from "src/controls/types";
 import { Hierarchical } from "../hierarchy/types";
 import { Physical } from "../physics/types";
 
@@ -13,6 +14,9 @@ export interface CameraProps extends Physical, Hierarchical {
   right?: number;
   top?: number;
   bottom?: number;
+
+  // Controls
+  controls?: ControlsConstructor;
 }
 
 export type ThreeCameras = THREE.PerspectiveCamera | THREE.OrthographicCamera;

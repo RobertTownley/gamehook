@@ -1,59 +1,40 @@
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import * as THREE from "three";
 
-import { usePhysics } from "../physics/hooks";
-
-import {
-  getDefaultCamera,
-  DefaultCameraType,
-  DefaultCameraPosition,
-} from "./defaults";
+import { DefaultCameraPosition } from "./defaults";
 import { CameraProps } from "./types";
-import { HierarchyContext } from "../hierarchy/context";
-import { useHierarchy } from "../hierarchy/hooks";
 import { useCamera } from "./hooks";
 
 export function Camera(props: CameraProps) {
-  const {
-    children,
-    type = DefaultCameraType,
-    fov,
-    aspect,
-    near,
-    far,
-    top,
-    bottom,
-    left,
-    right,
-    position = DefaultCameraPosition,
-  } = props;
-  const { setCamera } = useCamera();
+  const { camera } = useCamera();
+  const { fov, aspect, near, far, position = DefaultCameraPosition } = props;
 
-  const threeCamera = useMemo(() => {
-    if (type === "perspective") {
-      return new THREE.PerspectiveCamera(fov, aspect, near, far);
-    } else {
-      return new THREE.OrthographicCamera(left, right, top, bottom, near, far);
+  const [x, y, z] = position;
+  useEffect(() => {
+    if (camera instanceof THREE.PerspectiveCamera) {
+      camera.fov = fov ?? 50;
+      camera.aspect = aspect ?? window.innerWidth / window.innerHeight;
+      camera.near = near ?? 0.1;
+      camera.far = far ?? 2000;
     }
-  }, [type, left, right, top, bottom, aspect, far, fov, near]);
+  }, [aspect, camera, fov, near, far]);
 
   useEffect(() => {
-    setCamera(threeCamera);
-    return () => {
-      setCamera(getDefaultCamera());
-    };
-  }, [threeCamera, setCamera]);
+    const deltaX = x - camera.position.x;
+    const deltaY = y - camera.position.y;
+    const deltaZ = z - camera.position.z;
 
-  usePhysics(threeCamera, {
-    position,
-    ...props,
-  });
-
-  useHierarchy(threeCamera);
-
-  return (
-    <HierarchyContext.Provider value={{ parent: threeCamera, animations: [] }}>
-      {children}
-    </HierarchyContext.Provider>
-  );
+    camera.position.setX(x);
+    camera.position.setY(y);
+    camera.position.setZ(z);
+    if (camera.userData["controls"]) {
+      const controls = camera.userData["controls"];
+      controls.target.x += deltaX;
+      controls.target.y += deltaY;
+      controls.target.z += deltaZ;
+      console.log("UPDATING");
+      controls.update();
+    }
+  }, [camera, x, y, z]);
+  return null;
 }

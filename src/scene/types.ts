@@ -3,13 +3,25 @@ import * as THREE from "three";
 
 import { Hierarchical } from "../hierarchy/types";
 
+type FogProps =
+  | {
+      variant: "fog";
+      color: number;
+      near: number;
+      far: number;
+    }
+  | {
+      variant: "fogExp2";
+      color: number;
+      density: number;
+    };
 interface IScene extends Hierarchical {
   children?: ReactNode;
   id?: string;
 
   // Scene settings
   backgroundColor?: string | THREE.Color;
-  fog?: THREE.Fog | THREE.FogExp2;
+  fog?: FogProps;
 
   // Renderer settings
   antialias?: boolean;
@@ -22,7 +34,6 @@ interface IScene extends Hierarchical {
 }
 export interface SceneProps extends IScene {
   canvas?: HTMLCanvasElement;
-  fog?: THREE.Fog | THREE.FogExp2;
   width?: number;
   height?: number;
 }
@@ -30,6 +41,7 @@ export interface SceneProps extends IScene {
 export interface InnerSceneProps extends IScene {
   canvas: HTMLCanvasElement;
   id: string;
+  threeScene: THREE.Scene;
 }
 
 /** Context Values */

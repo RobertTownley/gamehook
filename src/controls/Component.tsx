@@ -1,12 +1,10 @@
-import { useEffect, useMemo } from "react";
-import * as THREE from "three";
+import { useEffect, useMemo, useState } from "react";
 import { useCamera } from "../camera/hooks";
+import { MapControls as ThreeMapControls } from "three/examples/jsm/controls/MapControls";
 import {
   ArcballControls,
-  DragControls,
   FirstPersonControls,
   FlyControls,
-  MapControls,
   OrbitControls,
   PointerLockControls,
   TrackballControls,
@@ -15,7 +13,7 @@ import {
 
 import { useSceneDetails } from "../scene/hooks";
 import { ControlsProps } from "./types";
-import { hasDispose } from "./guards";
+import { useRender } from "../render/hooks";
 
 export function Controls(props: ControlsProps) {
   const {
@@ -44,9 +42,6 @@ export function Controls(props: ControlsProps) {
     autoRotate,
     autoRotateSpeed,
     disabled,
-    target,
-    targetId,
-    targetIds,
     variant,
   } = props;
   const { camera } = useCamera();
@@ -63,15 +58,7 @@ export function Controls(props: ControlsProps) {
       return new ArcballControls(camera, listenerTarget, scene);
     }
     if (variant === "drag") {
-      const targets: THREE.Object3D[] = [];
-      if (targetIds) {
-        scene.traverse((obj) => {
-          if (targetIds.includes(obj["userData"].id)) {
-            targets.push(obj);
-          }
-        });
-      }
-      return new DragControls(targets, camera, listenerTarget);
+      throw new Error("Gamehook: Not Implemented");
     }
     if (variant === "firstPerson") {
       const controls = new FirstPersonControls(camera, listenerTarget);
@@ -84,34 +71,7 @@ export function Controls(props: ControlsProps) {
     }
 
     if (variant === "map") {
-      let targetVector: THREE.Vector3 | undefined;
-      if (targetId) {
-        scene.traverse((obj) => {
-          if (obj.userData["id"] == targetId) {
-            targetVector = new THREE.Vector3(
-              obj.position.x,
-              obj.position.y,
-              obj.position.z
-            );
-          }
-        });
-        if (!targetVector) {
-          const msg = `Gamehook error: Object with ${targetId} not found. No target set.`;
-          console.error(msg);
-        }
-      } else if (target) {
-        targetVector = new THREE.Vector3(...target);
-      }
-
-      const controls = new MapControls(camera, listenerTarget);
-      if (targetVector) {
-        controls.target = targetVector;
-        controls.cursor = targetVector;
-      } else {
-        const emptyVector = new THREE.Vector3(0, 0, 0);
-        controls.target = emptyVector;
-        controls.cursor = emptyVector;
-      }
+      const controls = new ThreeMapControls(camera, listenerTarget);
 
       // Controls configuration
       controls.minDistance = minDistance ?? 0;
@@ -207,9 +167,6 @@ export function Controls(props: ControlsProps) {
     rotateSpeed,
     scene,
     screenSpacePanning,
-    target,
-    targetId,
-    targetIds,
     variant,
     zoomSpeed,
     zoomToCursor,
@@ -218,13 +175,83 @@ export function Controls(props: ControlsProps) {
   useEffect(() => {
     scene.userData["controls"].push(threeControls);
     return () => {
-      if (hasDispose(threeControls)) {
-        threeControls.dispose();
-      }
-      scene.userData["controls"] = scene.userData["controls"].filter(
-        (c: unknown) => c !== threeControls
-      );
+      threeControls.dispose();
+      scene.userData["controls"] = undefined;
     };
   }, [scene.userData, threeControls]);
+  return null;
+}
+
+/* Temporarily separating out map controls while figuring out what's wrong with all controls */
+interface IMapControls {
+  minAzimuthAngle?: number;
+  maxAzimuthAngle?: number;
+  minDistance?: number;
+  maxDistance?: number;
+  minPolarAngle?: number;
+  maxPolarAngle?: number;
+  minTargetRadius?: number;
+  maxTargetRadius?: number;
+  zoomToCursor?: boolean;
+}
+export function MapControls(props: IMapControls) {
+  const [controls, setControls] = useState<ThreeMapControls | undefined>(
+    undefined
+  );
+  const {
+    minAzimuthAngle,
+    maxAzimuthAngle,
+    minDistance,
+    maxDistance,
+    minTargetRadius,
+    maxTargetRadius,
+    minPolarAngle,
+    maxPolarAngle,
+    zoomToCursor,
+  } = props;
+  const { camera } = useCamera();
+  const { renderer } = useRender();
+  const { scene } = useSceneDetails();
+
+  useEffect(() => {
+    const controls = new ThreeMapControls(camera, renderer.domElement);
+    camera.userData["controls"] = controls;
+    scene.userData["controls"] = controls;
+    controls.update();
+    setControls(controls);
+
+    return () => {
+      controls.dispose();
+      camera.userData["controls"] = undefined;
+      scene.userData["controls"] = undefined;
+    };
+  }, [camera, renderer.domElement, scene.userData]);
+
+  useEffect(() => {
+    if (controls) {
+      controls.enableDamping = true;
+      controls.minDistance = minDistance ?? 0;
+      controls.maxDistance = maxDistance ?? Infinity;
+      controls.minPolarAngle = minPolarAngle ?? 0;
+      controls.maxPolarAngle = maxPolarAngle ?? Math.PI;
+      controls.zoomToCursor = zoomToCursor ?? false;
+      controls.minTargetRadius = minTargetRadius ?? 0;
+      controls.maxTargetRadius = maxTargetRadius ?? Infinity;
+      controls.minAzimuthAngle = minAzimuthAngle ?? 0;
+      controls.maxAzimuthAngle = maxAzimuthAngle ?? Math.PI;
+    }
+  }, [
+    controls,
+    minAzimuthAngle,
+    maxAzimuthAngle,
+    minDistance,
+    minTargetRadius,
+    maxTargetRadius,
+    maxDistance,
+    minPolarAngle,
+    maxPolarAngle,
+    zoomToCursor,
+  ]);
+
   return null;
 }

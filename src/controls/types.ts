@@ -73,8 +73,11 @@ export interface ControlsProps {
   targetIds?: string[];
   variant: ControlsVariant;
 }
+export interface ControlsConstructor extends ControlsProps {
+  isConstructor: true;
+}
 
 // Workaround for not having yet found a unified Controls generic
 export interface IControls {
-  update: (delta: number) => void;
+  update: () => void;
 }

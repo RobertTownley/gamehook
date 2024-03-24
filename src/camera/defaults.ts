@@ -8,5 +8,6 @@ export function getDefaultCamera() {
   camera.position.set(...DefaultCameraPosition);
   return camera;
 }
+export const DefaultCamera = getDefaultCamera();
 
 export const DefaultCameraType = "perspective";
