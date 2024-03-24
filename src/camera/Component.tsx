@@ -32,6 +32,9 @@ export function Camera(props: CameraProps) {
       controls.target.x += deltaX;
       controls.target.y += deltaY;
       controls.target.z += deltaZ;
+      controls.cursor.x += deltaX;
+      controls.cursor.y += deltaY;
+      controls.cursor.z += deltaZ;
       console.log("UPDATING");
       controls.update();
     }

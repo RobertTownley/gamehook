@@ -221,6 +221,7 @@ export function MapControls(props: IMapControls) {
     setControls(controls);
 
     return () => {
+      controls.reset();
       controls.dispose();
       camera.userData["controls"] = undefined;
       scene.userData["controls"] = undefined;
