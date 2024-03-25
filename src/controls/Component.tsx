@@ -18,6 +18,7 @@ import { useRender } from "../render/hooks";
 export function Controls(props: ControlsProps) {
   const {
     controls,
+    disabled,
     minDistance,
     maxDistance,
     minZoom,
@@ -41,7 +42,6 @@ export function Controls(props: ControlsProps) {
     keyPanSpeed,
     autoRotate,
     autoRotateSpeed,
-    disabled,
     variant,
   } = props;
   const { camera } = useCamera();
@@ -98,6 +98,8 @@ export function Controls(props: ControlsProps) {
       controls.autoRotate = autoRotate ?? false;
       controls.autoRotateSpeed = autoRotateSpeed ?? 2;
       controls.enabled = disabled !== true;
+
+      controls.update();
       return controls;
     }
     if (variant === "orbit") {
@@ -173,7 +175,7 @@ export function Controls(props: ControlsProps) {
   ]);
 
   useEffect(() => {
-    scene.userData["controls"].push(threeControls);
+    scene.userData["controls"] = threeControls;
     return () => {
       threeControls.dispose();
       scene.userData["controls"] = undefined;
@@ -183,26 +185,27 @@ export function Controls(props: ControlsProps) {
 }
 
 /* Temporarily separating out map controls while figuring out what's wrong with all controls */
-interface IMapControls {
-  minAzimuthAngle?: number;
-  maxAzimuthAngle?: number;
-  minDistance?: number;
-  maxDistance?: number;
-  minPolarAngle?: number;
-  maxPolarAngle?: number;
-  minTargetRadius?: number;
-  maxTargetRadius?: number;
-  zoomToCursor?: boolean;
-}
-export function MapControls(props: IMapControls) {
+export function MapControls(props: ControlsProps) {
   const [controls, setControls] = useState<ThreeMapControls | undefined>(
     undefined
   );
   const {
+    disabled,
+    enableDamping,
+    dampingFactor,
+    zoomSpeed,
+    enableZoom,
+    enableRotate,
+    rotateSpeed,
+    screenSpacePanning,
+    autoRotate,
+    autoRotateSpeed,
     minAzimuthAngle,
     maxAzimuthAngle,
     minDistance,
     maxDistance,
+    minZoom,
+    maxZoom,
     minTargetRadius,
     maxTargetRadius,
     minPolarAngle,
@@ -230,18 +233,43 @@ export function MapControls(props: IMapControls) {
 
   useEffect(() => {
     if (controls) {
+      controls.enabled = disabled !== true;
       controls.enableDamping = true;
       controls.minDistance = minDistance ?? 0;
       controls.maxDistance = maxDistance ?? Infinity;
-      controls.minPolarAngle = minPolarAngle ?? 0;
-      controls.maxPolarAngle = maxPolarAngle ?? Math.PI;
-      controls.zoomToCursor = zoomToCursor ?? false;
+      controls.minZoom = minZoom ?? 0;
+      controls.maxZoom = maxZoom ?? Infinity;
       controls.minTargetRadius = minTargetRadius ?? 0;
       controls.maxTargetRadius = maxTargetRadius ?? Infinity;
-      controls.minAzimuthAngle = minAzimuthAngle ?? 0;
-      controls.maxAzimuthAngle = maxAzimuthAngle ?? Math.PI;
+      controls.minPolarAngle = minPolarAngle ?? 0;
+      controls.maxPolarAngle = maxPolarAngle ?? Math.PI;
+      controls.minAzimuthAngle = minAzimuthAngle ?? -Math.PI * -2;
+      controls.maxAzimuthAngle = maxAzimuthAngle ?? Math.PI * 2;
+      controls.enableDamping = enableDamping ?? false;
+      controls.dampingFactor = dampingFactor ?? 0.05;
+      controls.enableZoom = enableZoom ?? true;
+      controls.zoomSpeed = zoomSpeed ?? 1;
+      controls.zoomToCursor = zoomToCursor ?? false;
+      controls.enableRotate = enableRotate ?? true;
+      controls.rotateSpeed = rotateSpeed ?? 1;
+      controls.screenSpacePanning = screenSpacePanning ?? true;
+      controls.autoRotate = autoRotate ?? false;
+      controls.autoRotateSpeed = autoRotateSpeed ?? 2;
+      controls.update();
     }
   }, [
+    autoRotate,
+    autoRotateSpeed,
+    dampingFactor,
+    disabled,
+    enableDamping,
+    enableRotate,
+    minZoom,
+    maxZoom,
+    enableZoom,
+    rotateSpeed,
+    screenSpacePanning,
+    zoomSpeed,
     controls,
     minAzimuthAngle,
     maxAzimuthAngle,

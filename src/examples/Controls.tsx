@@ -16,12 +16,12 @@ export function ControlsExample() {
     <Scene backgroundColor={new THREE.Color(0xcccccc)}>
       <Camera position={CameraPosition} fov={60} near={1} far={1000} />
       <MapControls
+        variant="map"
         maxTargetRadius={500}
         zoomToCursor
         maxDistance={500}
         minDistance={20}
       />
-      <Fog variant="exponential" density={0.002} color={0xcccccc} />
       <Inner />
     </Scene>
   );
