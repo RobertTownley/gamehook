@@ -1,13 +1,9 @@
-import * as THREE from "three";
-
-import { Scene, Shape } from "gamehook";
-
-const BackgroundColor = new THREE.Color(0xcccccc);
-const Fog = new THREE.FogExp2(0x000000, 2);
+import { Fog, Scene, Shape } from "gamehook";
 
 export function FogExample() {
   return (
-    <Scene fog={Fog} backgroundColor={BackgroundColor}>
+    <Scene backgroundColor={0xcccccc}>
+      <Fog variant="exponential" color={0xcccccc} density={0.002} />
       <Shape />
       <Shape position={[-2, 2, -20]} />
       <Shape scale={[100, 0.1, 100]} position={[0, -2, 0]} />

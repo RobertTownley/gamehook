@@ -34,11 +34,18 @@ export function useBackgroundColor(props: SceneProps, scene: THREE.Scene) {
     if (typeof props.backgroundColor === "string") {
       return new THREE.Color(props.backgroundColor);
     }
+    if (typeof props.backgroundColor === "number") {
+      return props.backgroundColor;
+    }
+
     return props.backgroundColor;
   }, [props.backgroundColor]);
 
   useEffect(() => {
-    scene.background = backgroundColor;
+    scene.background =
+      typeof backgroundColor === "number"
+        ? new THREE.Color(backgroundColor)
+        : backgroundColor;
   }, [scene, backgroundColor]);
 }
 

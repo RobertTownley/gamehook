@@ -22,6 +22,7 @@ export function ControlsExample() {
         maxDistance={500}
         minDistance={20}
       />
+      <Fog variant="exponential" color={0xcccccc} density={0.002} />
       <Inner />
     </Scene>
   );

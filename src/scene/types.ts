@@ -20,7 +20,7 @@ interface IScene extends Hierarchical {
   id?: string;
 
   // Scene settings
-  backgroundColor?: string | THREE.Color;
+  backgroundColor?: string | number | THREE.Color;
   fog?: FogProps;
 
   // Renderer settings
