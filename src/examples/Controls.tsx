@@ -19,7 +19,7 @@ export function ControlsExample() {
         maxTargetRadius={500}
         zoomToCursor
         maxDistance={500}
-        minDistance={10}
+        minDistance={20}
       />
       <Fog variant="exponential" density={0.002} color={0xcccccc} />
       <Inner />
