@@ -10,7 +10,7 @@ const Material = new THREE.MeshPhongMaterial({
 const range = _.range(0, 500);
 Geometry.translate(0, 0.5, 0);
 
-const CameraPosition: XYZ = [0, 200, -400];
+const CameraPosition: XYZ = [300, 1000, 0];
 export function ControlsExample() {
   return (
     <Scene backgroundColor={new THREE.Color(0xcccccc)}>
@@ -21,6 +21,7 @@ export function ControlsExample() {
         zoomToCursor
         maxDistance={500}
         minDistance={20}
+        target={[300, 0, 0]}
       />
       <Fog variant="exponential" color={0xcccccc} density={0.002} />
       <Inner />
@@ -60,6 +61,8 @@ function Inner() {
         intensity={3}
         position={[-1, -1, -1]}
       />
+      <Shape scale={[100, 100, 100]} position={[-300, 0, 0]} />
+      <Shape scale={[100, 100, 100]} position={[300, 0, 0]} />
     </>
   );
 }

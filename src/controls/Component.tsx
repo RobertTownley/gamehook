@@ -1,3 +1,4 @@
+import * as THREE from "three";
 import { useEffect, useMemo, useState } from "react";
 import { useCamera } from "../camera/hooks";
 import { MapControls as ThreeMapControls } from "three/examples/jsm/controls/MapControls";
@@ -210,6 +211,7 @@ export function MapControls(props: ControlsProps) {
     maxTargetRadius,
     minPolarAngle,
     maxPolarAngle,
+    target,
     zoomToCursor,
   } = props;
   const { camera } = useCamera();
@@ -255,6 +257,10 @@ export function MapControls(props: ControlsProps) {
       controls.screenSpacePanning = screenSpacePanning ?? true;
       controls.autoRotate = autoRotate ?? false;
       controls.autoRotateSpeed = autoRotateSpeed ?? 2;
+      if (target) {
+        controls.target = new THREE.Vector3(target[0], target[1], target[2]);
+      }
+
       controls.update();
     }
   }, [
@@ -279,6 +285,7 @@ export function MapControls(props: ControlsProps) {
     maxDistance,
     minPolarAngle,
     maxPolarAngle,
+    target,
     zoomToCursor,
   ]);
 
