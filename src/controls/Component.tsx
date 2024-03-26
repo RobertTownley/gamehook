@@ -212,6 +212,7 @@ export function MapControls(props: ControlsProps) {
     minPolarAngle,
     maxPolarAngle,
     target,
+    targetId,
     zoomToCursor,
   } = props;
   const { camera } = useCamera();
@@ -259,6 +260,14 @@ export function MapControls(props: ControlsProps) {
       controls.autoRotateSpeed = autoRotateSpeed ?? 2;
       if (target) {
         controls.target = new THREE.Vector3(target[0], target[1], target[2]);
+      } else if (targetId) {
+        scene.traverse((o) => {
+          if (o.userData["id"] === targetId) {
+            controls.target = o.position;
+          }
+        });
+      } else {
+        controls.target = new THREE.Vector3(0, 0, 0);
       }
 
       controls.update();
@@ -285,7 +294,9 @@ export function MapControls(props: ControlsProps) {
     maxDistance,
     minPolarAngle,
     maxPolarAngle,
+    scene,
     target,
+    targetId,
     zoomToCursor,
   ]);
 

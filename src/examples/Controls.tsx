@@ -15,16 +15,15 @@ export function ControlsExample() {
   return (
     <Scene backgroundColor={new THREE.Color(0xcccccc)}>
       <Camera position={CameraPosition} fov={60} near={1} far={1000} />
+      <Inner />
       <MapControls
         variant="map"
         maxTargetRadius={500}
         zoomToCursor
         maxDistance={500}
         minDistance={20}
-        target={[300, 0, 0]}
       />
       <Fog variant="exponential" color={0xcccccc} density={0.002} />
-      <Inner />
     </Scene>
   );
 }
@@ -61,8 +60,8 @@ function Inner() {
         intensity={3}
         position={[-1, -1, -1]}
       />
-      <Shape scale={[100, 100, 100]} position={[-300, 0, 0]} />
-      <Shape scale={[100, 100, 100]} position={[300, 0, 0]} />
+      <Shape scale={[100, 100, 100]} position={[-300, 0, 0]} id="foo" />
+      <Shape scale={[100, 100, 100]} position={[300, 0, 0]} id="bar" />
     </>
   );
 }
