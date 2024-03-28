@@ -1,3 +1,5 @@
+import { XYZ } from "src/physics/types";
+
 interface BoxParams {
   variant: "box";
   width?: number;
@@ -32,4 +34,5 @@ export type GeometryProps = BoxParams | CylinderParams | SphereParams;
 
 export interface Shapeable {
   geometry?: GeometryProps | THREE.BufferGeometry;
+  translate?: XYZ;
 }
