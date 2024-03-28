@@ -7,7 +7,7 @@
 
 ## Usage
 
-Visit the `examples` folder for some demos of how to use Gamehook.
+Visit the `src/examples` folder for some demos of how to use Gamehook.
 
 You can also pull down this repo and run `pnpm run dev` to see the examples running in a working project. Just change the name of the example within `App.tsx`
 
